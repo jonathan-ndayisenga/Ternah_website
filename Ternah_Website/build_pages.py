@@ -257,6 +257,16 @@ INSIGHTS = [
  ('Technology Trends','Building for scale from day one','Architecture choices that save you a painful rebuild as your user base grows.','9 min read'),
 ]
 
+# ---------------- content lists for homepage ----------------
+PROCESS_STEPS = [
+ ('Discover', 'We learn how your business actually runs before proposing anything.'),
+ ('Design',   'We map the system to your exact workflow, simply and intentionally.'),
+ ('Build',    'Pragmatic engineering with weekly visible progress you can follow.'),
+ ('Ship',     'We deploy, test, and make sure every part lands correctly.'),
+ ('Support',  'We stay for maintenance, updates, and growth long after launch.'),
+]
+INDUSTRIES_TICKER = ['Education','Healthcare','Logistics','Retail','NGOs','Government','Finance','Hospitality','Agriculture','Pharmacy','Real Estate','Manufacturing']
+
 # ---------------- component templates ----------------
 SOL_FILTERS = ['software','erp','automation','data','cloud','support']
 def sol_card(i, s):
@@ -289,6 +299,25 @@ def proj_card(i,p):
     lis = "".join(f'<li>{x}</li>' for x in tags)
     return f'''    <div class="card reveal" data-d="{(i%3)+1}">
       <div class="num">{cat}</div><h3>{t}</h3><p>{d}</p><ul>{lis}</ul>
+    </div>'''
+
+def svc_block(i, s):
+    ic,t,d,_ = s
+    filt = SOL_FILTERS[i] if i < len(SOL_FILTERS) else 'all'
+    num  = str(i+1).zfill(2)
+    return f'''    <div class="svc-item reveal" id="sol-{filt}" data-d="{(i%3)+1}" data-filter="{filt}">
+      <div class="svc-num">{num}</div>
+      <div class="svc-ico">{ICONS[ic]}</div>
+      <h3>{t}</h3>
+      <p>{d}</p>
+    </div>'''
+
+def proj_card_slim(i,p):
+    cat,t,d,tags = p
+    chips = "".join(f'<span class="chip">{x}</span>' for x in tags)
+    return f'''    <div class="card reveal" data-d="{(i%3)+1}">
+      <div class="num">{cat}</div><h3>{t}</h3><p>{d}</p>
+      <div class="chip-row">{chips}</div>
     </div>'''
 
 def cta_band(h2, p, primary=('Start a Project','contact.html'), ghost=None):
@@ -334,46 +363,72 @@ home_body = f'''<section class="hero">
 
 <section class="sec" style="padding-top:20px">
   <div class="sec-head">
-    <span class="eyebrow">What we do</span>
-    <h2 class="h2">Everything you need<br>to go digital.</h2>
-    <p class="lead">From a single tool to a full platform: we design, build, and support the systems your organization runs on.</p>
+    <span class="eyebrow">What we build</span>
+    <h2 class="h2">Six ways we<br>move you forward.</h2>
+    <p class="lead">From a single tool to a full platform: design, build, and support — under one accountable team.</p>
   </div>
-  <div class="grid g3">
-{chr(10).join(sol_card(i,s) for i,s in enumerate(SOLUTIONS))}
+  <div class="svc-grid">
+{chr(10).join(svc_block(i,s) for i,s in enumerate(SOLUTIONS))}
   </div>
-  <div class="center mt-cta"><a class="btn btn-ghost" href="solutions.html">View all solutions {ARROW}</a></div>
+  <div class="center mt-cta"><a class="btn btn-ghost" href="solutions.html">All solutions {ARROW}</a></div>
 </section>
 
 <section class="sec">
   <div class="sec-head">
-    <span class="eyebrow">Industries served</span>
-    <h2 class="h2">Built for how Africa works.</h2>
-    <p class="lead">Deep familiarity with the realities of each sector means software that fits the way you actually operate.</p>
+    <span class="eyebrow">How we work</span>
+    <h2 class="h2">Simple process.<br>Real delivery.</h2>
+    <p class="lead">Five steps from your first conversation to a running system.</p>
   </div>
-  <div class="ind-grid">
-{chr(10).join(ind_card(x) for x in INDUSTRIES[:6])}
+  <div class="process-track">
+{chr(10).join(f"""    <div class="process-step reveal" data-d="{i+1}">
+      <div class="process-dot">{i+1}</div>
+      <h4>{t}</h4>
+      <p>{d}</p>
+    </div>""" for i,(t,d) in enumerate(PROCESS_STEPS))}
   </div>
-  <div class="center mt-cta"><a class="btn btn-ghost" href="industries.html">All industries {ARROW}</a></div>
 </section>
 
+<div class="marquee-section">
+  <div class="marquee-track">
+    {"".join(f'<span class="marquee-item">{ind}</span><span class="marquee-sep">&nbsp;·&nbsp;</span>' for ind in INDUSTRIES_TICKER * 2)}
+  </div>
+</div>
+
 <section class="sec">
-  <div class="split">
-    <div>
-      <span class="eyebrow">Why Ternah</span>
-      <h2 class="h2" style="margin:20px 0 30px">A partner, not<br>just a vendor.</h2>
-      {rows_tpl(WHY[:4])}
+  <div class="sec-head">
+    <span class="eyebrow">Why Ternah</span>
+    <h2 class="h2">A partner, not<br>just a vendor.</h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-block reveal">
+      <div class="bn">01</div>
+      <div class="accent-line"></div>
+      <h3>Built to fit you</h3>
+      <p>Software shaped around your exact processes, not a rigid template you bend to fit. We start by understanding how you already work.</p>
     </div>
-    <div class="visual reveal">{MK('#cdd6ff')}</div>
+    <div class="why-block reveal" data-d="1">
+      <div class="bn">02</div>
+      <div class="accent-line"></div>
+      <h3>African insight</h3>
+      <p>Local understanding of the markets, constraints, connectivity, and opportunities you actually operate in. Not imported assumptions.</p>
+    </div>
+    <div class="why-block reveal" data-d="2">
+      <div class="bn">03</div>
+      <div class="accent-line"></div>
+      <h3>Scalable by design</h3>
+      <p>Architecture that grows the moment your business does, without painful rebuilds or migrations six months in.</p>
+    </div>
   </div>
 </section>
 
 <section class="sec">
   <div class="sec-head">
-    <span class="eyebrow">Featured projects</span>
+    <span class="eyebrow">Featured work</span>
     <h2 class="h2">Work that ships.</h2>
+    <p class="lead">A selection of platforms and systems we have designed and delivered.</p>
   </div>
   <div class="grid g3">
-{chr(10).join(proj_card(i,p) for i,p in enumerate(PROJECTS[:3]))}
+{chr(10).join(proj_card_slim(i,p) for i,p in enumerate(PROJECTS[:3]))}
   </div>
   <div class="center mt-cta"><a class="btn btn-ghost" href="projects.html">See all projects {ARROW}</a></div>
 </section>
