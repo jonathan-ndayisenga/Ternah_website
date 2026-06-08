@@ -217,6 +217,63 @@ footer{margin-top:120px;border-top:1px solid rgba(10,15,44,.08);background:var(-
 .foot-bot{max-width:var(--maxw);margin:0 auto;padding:24px 40px;border-top:1px solid rgba(255,255,255,.10);display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.40)}
 .foot-bot .slg{font-family:var(--sf);letter-spacing:.04em}
 
+/* ---------- welcome modal ---------- */
+.welcome-overlay{
+  position:fixed;inset:0;z-index:300;
+  background:rgba(10,15,44,.60);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s var(--ease);
+}
+.welcome-overlay.open{opacity:1;pointer-events:all}
+.welcome-box{
+  background:#fff;border-radius:28px;max-width:520px;width:100%;
+  padding:48px 48px 40px;position:relative;
+  box-shadow:0 40px 100px rgba(10,15,44,.22);
+  transform:translateY(32px) scale(.97);
+  transition:transform .45s var(--ease);
+}
+.welcome-overlay.open .welcome-box{transform:translateY(0) scale(1)}
+.welcome-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.welcome-logo .wm{font-weight:800;letter-spacing:.13em;font-size:17px;color:var(--navy)}
+.welcome-logo .mk g{fill:var(--navy)}
+.welcome-box h2{font-size:clamp(22px,4vw,30px);color:var(--navy);line-height:1.15;margin-bottom:10px}
+.welcome-box .sub{font-size:15px;color:var(--mute);line-height:1.6;margin-bottom:24px}
+.welcome-box textarea{
+  width:100%;min-height:110px;resize:vertical;
+  background:#f5f7ff;border:1.5px solid var(--border);
+  border-radius:14px;padding:14px 16px;
+  font-family:var(--sf);font-size:15px;color:var(--navy);
+  transition:border-color .25s,box-shadow .25s;
+  line-height:1.6;
+}
+.welcome-box textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(47,76,255,.10)}
+.welcome-box textarea::placeholder{color:rgba(10,15,44,.35)}
+.welcome-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.welcome-actions .btn{flex:1;justify-content:center;min-width:140px;font-size:14px;padding:13px 18px}
+.welcome-wa{background:#25d366;color:#fff;border:none}
+.welcome-wa:hover{background:#1fba59;box-shadow:0 8px 24px rgba(37,211,102,.35);transform:translateY(-2px)}
+.welcome-skip{
+  display:block;text-align:center;margin-top:18px;
+  font-size:13px;color:var(--mute);cursor:pointer;
+  transition:color .2s;background:none;border:none;width:100%;
+  font-family:var(--sf);
+}
+.welcome-skip:hover{color:var(--navy)}
+/* badge */
+.welcome-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--green);background:var(--green-light);
+  border-radius:100px;padding:5px 12px;margin-bottom:18px;
+}
+.welcome-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green-soft);flex:none}
+@media(max-width:480px){
+  .welcome-box{padding:32px 22px 28px;border-radius:20px}
+  .welcome-actions{flex-direction:column}
+  .welcome-actions .btn{min-width:unset}
+}
+
 /* ---------- floating action buttons ---------- */
 .fab-group{
   position:fixed;bottom:28px;right:28px;z-index:180;
