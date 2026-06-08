@@ -89,7 +89,11 @@ def footer_html():
   </div>
 </footer>'''
 
+SITE_URL  = 'https://ternah.onrender.com'   # update to your custom domain when ready
+OG_IMAGE  = f'{SITE_URL}/assets/og-image.svg'
+
 def page(slug, title, desc, body):
+    canonical = f'{SITE_URL}/{slug}.html' if slug != 'index' else SITE_URL
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,6 +101,32 @@ def page(slug, title, desc, body):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+
+<!-- canonical -->
+<link rel="canonical" href="{canonical}">
+
+<!-- favicon -->
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="shortcut icon" href="assets/favicon.svg">
+<meta name="theme-color" content="#2f4cff">
+
+<!-- open graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ternah Software Company Ltd">
+<meta property="og:url" content="{canonical}">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{desc}">
+<meta property="og:image" content="{OG_IMAGE}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+
+<!-- twitter / x card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{desc}">
+<meta name="twitter:image" content="{OG_IMAGE}">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">

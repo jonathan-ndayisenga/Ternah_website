@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- background -->
+  <rect width="1200" height="630" fill="#0a0f2c"/>
+  <radialGradient id="bg" cx="75%" cy="10%" r="70%">
+    <stop offset="0%" stop-color="#2f4cff" stop-opacity="0.55"/>
+    <stop offset="100%" stop-color="#0a0f2c" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- subtle dot grid -->
+  <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+    <circle cx="1" cy="1" r="1" fill="#ffffff" fill-opacity="0.04"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- logo mark -->
+  <g transform="translate(80, 80) scale(1.1)">
+    <rect width="90" height="84" rx="18" fill="#2f4cff"/>
+    <g fill="#ffffff">
+      <path d="M24 12 L40 12 C42 12 43 14 42 16 L34 37 C33 39 30 39 29 37 L21 17 C20 14 21 12 24 12 Z"/>
+      <path d="M52 12 L75 12 C77 12 78 14 78 16 L78 30 C78 33 75 34 73 32 L66 27 L30 70 C29 71 27 72 25 72 L15 72 C12 72 11 69 13 67 L52 12 Z"/>
+      <path d="M65 70 L49 70 C47 70 46 68 47 66 L55 45 C56 43 59 43 60 45 L68 65 C69 68 68 70 65 70 Z"/>
+    </g>
+  </g>
+
+  <!-- wordmark -->
+  <text x="80" y="232" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-weight="800" font-size="28" letter-spacing="8" fill="#ffffff" opacity="0.9">TERNAH</text>
+
+  <!-- divider -->
+  <rect x="80" y="256" width="60" height="3" rx="2" fill="#2f4cff"/>
+
+  <!-- headline -->
+  <text x="80" y="330" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-weight="800" font-size="64" fill="#ffffff" letter-spacing="-2">Keep it simple.</text>
+
+  <!-- subline -->
+  <text x="80" y="392" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-weight="400" font-size="26" fill="#ffffff" opacity="0.65">We build software that works.</text>
+
+  <!-- tags -->
+  <g transform="translate(80, 436)">
+    <rect width="170" height="38" rx="19" fill="#2f4cff" fill-opacity="0.35"/>
+    <text x="85" y="24" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="14" font-weight="600" fill="#ffffff" text-anchor="middle">Custom Software</text>
+  </g>
+  <g transform="translate(264, 436)">
+    <rect width="130" height="38" rx="19" fill="#2f4cff" fill-opacity="0.35"/>
+    <text x="65" y="24" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="14" font-weight="600" fill="#ffffff" text-anchor="middle">ERP &amp; CRM</text>
+  </g>
+  <g transform="translate(408, 436)">
+    <rect width="130" height="38" rx="19" fill="#2f4cff" fill-opacity="0.35"/>
+    <text x="65" y="24" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="14" font-weight="600" fill="#ffffff" text-anchor="middle">Automation</text>
+  </g>
+  <g transform="translate(552, 436)">
+    <rect width="168" height="38" rx="19" fill="#22c55e" fill-opacity="0.30"/>
+    <text x="84" y="24" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="14" font-weight="600" fill="#22c55e" text-anchor="middle">Africa-focused</text>
+  </g>
+
+  <!-- URL -->
+  <text x="80" y="570" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="18" fill="#ffffff" opacity="0.40" letter-spacing="0.5">ternah.com</text>
+</svg>
