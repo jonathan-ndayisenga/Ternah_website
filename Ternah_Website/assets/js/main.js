@@ -170,7 +170,28 @@ if(yr) yr.textContent = new Date().getFullYear();
   });
 })();
 
-/* ---- solution filter pills ---- */
+/* ---- shared: scroll to a card by id ---- */
+function scrollToCard(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const headerH = document.getElementById('hdr')?.offsetHeight || 72;
+  const top = el.getBoundingClientRect().top + window.scrollY - headerH - 20;
+  window.scrollTo({top, behavior:'smooth'});
+  // pulse highlight
+  el.classList.remove('card-highlight');
+  void el.offsetWidth; // force reflow so animation restarts
+  el.classList.add('card-highlight');
+  el.addEventListener('animationend', ()=> el.classList.remove('card-highlight'), {once:true});
+}
+
+/* ---- hero tags → scroll to solution card ---- */
+(function(){
+  document.querySelectorAll('.tag[data-scroll]').forEach(tag=>{
+    tag.addEventListener('click', ()=> scrollToCard(tag.dataset.scroll));
+  });
+})();
+
+/* ---- solution filter pills → filter + scroll to card ---- */
 (function(){
   const bar = document.getElementById('solFilter');
   const grid = document.getElementById('solGrid');
@@ -180,7 +201,6 @@ if(yr) yr.textContent = new Date().getFullYear();
 
   pills.forEach(pill=>{
     pill.addEventListener('click', ()=>{
-      // update active pill
       pills.forEach(p=>p.classList.remove('active'));
       pill.classList.add('active');
 
@@ -188,10 +208,21 @@ if(yr) yr.textContent = new Date().getFullYear();
       cards.forEach(card=>{
         const match = filter === 'all' || card.dataset.filter === filter;
         card.style.transition = 'opacity .3s, transform .3s';
-        card.style.opacity  = match ? '1' : '0.25';
-        card.style.transform = match ? 'scale(1)' : 'scale(0.96)';
+        card.style.opacity    = match ? '1' : '0.25';
+        card.style.transform  = match ? 'scale(1)' : 'scale(0.96)';
         card.style.pointerEvents = match ? '' : 'none';
       });
+
+      // scroll to first matching card
+      if(filter !== 'all'){
+        const target = grid.querySelector(`.card[data-filter="${filter}"]`);
+        if(target) setTimeout(()=> scrollToCard(target.id), 80);
+      } else {
+        // scroll to grid top
+        const headerH = document.getElementById('hdr')?.offsetHeight || 72;
+        const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 20;
+        window.scrollTo({top, behavior:'smooth'});
+      }
     });
   });
 })();

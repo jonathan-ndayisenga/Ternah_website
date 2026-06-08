@@ -78,7 +78,9 @@ h1,h2,h3{font-weight:800;letter-spacing:-.03em;line-height:1.02;color:var(--navy
 .hero .lead{margin-top:26px;color:rgba(255,255,255,.82)}
 .hero .eyebrow{color:rgba(255,255,255,.78);letter-spacing:.32em;font-size:12px}
 .hero-tags{display:flex;flex-wrap:wrap;gap:12px;margin-top:38px}
-.tag{font-family:var(--sf);font-weight:600;font-size:13.5px;letter-spacing:.03em;color:rgba(255,255,255,.90);border:1px solid rgba(255,255,255,.24);border-radius:100px;padding:11px 22px;backdrop-filter:blur(4px);background:rgba(255,255,255,.08)}
+.tag{font-family:var(--sf);font-weight:600;font-size:13.5px;letter-spacing:.03em;color:rgba(255,255,255,.90);border:1px solid rgba(255,255,255,.24);border-radius:100px;padding:11px 22px;backdrop-filter:blur(4px);background:rgba(255,255,255,.08);cursor:pointer;appearance:none;-webkit-appearance:none;transition:background .22s var(--ease),border-color .22s,transform .2s,color .2s}
+.tag:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.45);transform:translateY(-2px);color:#fff}
+.tag:active{transform:translateY(0)}
 .hero-cta{display:flex;flex-wrap:wrap;gap:16px;margin-top:40px}
 .hero .btn-ghost{border-color:rgba(255,255,255,.35);color:#fff}
 .hero .btn-ghost:hover{background:rgba(255,255,255,.10)}
@@ -406,6 +408,8 @@ footer{margin-top:120px;border-top:1px solid rgba(10,15,44,.08);background:var(-
 .mt-cta{margin-top:90px}
 .fade-in{animation:fadein .6s var(--ease)}
 @keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes cardpulse{0%,100%{box-shadow:0 2px 12px rgba(10,15,44,.05)}50%{box-shadow:0 0 0 4px rgba(47,76,255,.22),0 20px 48px rgba(47,76,255,.16)}}
+.card-highlight{animation:cardpulse 1.1s var(--ease)}
 
 /* =========================================================
    RESPONSIVE — 4-breakpoint system

@@ -264,7 +264,7 @@ def sol_card(i, s):
     lis = "".join(f'<li>{x}</li>' for x in items)
     filt = SOL_FILTERS[i] if i < len(SOL_FILTERS) else 'all'
     green = ' green-accent' if filt in ('erp','data','support') else ''
-    return f'''    <div class="card{green} reveal" data-d="{(i%3)+1}" data-filter="{filt}">
+    return f'''    <div class="card{green} reveal" id="sol-{filt}" data-d="{(i%3)+1}" data-filter="{filt}">
       <div class="ico">{ICONS[ic]}</div>
       <h3>{t}</h3><p>{d}</p>
       <ul>{lis}</ul>
@@ -317,7 +317,7 @@ home_body = f'''<section class="hero">
       <a class="btn btn-ghost" href="solutions.html">Explore Solutions</a>
     </div>
     <div class="hero-tags reveal in" data-d="5">
-      {"".join(f'<span class="tag">{x}</span>' for x in ['Custom Software','ERP & CRM','Automation','Data & Analytics','Cloud','Support'])}
+      {"".join(f'<button class="tag" data-scroll="sol-{s}">{x}</button>' for x,s in [('Custom Software','software'),('ERP &amp; CRM','erp'),('Automation','automation'),('Data &amp; Analytics','data'),('Cloud','cloud'),('Support','support')])}
     </div>
   </div>
   <div class="scroll-ind"><div class="line"></div>Scroll</div>
