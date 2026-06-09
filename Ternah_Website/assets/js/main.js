@@ -78,59 +78,6 @@ if(yr) yr.textContent = new Date().getFullYear();
   });
 })();
 
-/* ---- welcome modal ---- */
-(function(){
-  const overlay = document.getElementById('welcomeOverlay');
-  if(!overlay) return;
-
-  // show once per session
-  if(sessionStorage.getItem('ternah_welcomed')) return;
-
-  function closeWelcome(){
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
-    sessionStorage.setItem('ternah_welcomed','1');
-  }
-
-  // open after short delay so page has rendered
-  setTimeout(()=>{
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }, 900);
-
-  // skip button
-  document.getElementById('welcomeSkip')?.addEventListener('click', closeWelcome);
-
-  // close on backdrop click
-  overlay.addEventListener('click', e=>{ if(e.target === overlay) closeWelcome(); });
-
-  // Escape key
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeWelcome(); });
-
-  // WhatsApp send
-  document.getElementById('welcomeWa')?.addEventListener('click', ()=>{
-    const msg = (document.getElementById('welcomeMsg')?.value || '').trim();
-    const text = msg
-      ? `Hi Ternah, I need your services for: ${msg}`
-      : 'Hi Ternah, I would like to know more about your services.';
-    window.open(`https://wa.me/256787770007?text=${encodeURIComponent(text)}`, '_blank');
-    closeWelcome();
-  });
-
-  // Email send
-  document.getElementById('welcomeEmail')?.addEventListener('click', ()=>{
-    const msg = (document.getElementById('welcomeMsg')?.value || '').trim();
-    const subject = encodeURIComponent('New enquiry via Ternah website');
-    const body = encodeURIComponent(
-      msg
-        ? `Hi Ternah,\n\nI need your services for:\n${msg}`
-        : 'Hi Ternah,\n\nI would like to know more about your services.'
-    );
-    window.location.href = `mailto:ternah22@gmail.com?subject=${subject}&body=${body}`;
-    closeWelcome();
-  });
-})();
-
 /* ---- article modals ---- */
 (function(){
   // open
