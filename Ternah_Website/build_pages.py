@@ -35,7 +35,7 @@ ICONS = {
 
 # ---------------- shared shell ----------------
 NAV_ITEMS = [('index','Home'),('about','About'),('solutions','Solutions'),
-             ('industries','Industries'),('projects','Projects'),('insights','Insights'),('contact','Contact')]
+             ('industries','Industries'),('products','Products'),('insights','Insights'),('contact','Contact')]
 
 def nav_links():
     out=[]
@@ -69,7 +69,7 @@ def footer_html():
     <div>
       <h4>Company</h4>
       <a href="about.html">About</a><a href="solutions.html">Solutions</a>
-      <a href="industries.html">Industries</a><a href="projects.html">Projects</a><a href="insights.html">Insights</a>
+      <a href="industries.html">Industries</a><a href="products.html">Products</a><a href="insights.html">Insights</a>
     </div>
     <div>
       <h4>Solutions</h4>
@@ -275,9 +275,10 @@ def proj_card(i,p):
     cat,t,d,tags,*rest = p
     url = rest[0] if rest else None
     lis = "".join(f'<li>{x}</li>' for x in tags)
-    live = f'<a class="art-read" href="{url}" target="_blank" rel="noopener noreferrer">Visit live site {LIVE_SVG}</a>' if url else ''
+    heading = f'<h3><a class="card-link-title" href="{url}" target="_blank" rel="noopener noreferrer">{t}</a></h3>' if url else f'<h3>{t}</h3>'
+    live = f'<a class="live-link" href="{url}" target="_blank" rel="noopener noreferrer">Visit live site {LIVE_SVG}</a>' if url else ''
     return f'''    <div class="card reveal" data-d="{(i%3)+1}">
-      <div class="num">{cat}</div><h3>{t}</h3><p>{d}</p><ul>{lis}</ul>{live}
+      <div class="num">{cat}</div>{heading}<p>{d}</p><ul>{lis}</ul>{live}
     </div>'''
 
 def svc_block(i, s):
@@ -295,9 +296,10 @@ def proj_card_slim(i,p):
     cat,t,d,tags,*rest = p
     url = rest[0] if rest else None
     chips = "".join(f'<span class="chip">{x}</span>' for x in tags)
-    live = f'<a class="art-read" href="{url}" target="_blank" rel="noopener noreferrer">Visit live site {LIVE_SVG}</a>' if url else ''
+    heading = f'<h3><a class="card-link-title" href="{url}" target="_blank" rel="noopener noreferrer">{t}</a></h3>' if url else f'<h3>{t}</h3>'
+    live = f'<a class="live-link" href="{url}" target="_blank" rel="noopener noreferrer">Visit live site {LIVE_SVG}</a>' if url else ''
     return f'''    <div class="card reveal" data-d="{(i%3)+1}">
-      <div class="num">{cat}</div><h3>{t}</h3><p>{d}</p>
+      <div class="num">{cat}</div>{heading}<p>{d}</p>
       <div class="chip-row">{chips}</div>{live}
     </div>'''
 
@@ -404,14 +406,14 @@ home_body = f'''<section class="hero">
 
 <section class="sec">
   <div class="sec-head">
-    <span class="eyebrow">Featured work</span>
+    <span class="eyebrow">Featured products</span>
     <h2 class="h2">Work that ships.</h2>
     <p class="lead">A selection of platforms and systems we have designed and delivered.</p>
   </div>
   <div class="grid g3">
 {chr(10).join(proj_card_slim(i,p) for i,p in enumerate(PROJECTS[:3]))}
   </div>
-  <div class="center mt-cta"><a class="btn btn-ghost" href="projects.html">See all projects {ARROW}</a></div>
+  <div class="center mt-cta"><a class="btn btn-ghost" href="products.html">See all products {ARROW}</a></div>
 </section>
 
 {cta_band("Let's build something that fits.", "Tell us how your business runs. We'll turn it into software that keeps it simple.", ghost=('ternah22@gmail.com','mailto:ternah22@gmail.com'))}'''
@@ -498,10 +500,10 @@ industries_body = f'''<section class="phead">
 </section>
 {cta_band("Don't see your sector?", "If your organization runs on processes, we can build software for it. Let's talk.", primary=('Start a conversation','contact.html'))}'''
 
-projects_body = f'''<section class="phead">
-  <span class="eyebrow">Projects</span>
+products_body = f'''<section class="phead">
+  <span class="eyebrow">Products</span>
   <h1>Work that ships.</h1>
-  <p class="lead">A selection of platforms and systems we've designed and built across industries and markets.</p>
+  <p class="lead">A selection of products, platforms, and systems we've designed and built across industries and markets.</p>
 </section>
 <section class="sec" style="padding-top:20px">
   <div class="grid g3">
@@ -517,7 +519,7 @@ projects_body = f'''<section class="phead">
     </div>''' for i,(q,n,r) in enumerate(TESTIMONIALS))}
   </div>
 </section>
-{cta_band("Your project could be next.", "Bring us a challenge. We'll bring the simplest software that solves it.")}'''
+{cta_band("Your product could be next.", "Bring us a challenge. We'll bring the simplest software that solves it.")}'''
 
 BUY_VS_BUILD_SLUG = 'buy-vs-build'
 ARTICLE_SLUGS = {
@@ -1184,7 +1186,7 @@ PAGES = [
  ('about','About | Ternah Software Company Ltd','An African software development and digital transformation company building reliable, scalable technology.',about_body),
  ('solutions','Solutions | Ternah Software Company Ltd','Custom software, ERP & business systems, automation, data & analytics, cloud and support services.',solutions_body),
  ('industries','Industries | Ternah Software Company Ltd','Software built for education, healthcare, logistics, retail, NGOs, government, finance and enterprises across Africa.',industries_body),
- ('projects','Projects | Ternah Software Company Ltd','Platforms and systems we have designed and built across industries and markets.',projects_body),
+ ('products','Products | Ternah Software Company Ltd','Products, platforms, and systems we have designed and built across industries and markets.',products_body),
  ('insights','Insights | Ternah Software Company Ltd','Articles, technology trends, and practical guides on digital transformation across Africa.',insights_body),
  ('contact','Contact | Ternah Software Company Ltd','Get in touch with Ternah Software Company Ltd. Email ternah22@gmail.com or call +256 787 770007.',contact_body),
 ]

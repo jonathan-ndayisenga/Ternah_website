@@ -117,6 +117,11 @@ h1,h2,h3{font-weight:800;letter-spacing:-.03em;line-height:1.02;color:var(--navy
 .card ul{list-style:none;margin-top:18px}
 .card ul li{font-size:15px;color:var(--mute);padding:7px 0;border-top:1px solid rgba(10,15,44,.07)}
 .card.feat{background:linear-gradient(135deg,#2f4cff,#1a2fb0);border:none;box-shadow:0 16px 48px rgba(47,76,255,.35)}
+.card h3 a.card-link-title{color:var(--blue);transition:opacity .2s}
+.card h3 a.card-link-title:hover{opacity:.72;text-decoration:underline}
+.live-link{font-size:13px;font-weight:600;color:var(--blue);margin-top:20px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:gap .2s,opacity .2s}
+.live-link:hover{gap:10px;opacity:.85}
+.live-link svg{width:14px;height:14px;flex:none;stroke:var(--blue)}
 .card.feat h3,.card.feat .num{color:#fff}
 .card.feat p{color:rgba(232,236,255,.90)}
 
