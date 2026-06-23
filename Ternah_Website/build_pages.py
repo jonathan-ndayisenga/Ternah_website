@@ -211,7 +211,7 @@ WHY = [
 ]
 PROJECTS = [
  ('Real Estate · SaaS','Property Management Platform','Multi-tenant SaaS for property businesses with double-entry accounting, automated accruals, supplier ledgers, and VAT reporting.',['Django','SaaS','Accounting']),
- ('Retail · SaaS','Mykashop','One platform for stock, sales, debtors, expenses, and business performance. Built for shops, supermarkets, pharmacies, hardware stores, restaurants, and any growing retail business that needs real control.',['POS','Inventory','Multi-tenant']),
+ ('Retail · SaaS','Mykashop','One platform for stock, sales, debtors, expenses, and business performance. Built for shops, supermarkets, pharmacies, hardware stores, restaurants, and any growing retail business that needs real control.',['POS','Inventory','Multi-tenant'],'http://mykashop.online/'),
  ('Healthcare · EMR','Medical Records & Inventory','Electronic medical records with prescriptions, dispensing, automatic stock deduction, and lab management.',['EMR','Inventory','Compliance']),
  ('Web · Development','Static and Dynamic Websites','Professional static and dynamic websites for businesses, institutions, and organizations — fast to deploy, built to convert, and easy to manage.',['HTML/CSS','React','CMS']),
  ('Hospitality · Multi-tenant','Hospitality Operations Suite','Bar, restaurant, lodge, gym and service-queue modules under a super-admin licensing model.',['Multi-tenant','POS','Licensing']),
@@ -269,11 +269,15 @@ def ind_card(x):
     ic,t,d = x
     return f'''    <div class="ind reveal"><div class="ico">{ICONS[ic]}</div><h3>{t}</h3><p>{d}</p></div>'''
 
+LIVE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'
+
 def proj_card(i,p):
-    cat,t,d,tags = p
+    cat,t,d,tags,*rest = p
+    url = rest[0] if rest else None
     lis = "".join(f'<li>{x}</li>' for x in tags)
+    live = f'<a class="art-read" href="{url}" target="_blank" rel="noopener noreferrer">Visit live site {LIVE_SVG}</a>' if url else ''
     return f'''    <div class="card reveal" data-d="{(i%3)+1}">
-      <div class="num">{cat}</div><h3>{t}</h3><p>{d}</p><ul>{lis}</ul>
+      <div class="num">{cat}</div><h3>{t}</h3><p>{d}</p><ul>{lis}</ul>{live}
     </div>'''
 
 def svc_block(i, s):
@@ -288,11 +292,13 @@ def svc_block(i, s):
     </div>'''
 
 def proj_card_slim(i,p):
-    cat,t,d,tags = p
+    cat,t,d,tags,*rest = p
+    url = rest[0] if rest else None
     chips = "".join(f'<span class="chip">{x}</span>' for x in tags)
+    live = f'<a class="art-read" href="{url}" target="_blank" rel="noopener noreferrer">Visit live site {LIVE_SVG}</a>' if url else ''
     return f'''    <div class="card reveal" data-d="{(i%3)+1}">
       <div class="num">{cat}</div><h3>{t}</h3><p>{d}</p>
-      <div class="chip-row">{chips}</div>
+      <div class="chip-row">{chips}</div>{live}
     </div>'''
 
 def cta_band(h2, p, primary=('Start a Project','contact.html'), ghost=None):
