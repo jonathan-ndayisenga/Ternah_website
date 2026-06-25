@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ternah Software Company Ltd | Keep it simple.</title>
 <meta name="description" content="Ternah Software Company Ltd builds custom software, ERP, automation, data and cloud solutions for businesses across Africa.">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+  }
+}
+</script>
 
 <!-- canonical -->
 <link rel="canonical" href="https://ternah.onrender.com">
@@ -61,23 +69,47 @@
 </header>
 
 <main class="fade-in">
-<section class="hero">
-  <canvas id="waves"></canvas>
-  <div class="hero-veil"></div>
-  <div class="hero-inner">
-    <div class="eyebrow reveal in">Ternah Software Company Ltd</div>
-    <h1 class="reveal in" data-d="1" style="margin-top:24px">Keep<br>it <span class="kick">simple.</span></h1>
-    <div class="sub reveal in" data-d="2">We build software that works.</div>
-    <p class="lead reveal in" data-d="3">Custom-built systems, crafted to fit the exact way your business runs, powering teams, organizations, and communities across Africa.</p>
-    <div class="hero-cta reveal in" data-d="4">
-      <a class="btn btn-primary" href="contact.html">Start a Project <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-      <a class="btn btn-ghost" href="solutions.html">Explore Solutions</a>
+<section class="hero3d" id="hero3d">
+  <div class="hero3d-stage">
+    <div class="hero3d-fallback"><svg class="mk" viewBox="0 0 100 94"><g fill="#3d5bff"><path d="M27 14 L45 14 C47 14 48 16 47 18 L38 41 C37 43 34 43 33 41 L24 19 C23 16 24 14 27 14 Z"/><path d="M58 14 L84 14 C86 14 87 16 87 18 L87 34 C87 37 84 38 82 36 L74 30 L34 78 C33 79 31 80 29 80 L18 80 C15 80 14 77 16 75 L58 14 Z"/><path d="M73 78 L55 78 C53 78 52 76 53 74 L62 51 C63 49 66 49 67 51 L76 73 C77 76 76 78 73 78 Z"/></g></svg></div>
+    <canvas id="logo3d"></canvas>
+  </div>
+  <div class="hero3d-veil"></div>
+  <div class="hero3d-panels">
+    <div class="h3p">
+      <div class="eyebrow">Ternah Software Company Ltd</div>
+      <h1>Keep<br>it <span class="kick">simple.</span></h1>
+      <div class="sub">We build software that works.</div>
+      <p class="lead">Custom-built systems, crafted to fit the exact way your business runs, powering teams, organizations, and communities across Africa.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="contact.html">Start a Project <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
+        <a class="btn btn-ghost" href="solutions.html">Explore Solutions</a>
+      </div>
+      <div class="hero3d-tags">
+        <button class="tag" data-scroll="sol-software">Custom Software</button><button class="tag" data-scroll="sol-erp">ERP &amp; CRM</button><button class="tag" data-scroll="sol-automation">Automation</button><button class="tag" data-scroll="sol-data">Data &amp; Analytics</button><button class="tag" data-scroll="sol-cloud">Cloud</button><button class="tag" data-scroll="sol-support">Support</button>
+      </div>
     </div>
-    <div class="hero-tags reveal in" data-d="5">
-      <button class="tag" data-scroll="sol-software">Custom Software</button><button class="tag" data-scroll="sol-erp">ERP &amp; CRM</button><button class="tag" data-scroll="sol-automation">Automation</button><button class="tag" data-scroll="sol-data">Data &amp; Analytics</button><button class="tag" data-scroll="sol-cloud">Cloud</button><button class="tag" data-scroll="sol-support">Support</button>
+    <div class="h3p">
+      <span class="eyebrow">Built to fit you</span>
+      <h2>Software shaped<br>around how you work.</h2>
+      <p>Not a rigid template you bend to fit. We start by understanding your exact processes, then build around them.</p>
+    </div>
+    <div class="h3p">
+      <span class="eyebrow">Scalable by design</span>
+      <h2>Grows the moment<br>your business does.</h2>
+      <p>Architecture that scales without painful rebuilds, six months or six years from now.</p>
+    </div>
+    <div class="h3p">
+      <span class="eyebrow">Ready when you are</span>
+      <h2>Let's build something<br>that fits.</h2>
+      <p>Tell us how your business runs. We'll turn it into software that keeps it simple.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="contact.html">Start a Project <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
+      </div>
     </div>
   </div>
-  <div class="scroll-ind"><div class="line"></div>Scroll</div>
+  <div class="hero3d-dots"><span class="active"></span><span></span><span></span><span></span></div>
+  <div class="hero3d-scrollhint"><div class="line"></div>Scroll</div>
 </section>
 
 <section class="sec">
@@ -284,6 +316,7 @@
   </a>
 </div>
 
+<script type="module" src="assets/js/hero3d.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

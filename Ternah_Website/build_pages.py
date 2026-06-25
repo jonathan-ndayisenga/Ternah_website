@@ -92,8 +92,19 @@ def footer_html():
 SITE_URL  = 'https://ternah.onrender.com'   # update to your custom domain when ready
 OG_IMAGE  = f'{SITE_URL}/assets/og-image.svg'
 
+THREE_IMPORTMAP = '''<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+  }
+}
+</script>'''
+
 def page(slug, title, desc, body):
     canonical = f'{SITE_URL}/{slug}.html' if slug != 'index' else SITE_URL
+    importmap = THREE_IMPORTMAP if slug == 'index' else ''
+    hero3d_script = '<script type="module" src="assets/js/hero3d.js"></script>' if slug == 'index' else ''
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,6 +112,7 @@ def page(slug, title, desc, body):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+{importmap}
 
 <!-- canonical -->
 <link rel="canonical" href="{canonical}">
@@ -163,6 +175,7 @@ def page(slug, title, desc, body):
   </a>
 </div>
 
+{hero3d_script}
 <script src="assets/js/main.js"></script>
 </body>
 </html>'''
@@ -316,23 +329,47 @@ def cta_band(h2, p, primary=('Start a Project','contact.html'), ghost=None):
 
 # ================= PAGE BODIES =================
 
-home_body = f'''<section class="hero">
-  <canvas id="waves"></canvas>
-  <div class="hero-veil"></div>
-  <div class="hero-inner">
-    <div class="eyebrow reveal in">Ternah Software Company Ltd</div>
-    <h1 class="reveal in" data-d="1" style="margin-top:24px">Keep<br>it <span class="kick">simple.</span></h1>
-    <div class="sub reveal in" data-d="2">We build software that works.</div>
-    <p class="lead reveal in" data-d="3">Custom-built systems, crafted to fit the exact way your business runs, powering teams, organizations, and communities across Africa.</p>
-    <div class="hero-cta reveal in" data-d="4">
-      <a class="btn btn-primary" href="contact.html">Start a Project {ARROW}</a>
-      <a class="btn btn-ghost" href="solutions.html">Explore Solutions</a>
+home_body = f'''<section class="hero3d" id="hero3d">
+  <div class="hero3d-stage">
+    <div class="hero3d-fallback">{MK('#3d5bff')}</div>
+    <canvas id="logo3d"></canvas>
+  </div>
+  <div class="hero3d-veil"></div>
+  <div class="hero3d-panels">
+    <div class="h3p">
+      <div class="eyebrow">Ternah Software Company Ltd</div>
+      <h1>Keep<br>it <span class="kick">simple.</span></h1>
+      <div class="sub">We build software that works.</div>
+      <p class="lead">Custom-built systems, crafted to fit the exact way your business runs, powering teams, organizations, and communities across Africa.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="contact.html">Start a Project {ARROW}</a>
+        <a class="btn btn-ghost" href="solutions.html">Explore Solutions</a>
+      </div>
+      <div class="hero3d-tags">
+        {"".join(f'<button class="tag" data-scroll="sol-{s}">{x}</button>' for x,s in [('Custom Software','software'),('ERP &amp; CRM','erp'),('Automation','automation'),('Data &amp; Analytics','data'),('Cloud','cloud'),('Support','support')])}
+      </div>
     </div>
-    <div class="hero-tags reveal in" data-d="5">
-      {"".join(f'<button class="tag" data-scroll="sol-{s}">{x}</button>' for x,s in [('Custom Software','software'),('ERP &amp; CRM','erp'),('Automation','automation'),('Data &amp; Analytics','data'),('Cloud','cloud'),('Support','support')])}
+    <div class="h3p">
+      <span class="eyebrow">Built to fit you</span>
+      <h2>Software shaped<br>around how you work.</h2>
+      <p>Not a rigid template you bend to fit. We start by understanding your exact processes, then build around them.</p>
+    </div>
+    <div class="h3p">
+      <span class="eyebrow">Scalable by design</span>
+      <h2>Grows the moment<br>your business does.</h2>
+      <p>Architecture that scales without painful rebuilds, six months or six years from now.</p>
+    </div>
+    <div class="h3p">
+      <span class="eyebrow">Ready when you are</span>
+      <h2>Let's build something<br>that fits.</h2>
+      <p>Tell us how your business runs. We'll turn it into software that keeps it simple.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="contact.html">Start a Project {ARROW}</a>
+      </div>
     </div>
   </div>
-  <div class="scroll-ind"><div class="line"></div>Scroll</div>
+  <div class="hero3d-dots"><span class="active"></span><span></span><span></span><span></span></div>
+  <div class="hero3d-scrollhint"><div class="line"></div>Scroll</div>
 </section>
 
 <section class="sec">
