@@ -129,19 +129,10 @@ def page(slug, title, desc, body):
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-page="{slug}">
-<div class="bg-fixed"></div>
-<div class="bg-scroll">
-  <span class="b-black"></span>
-  <span class="b-blue1"></span>
-  <span class="b-blue2"></span>
-  <span class="b-green1"></span>
-  <span class="b-green2"></span>
-</div>
-<div class="grain"></div>
 
 {header_html()}
 
@@ -324,7 +315,6 @@ def cta_band(h2, p, primary=('Start a Project','contact.html'), ghost=None):
 # ================= PAGE BODIES =================
 
 home_body = f'''<section class="hero">
-  <canvas id="waves"></canvas>
   <div class="hero-veil"></div>
   <div class="hero-inner">
     <div class="eyebrow reveal in">Ternah Software Company Ltd</div>
