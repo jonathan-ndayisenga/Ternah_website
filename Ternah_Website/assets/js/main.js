@@ -1,43 +1,28 @@
 /* =========================================================
    TERNAH — shared site script
    ========================================================= */
+document.documentElement.classList.remove('no-js');
 
-/* ---- header scroll state ---- */
+/* ---- header border once scrolled ---- */
 const hdr = document.getElementById('hdr');
-function updateHeader(){ if(hdr) hdr.classList.toggle('scrolled', window.scrollY > 20); }
+function updateHeader(){ if(hdr) hdr.classList.toggle('scrolled', window.scrollY > 8); }
 window.addEventListener('scroll', updateHeader, {passive:true});
 updateHeader();
 
-/* ---- mobile burger ---- */
+/* ---- mobile menu ---- */
 const burger = document.getElementById('burger');
 const navlinks = document.getElementById('navlinks');
 if(burger && navlinks){
-  burger.addEventListener('click', ()=>{
-    const open = navlinks.classList.toggle('open');
-    burger.setAttribute('aria-expanded', open);
-    // animate burger → X
-    burger.querySelectorAll('span').forEach((s,i)=>{
-      s.style.transform = open
-        ? [' rotate(45deg) translate(5px,5px)',' opacity:0',' rotate(-45deg) translate(5px,-5px)'][i] : '';
-      s.style.opacity   = (open && i===1) ? '0' : '';
-    });
-  });
-  // close nav when any link is tapped
-  navlinks.querySelectorAll('a').forEach(a=>{
-    a.addEventListener('click', ()=>{
-      navlinks.classList.remove('open');
-      burger.setAttribute('aria-expanded', false);
-      burger.querySelectorAll('span').forEach(s=>{ s.style.transform=''; s.style.opacity=''; });
-    });
-  });
-  // close nav on outside tap
+  const setOpen = open => {
+    navlinks.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', String(open));
+  };
+  burger.addEventListener('click', ()=> setOpen(!navlinks.classList.contains('open')));
+  navlinks.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> setOpen(false)));
   document.addEventListener('click', e=>{
-    if(!burger.contains(e.target) && !navlinks.contains(e.target)){
-      navlinks.classList.remove('open');
-      burger.setAttribute('aria-expanded', false);
-      burger.querySelectorAll('span').forEach(s=>{ s.style.transform=''; s.style.opacity=''; });
-    }
+    if(!burger.contains(e.target) && !navlinks.contains(e.target)) setOpen(false);
   });
+  document.addEventListener('keydown', e=>{ if(e.key === 'Escape') setOpen(false); });
 }
 
 /* ---- mark active nav link (by data-page on <body>) ---- */
@@ -48,129 +33,142 @@ if(burger && navlinks){
   });
 })();
 
-/* ---- footer year ---- */
-const yr = document.getElementById('yr');
-if(yr) yr.textContent = new Date().getFullYear();
-
 /* ---- scroll reveal ---- */
 (function(){
   const els = document.querySelectorAll('.reveal');
   if(!els.length) return;
+  if(!('IntersectionObserver' in window)){ els.forEach(el=>el.classList.add('in')); return; }
   const io = new IntersectionObserver(entries=>{
     entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
   },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
   els.forEach(el=>io.observe(el));
 })();
 
-/* ---- contact form (opens email app, no backend) ---- */
+/* ---- contact form: inline validation, honeypot, endpoint or email fallback ---- */
 (function(){
+  const form = document.getElementById('contactForm');
+  if(!form) return;
+  const out = document.getElementById('formMsg');
   const btn = document.getElementById('sendBtn');
-  if(!btn) return;
-  btn.addEventListener('click', ()=>{
-    const v = id => (document.getElementById(id)?.value || '').trim();
-    const name=v('f_name'), email=v('f_email'), co=v('f_co'), msg=v('f_msg');
-    const out=document.getElementById('formMsg');
-    if(!name||!email||!msg){ out.style.color='#ff9c9c'; out.textContent='Please fill in your name, email, and message.'; return; }
-    const subject=encodeURIComponent(`New project enquiry — ${name}`);
-    const body=encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCompany: ${co||'—'}\n\n${msg}`);
-    out.style.color='var(--blue-soft)'; out.textContent='Opening your email app…';
-    window.location.href=`mailto:ternah22@gmail.com?subject=${subject}&body=${body}`;
+
+  // "Book a demo" links arrive as contact.html?product=<key>
+  const product = new URLSearchParams(location.search).get('product');
+  if(product){
+    form.product.value = product;
+    const label = product.replace(/-/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+    if(!form.message.value) form.message.value = `I'd like a demo of ${label}.`;
+  }
+
+  const rules = {
+    name:    v => v ? '' : 'Please enter your name.',
+    email:   v => !v ? 'Please enter your email.' : (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? '' : 'That email address looks incomplete.'),
+    message: v => v ? '' : 'Please tell us a little about what you need.',
+  };
+  function check(name){
+    const el = form.elements[name];
+    const msg = rules[name](el.value.trim());
+    const wrap = el.closest('.field');
+    wrap.classList.toggle('invalid', !!msg);
+    el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    document.getElementById(name + '_err').textContent = msg;
+    return !msg;
+  }
+  Object.keys(rules).forEach(n=>{
+    const el = form.elements[n];
+    el.addEventListener('blur', ()=> { if(el.value.trim()) check(n); });
+    el.addEventListener('input', ()=> { if(el.closest('.field').classList.contains('invalid')) check(n); });
+  });
+
+  function show(text, kind){ out.className = kind; out.textContent = text; }
+
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const bad = Object.keys(rules).filter(n=> !check(n));
+    if(bad.length){ form.elements[bad[0]].focus(); show('Please fix the highlighted fields.', 'bad'); return; }
+    if(form.website.value){ show('Thanks — your message has been sent.', 'ok'); form.reset(); return; } // bot
+
+    const v = n => form.elements[n].value.trim();
+    const endpoint = form.getAttribute('action');
+    if(endpoint){
+      btn.disabled = true;
+      show('Sending…', '');
+      try{
+        const res = await fetch(endpoint, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}});
+        if(!res.ok) throw new Error(res.status);
+        form.reset();
+        show(`Thanks, ${v('name') || 'we have it'}. Your message has been sent and we'll reply within one working day.`, 'ok');
+      }catch(err){
+        show(`Sorry, that didn't go through. Please email ${form.dataset.email} or message us on WhatsApp.`, 'bad');
+      }finally{ btn.disabled = false; }
+      return;
+    }
+    // No endpoint configured: open the visitor's email app pre-filled.
+    const subject = encodeURIComponent(`New project enquiry from ${v('name')}`);
+    const body = encodeURIComponent(
+      `Name: ${v('name')}\nEmail: ${v('email')}\nPhone: ${v('phone') || '-'}\nOrganisation: ${v('organisation') || '-'}` +
+      `${form.product.value ? `\nProduct: ${form.product.value}` : ''}\n\n${v('message')}`);
+    show('Your email app should open with the message ready to send. If it does not, email us directly at ' + form.dataset.email + '.', 'ok');
+    window.location.href = `mailto:${form.dataset.email}?subject=${subject}&body=${body}`;
   });
 })();
 
 /* ---- article modals ---- */
 (function(){
-  // open
-  document.querySelectorAll('[data-open]').forEach(trigger=>{
-    trigger.addEventListener('click', ()=>{
-      const modal = document.getElementById('modal-' + trigger.dataset.open);
-      if(!modal) return;
-      modal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      modal.querySelector('.modal-close')?.focus();
-    });
-  });
-
-  // close helpers
+  let lastTrigger = null;
+  function openModal(trigger){
+    const modal = document.getElementById('modal-' + trigger.dataset.open);
+    if(!modal) return;
+    lastTrigger = trigger;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    modal.querySelector('.modal-close')?.focus();
+  }
   function closeModal(modal){
     modal.classList.remove('open');
     document.body.style.overflow = '';
+    lastTrigger?.focus();
   }
-
-  // close button
+  document.querySelectorAll('[data-open]').forEach(trigger=>{
+    trigger.addEventListener('click', ()=> openModal(trigger));
+    trigger.addEventListener('keydown', e=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openModal(trigger); }
+    });
+  });
   document.querySelectorAll('.modal-close').forEach(btn=>{
     btn.addEventListener('click', ()=> closeModal(btn.closest('.modal-overlay')));
   });
-
-  // click outside modal box
   document.querySelectorAll('.modal-overlay').forEach(overlay=>{
-    overlay.addEventListener('click', e=>{
-      if(e.target === overlay) closeModal(overlay);
-    });
+    overlay.addEventListener('click', e=>{ if(e.target === overlay) closeModal(overlay); });
   });
-
-  // Escape key
   document.addEventListener('keydown', e=>{
-    if(e.key === 'Escape'){
-      document.querySelectorAll('.modal-overlay.open').forEach(closeModal);
-    }
+    if(e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(closeModal);
   });
 })();
 
-/* ---- shared: scroll to a card by id ---- */
-function scrollToCard(id){
-  const el = document.getElementById(id);
-  if(!el) return;
-  const headerH = document.getElementById('hdr')?.offsetHeight || 72;
-  const top = el.getBoundingClientRect().top + window.scrollY - headerH - 20;
-  window.scrollTo({top, behavior:'smooth'});
-  // pulse highlight
-  el.classList.remove('card-highlight');
-  void el.offsetWidth; // force reflow so animation restarts
-  el.classList.add('card-highlight');
-  el.addEventListener('animationend', ()=> el.classList.remove('card-highlight'), {once:true});
-}
-
-/* ---- hero tags → scroll to solution card ---- */
-(function(){
-  document.querySelectorAll('.tag[data-scroll]').forEach(tag=>{
-    tag.addEventListener('click', ()=> scrollToCard(tag.dataset.scroll));
-  });
-})();
-
-/* ---- solution filter pills → filter + scroll to card ---- */
+/* ---- solutions filter pills ---- */
 (function(){
   const bar = document.getElementById('solFilter');
   const grid = document.getElementById('solGrid');
   if(!bar || !grid) return;
   const pills = bar.querySelectorAll('.pill');
   const cards = grid.querySelectorAll('.card[data-filter]');
-
   pills.forEach(pill=>{
     pill.addEventListener('click', ()=>{
-      pills.forEach(p=>p.classList.remove('active'));
-      pill.classList.add('active');
-
+      pills.forEach(p=>{ p.classList.toggle('active', p === pill); p.setAttribute('aria-pressed', String(p === pill)); });
       const filter = pill.dataset.filter;
       cards.forEach(card=>{
         const match = filter === 'all' || card.dataset.filter === filter;
         card.style.transition = 'opacity .3s, transform .3s';
-        card.style.opacity    = match ? '1' : '0.25';
-        card.style.transform  = match ? 'scale(1)' : 'scale(0.96)';
+        card.style.opacity = match ? '1' : '0.3';
         card.style.pointerEvents = match ? '' : 'none';
       });
-
-      // scroll to first matching card
       if(filter !== 'all'){
         const target = grid.querySelector(`.card[data-filter="${filter}"]`);
-        if(target) setTimeout(()=> scrollToCard(target.id), 80);
-      } else {
-        // scroll to grid top
-        const headerH = document.getElementById('hdr')?.offsetHeight || 72;
-        const top = grid.getBoundingClientRect().top + window.scrollY - headerH - 20;
-        window.scrollTo({top, behavior:'smooth'});
+        if(target){
+          target.classList.remove('card-highlight'); void target.offsetWidth; target.classList.add('card-highlight');
+          target.scrollIntoView({behavior:'smooth', block:'center'});
+        }
       }
     });
   });
 })();
-

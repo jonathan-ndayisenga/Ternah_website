@@ -1,234 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ternah Software Company Ltd | Keep it simple.</title>
-<meta name="description" content="Ternah Software Company Ltd builds custom software, ERP, automation, data and cloud solutions for businesses across Africa.">
+<meta name="description" content="Software built around the way your business already runs, for hospitals, factories, shops and SACCOs. Built in Kampala, Uganda.">
+<link rel="canonical" href="https://ternahwebsite.onrender.com/">
 
-<!-- canonical -->
-<link rel="canonical" href="https://ternah.onrender.com">
-
-<!-- favicon -->
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="shortcut icon" href="assets/favicon.svg">
-<meta name="theme-color" content="#2f4cff">
+<link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#14233A">
 
-<!-- open graph -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ternah Software Company Ltd">
-<meta property="og:url" content="https://ternah.onrender.com">
+<meta property="og:url" content="https://ternahwebsite.onrender.com/">
 <meta property="og:title" content="Ternah Software Company Ltd | Keep it simple.">
-<meta property="og:description" content="Ternah Software Company Ltd builds custom software, ERP, automation, data and cloud solutions for businesses across Africa.">
-<meta property="og:image" content="https://ternah.onrender.com/assets/og-image.svg">
+<meta property="og:description" content="Software built around the way your business already runs, for hospitals, factories, shops and SACCOs. Built in Kampala, Uganda.">
+<meta property="og:image" content="https://ternahwebsite.onrender.com/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:locale" content="en_US">
-
-<!-- twitter / x card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Ternah Software Company Ltd | Keep it simple.">
-<meta name="twitter:description" content="Ternah Software Company Ltd builds custom software, ERP, automation, data and cloud solutions for businesses across Africa.">
-<meta name="twitter:image" content="https://ternah.onrender.com/assets/og-image.svg">
+<meta name="twitter:description" content="Software built around the way your business already runs, for hospitals, factories, shops and SACCOs. Built in Kampala, Uganda.">
+<meta name="twitter:image" content="https://ternahwebsite.onrender.com/assets/og-image.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/ternah-ui/fonts/HankenGrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/ternah-ui/tokens.css">
 <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-page="index">
 
 <header id="hdr">
   <div class="nav">
-    <a class="brand" href="index.html">
-      <svg class="mk" viewBox="0 0 100 94"><g fill="#fff"><path d="M27 14 L45 14 C47 14 48 16 47 18 L38 41 C37 43 34 43 33 41 L24 19 C23 16 24 14 27 14 Z"/><path d="M58 14 L84 14 C86 14 87 16 87 18 L87 34 C87 37 84 38 82 36 L74 30 L34 78 C33 79 31 80 29 80 L18 80 C15 80 14 77 16 75 L58 14 Z"/><path d="M73 78 L55 78 C53 78 52 76 53 74 L62 51 C63 49 66 49 67 51 L76 73 C77 76 76 78 73 78 Z"/></g></svg>
-      <span class="wm">TERNAH</span>
-    </a>
-    <nav class="navlinks" id="navlinks">
-      <a href="index.html" data-nav="index">Home</a>
-      <a href="about.html" data-nav="about">About</a>
+    <a class="brand" href="index.html" aria-label="Ternah home"><span class="logo" aria-hidden="true">T</span><span class="wm">Ternah</span></a>
+    <nav class="navlinks" id="navlinks" aria-label="Main">
       <a href="solutions.html" data-nav="solutions">Solutions</a>
-      <a href="industries.html" data-nav="industries">Industries</a>
       <a href="products.html" data-nav="products">Products</a>
+      <a href="industries.html" data-nav="industries">Industries</a>
+      <a href="about.html" data-nav="about">About</a>
       <a href="insights.html" data-nav="insights">Insights</a>
       <a href="contact.html" data-nav="contact">Contact</a>
+      <a class="btn btn-primary nav-cta-m" href="contact.html">Start a project</a>
     </nav>
-    <a class="nav-cta" href="contact.html">Start a Project</a>
-    <div class="burger" id="burger"><span></span><span></span><span></span></div>
+    <a class="btn btn-primary" href="contact.html">Start a project</a>
+    <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span><span></span></button>
   </div>
 </header>
 
-<main class="fade-in">
-<section class="hero">
-  <div class="hero-veil"></div>
-  <div class="hero-inner">
-    <div class="eyebrow reveal in">Ternah Software Company Ltd</div>
-    <h1 class="reveal in" data-d="1" style="margin-top:24px">Keep<br>it <span class="kick">simple.</span></h1>
-    <div class="sub reveal in" data-d="2">We build software that works.</div>
-    <p class="lead reveal in" data-d="3">Custom-built systems, crafted to fit the exact way your business runs, powering teams, organizations, and communities across Africa.</p>
-    <div class="hero-cta reveal in" data-d="4">
-      <a class="btn btn-primary" href="contact.html">Start a Project <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-      <a class="btn btn-ghost" href="solutions.html">Explore Solutions</a>
-    </div>
-    <div class="hero-tags reveal in" data-d="5">
-      <button class="tag" data-scroll="sol-software">Custom Software</button><button class="tag" data-scroll="sol-erp">ERP &amp; CRM</button><button class="tag" data-scroll="sol-automation">Automation</button><button class="tag" data-scroll="sol-data">Data &amp; Analytics</button><button class="tag" data-scroll="sol-cloud">Cloud</button><button class="tag" data-scroll="sol-support">Support</button>
-    </div>
+<main>
+<section class="hero wrap">
+  <span class="origin"><span class="flag" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>Built in Kampala, Uganda</span>
+  <h1>Keep it simple.<span class="l2">We build software that works.</span></h1>
+  <p class="lead">Systems built around the way your business already runs, for hospitals, factories, shops and SACCOs.</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary btn-lg" href="contact.html">Start a project</a>
+    <a class="btn btn-ghost btn-lg" href="#products">See our products</a>
   </div>
-  <div class="scroll-ind"><div class="line"></div>Scroll</div>
-</section>
-
-<section class="sec">
-  <div class="stats">
-    <div class="stat reveal"><div class="n">100%</div><div class="l">Custom-built to fit</div></div>
-    <div class="stat reveal" data-d="1"><div class="n">9+</div><div class="l">Industries served</div></div>
-    <div class="stat green reveal" data-d="2"><div class="n">Weeks</div><div class="l">Not quarters to ship</div></div>
-    <div class="stat reveal" data-d="3"><div class="n">Africa</div><div class="l">Built for the future</div></div>
-  </div>
-</section>
-
-<section class="sec" style="padding-top:20px">
-  <div class="sec-head">
-    <span class="eyebrow">What we build</span>
-    <h2 class="h2">Six ways we<br>move you forward.</h2>
-    <p class="lead">From a single tool to a full platform: design, build, and support — under one accountable team.</p>
-  </div>
-  <div class="svc-grid">
-    <div class="svc-item reveal" id="sol-software" data-d="1" data-filter="software">
-      <div class="svc-num">01</div>
-      <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-      <h3>Custom Software Development</h3>
-      <p>Enterprise systems, web applications, and business platforms engineered around your exact processes.</p>
-    </div>
-    <div class="svc-item reveal" id="sol-erp" data-d="2" data-filter="erp">
-      <div class="svc-num">02</div>
-      <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
-      <h3>ERP & Business Systems</h3>
-      <p>Unified ERP, CRM, inventory, school and healthcare information systems that connect every part of your operation.</p>
-    </div>
-    <div class="svc-item reveal" id="sol-automation" data-d="3" data-filter="automation">
-      <div class="svc-num">03</div>
-      <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M9 6h6a2 2 0 0 1 2 2v7"/></svg></div>
-      <h3>Automation</h3>
-      <p>Replace manual work with intelligent workflows, approvals, and digital documentation that run themselves.</p>
-    </div>
-    <div class="svc-item reveal" id="sol-data" data-d="1" data-filter="data">
-      <div class="svc-num">04</div>
-      <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-      <h3>Data & Analytics</h3>
-      <p>Turn raw data into decisions with dashboards, reporting, and decision-support built for clarity.</p>
-    </div>
-    <div class="svc-item reveal" id="sol-cloud" data-d="2" data-filter="cloud">
-      <div class="svc-num">05</div>
-      <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
-      <h3>Cloud Solutions</h3>
-      <p>Business email, collaboration, migration, and infrastructure that scale with your team.</p>
-    </div>
-    <div class="svc-item reveal" id="sol-support" data-d="3" data-filter="support">
-      <div class="svc-num">06</div>
-      <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></div>
-      <h3>Support & Managed Services</h3>
-      <p>Maintenance, monitoring, security updates and optimization that keep everything running.</p>
-    </div>
-  </div>
-  <div class="center mt-cta"><a class="btn btn-ghost" href="solutions.html">All solutions <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a></div>
-</section>
-
-<section class="sec">
-  <div class="sec-head">
-    <span class="eyebrow">How we work</span>
-    <h2 class="h2">Simple process.<br>Real delivery.</h2>
-    <p class="lead">Five steps from your first conversation to a running system.</p>
-  </div>
-  <div class="process-track">
-    <div class="process-step reveal" data-d="1">
-      <div class="process-dot">1</div>
-      <h4>Discover</h4>
-      <p>We learn how your business actually runs before proposing anything.</p>
-    </div>
-    <div class="process-step reveal" data-d="2">
-      <div class="process-dot">2</div>
-      <h4>Design</h4>
-      <p>We map the system to your exact workflow, simply and intentionally.</p>
-    </div>
-    <div class="process-step reveal" data-d="3">
-      <div class="process-dot">3</div>
-      <h4>Build</h4>
-      <p>Pragmatic engineering with weekly visible progress you can follow.</p>
-    </div>
-    <div class="process-step reveal" data-d="4">
-      <div class="process-dot">4</div>
-      <h4>Ship</h4>
-      <p>We deploy, test, and make sure every part lands correctly.</p>
-    </div>
-    <div class="process-step reveal" data-d="5">
-      <div class="process-dot">5</div>
-      <h4>Support</h4>
-      <p>We stay for maintenance, updates, and growth long after launch.</p>
-    </div>
+  <div class="stage">
+    <div class="photo"><div class="photo-ph" role="img" aria-label="Team photo, Kampala office"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>[Team photo, Kampala office]</span></div></div>
+    <figure class="frame f-left"><div class="shot"><div role="img" aria-label="Ternah Health home screen" style="width:100%;height:100%"><div class="dash" aria-hidden="true">
+        <div class="sb"><div class="sb-brand"><span class="sb-logo">T</span><div><div class="sb-name">[Hospital name]</div><div class="sb-sub">Ternah Health</div></div></div><a class="on">Home</a><a class="">Reception</a><a class="">Doctor</a><a class="">Nursing</a><a class="">Laboratory</a><a class="">Sonography</a><a class="">Inventory</a><a class="">Finance</a><a class="">Hospital admin</a>
+          <div class="sb-user"><span class="sb-av">AD</span><div>[First name]<br><span class="sb-sub">Hospital admin</span></div></div></div>
+        <div class="main"><div class="top"><div class="search">Search patient by name, phone or patient number</div><div class="date">Wednesday, 30 September</div></div>
+          <div class="greet">Good morning, [First name]</div><div class="greet-sub">[Hospital name] · here is where every department stands right now.</div>
+          <div class="tiles"><div class="t s2"><div class="tt"><span class="ti"></span>Reception</div><span class="n">6</span><span class="u">waiting at the desk</span></div><div class="t s2 raised"><div class="tt"><span class="ti"></span>Doctor</div><span class="n">7</span><span class="u">patients waiting</span><span class="n w">42 min</span><span class="u">longest wait</span><div class="pills"><span>Open queue</span><span>Today&#x27;s consultations</span></div></div><div class="t"><div class="tt"><span class="ti"></span>Laboratory</div><span class="n">3</span><span class="u">results pending</span></div><div class="t"><div class="tt"><span class="ti"></span>Nursing</div><span class="n">4</span><span class="u">awaiting triage</span></div><div class="t"><div class="tt"><span class="ti"></span>Sonography</div><span class="n">2</span><span class="u">scans queued</span></div><div class="t"><div class="tt"><span class="ti w"></span>Inventory</div><span class="n amber">4</span><span class="u">items below reorder level</span></div><div class="t s2"><div class="tt"><span class="ti"></span>Finance</div><span class="n">UGX 2.4M</span><span class="u">collected today</span></div><div class="t s2"><div class="tt"><span class="ti"></span>Hospital admin</div><div class="calm">Nothing needs your attention</div></div></div></div>
+      </div></div></div><figcaption class="cap">Ternah Health</figcaption></figure>
+    <figure class="frame f-right"><div class="shot"><div role="img" aria-label="Ternah for Factories home screen" style="width:100%;height:100%"><div class="dash" aria-hidden="true">
+        <div class="sb"><div class="sb-brand"><span class="sb-logo">T</span><div><div class="sb-name">[Factory name]</div><div class="sb-sub">Ternah for Factories</div></div></div><a class="on">Home</a><a class="">Production</a><a class="">Branch &amp; stock</a><a class="">Cashier</a><a class="">Finance</a><a class="">Staff</a>
+          <div class="sb-user"><span class="sb-av">JN</span><div>[First name]<br><span class="sb-sub">Manager</span></div></div></div>
+        <div class="main"><div class="top"><div class="search">Search products, batches, customers or receipts</div><div class="date">Wednesday, 30 September</div></div>
+          <div class="greet">Good afternoon, [First name]</div><div class="greet-sub">[Factory name] · here is where the factory stands right now.</div>
+          <div class="tiles"><div class="t s2 raised"><div class="tt"><span class="ti"></span>Production</div><span class="n">2</span><span class="u">batches in progress</span><span class="n w">1</span><span class="u">formula short of materials</span><div class="pills"><span>Start batch</span><span>Formulas</span><span>Distribution</span></div></div><div class="t s2"><div class="tt"><span class="ti"></span>Branch &amp; stock</div><span class="n">3</span><span class="u">stock movements awaiting approval</span></div><div class="t s2"><div class="tt"><span class="ti"></span>Cashier</div><span class="n">UGX 640K</span><span class="u">sales today</span></div><div class="t"><div class="tt"><span class="ti w"></span>Finance</div><span class="n amber">5</span><span class="u">debtors overdue</span></div><div class="t"><div class="tt"><span class="ti"></span>Staff</div><div class="calm">Nothing needs your attention</div></div></div></div>
+      </div></div></div><figcaption class="cap">Ternah for Factories</figcaption></figure>
   </div>
 </section>
 
-<div class="marquee-section">
-  <div class="marquee-track">
-    <span class="marquee-item">Education</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Healthcare</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Logistics</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Retail</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">NGOs</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Government</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Finance</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Hospitality</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Agriculture</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Pharmacy</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Real Estate</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Manufacturing</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Education</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Healthcare</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Logistics</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Retail</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">NGOs</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Government</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Finance</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Hospitality</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Agriculture</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Pharmacy</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Real Estate</span><span class="marquee-sep">&nbsp;·&nbsp;</span><span class="marquee-item">Manufacturing</span><span class="marquee-sep">&nbsp;·&nbsp;</span>
+<section class="sec wrap" id="products">
+  <div class="sec-head"><span class="eyebrow">Products</span><h2 class="h2">Software already at work.</h2><p class="lead">Products we build and run, each designed around one kind of business.</p></div>
+  <div class="grid g3">
+    <article class="card prod reveal" id="ternah-health" data-d="1">
+      <div class="frame"><div class="shot"><div role="img" aria-label="Ternah Health home screen" style="width:100%;height:100%"><div class="dash" aria-hidden="true">
+        <div class="sb"><div class="sb-brand"><span class="sb-logo">T</span><div><div class="sb-name">[Hospital name]</div><div class="sb-sub">Ternah Health</div></div></div><a class="on">Home</a><a class="">Reception</a><a class="">Doctor</a><a class="">Nursing</a><a class="">Laboratory</a><a class="">Sonography</a><a class="">Inventory</a><a class="">Finance</a><a class="">Hospital admin</a>
+          <div class="sb-user"><span class="sb-av">AD</span><div>[First name]<br><span class="sb-sub">Hospital admin</span></div></div></div>
+        <div class="main"><div class="top"><div class="search">Search patient by name, phone or patient number</div><div class="date">Wednesday, 30 September</div></div>
+          <div class="greet">Good morning, [First name]</div><div class="greet-sub">[Hospital name] · here is where every department stands right now.</div>
+          <div class="tiles"><div class="t s2"><div class="tt"><span class="ti"></span>Reception</div><span class="n">6</span><span class="u">waiting at the desk</span></div><div class="t s2 raised"><div class="tt"><span class="ti"></span>Doctor</div><span class="n">7</span><span class="u">patients waiting</span><span class="n w">42 min</span><span class="u">longest wait</span><div class="pills"><span>Open queue</span><span>Today&#x27;s consultations</span></div></div><div class="t"><div class="tt"><span class="ti"></span>Laboratory</div><span class="n">3</span><span class="u">results pending</span></div><div class="t"><div class="tt"><span class="ti"></span>Nursing</div><span class="n">4</span><span class="u">awaiting triage</span></div><div class="t"><div class="tt"><span class="ti"></span>Sonography</div><span class="n">2</span><span class="u">scans queued</span></div><div class="t"><div class="tt"><span class="ti w"></span>Inventory</div><span class="n amber">4</span><span class="u">items below reorder level</span></div><div class="t s2"><div class="tt"><span class="ti"></span>Finance</div><span class="n">UGX 2.4M</span><span class="u">collected today</span></div><div class="t s2"><div class="tt"><span class="ti"></span>Hospital admin</div><div class="calm">Nothing needs your attention</div></div></div></div>
+      </div></div></div></div>
+      <div class="body">
+        <div class="kicker">Hospitals &amp; clinics</div>
+        <h3>Ternah Health</h3>
+        <p class="for">For hospitals and clinics that want every department, from reception to finance, on one screen.</p>
+        
+        <div class="act" style="margin-top:24px"><a class="btn btn-ghost" href="contact.html?product=ternah-health">Book a demo <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+      </div>
+    </article>
+    <article class="card prod reveal" id="ternah-factories" data-d="2">
+      <div class="frame"><div class="shot"><div role="img" aria-label="Ternah for Factories home screen" style="width:100%;height:100%"><div class="dash" aria-hidden="true">
+        <div class="sb"><div class="sb-brand"><span class="sb-logo">T</span><div><div class="sb-name">[Factory name]</div><div class="sb-sub">Ternah for Factories</div></div></div><a class="on">Home</a><a class="">Production</a><a class="">Branch &amp; stock</a><a class="">Cashier</a><a class="">Finance</a><a class="">Staff</a>
+          <div class="sb-user"><span class="sb-av">JN</span><div>[First name]<br><span class="sb-sub">Manager</span></div></div></div>
+        <div class="main"><div class="top"><div class="search">Search products, batches, customers or receipts</div><div class="date">Wednesday, 30 September</div></div>
+          <div class="greet">Good afternoon, [First name]</div><div class="greet-sub">[Factory name] · here is where the factory stands right now.</div>
+          <div class="tiles"><div class="t s2 raised"><div class="tt"><span class="ti"></span>Production</div><span class="n">2</span><span class="u">batches in progress</span><span class="n w">1</span><span class="u">formula short of materials</span><div class="pills"><span>Start batch</span><span>Formulas</span><span>Distribution</span></div></div><div class="t s2"><div class="tt"><span class="ti"></span>Branch &amp; stock</div><span class="n">3</span><span class="u">stock movements awaiting approval</span></div><div class="t s2"><div class="tt"><span class="ti"></span>Cashier</div><span class="n">UGX 640K</span><span class="u">sales today</span></div><div class="t"><div class="tt"><span class="ti w"></span>Finance</div><span class="n amber">5</span><span class="u">debtors overdue</span></div><div class="t"><div class="tt"><span class="ti"></span>Staff</div><div class="calm">Nothing needs your attention</div></div></div></div>
+      </div></div></div></div>
+      <div class="body">
+        <div class="kicker">Manufacturing</div>
+        <h3>Ternah for Factories</h3>
+        <p class="for">For manufacturers who need production, branch stock and sales in one place.</p>
+        
+        <div class="act" style="margin-top:24px"><a class="btn btn-ghost" href="contact.html?product=ternah-factories">Book a demo <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+      </div>
+    </article>
+    <article class="card prod reveal" id="mykashop" data-d="3">
+      <div class="frame"><div class="shot"><div class="prod-ph" role="img" aria-label="Screenshot of Mykashop coming soon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>[Mykashop screenshot]</span></div></div></div>
+      <div class="body">
+        <div class="kicker">Shops &amp; retail</div>
+        <h3>Mykashop</h3>
+        <p class="for">For shops, supermarkets, hardware stores and restaurants that need real control of stock and sales.</p>
+        
+        <div class="act" style="margin-top:24px"><a class="btn btn-ghost" href="https://mykashop.online/" target="_blank" rel="noopener noreferrer">Visit Mykashop <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></div>
+      </div>
+    </article>
   </div>
-</div>
-
-<section class="sec">
-  <div class="sec-head">
-    <span class="eyebrow">Why Ternah</span>
-    <h2 class="h2">A partner, not<br>just a vendor.</h2>
-  </div>
-  <div class="why-grid">
-    <div class="why-block reveal">
-      <div class="bn">01</div>
-      <div class="accent-line"></div>
-      <h3>Built to fit you</h3>
-      <p>Software shaped around your exact processes, not a rigid template you bend to fit. We start by understanding how you already work.</p>
-    </div>
-    <div class="why-block reveal" data-d="1">
-      <div class="bn">02</div>
-      <div class="accent-line"></div>
-      <h3>African insight</h3>
-      <p>Local understanding of the markets, constraints, connectivity, and opportunities you actually operate in. Not imported assumptions.</p>
-    </div>
-    <div class="why-block reveal" data-d="2">
-      <div class="bn">03</div>
-      <div class="accent-line"></div>
-      <h3>Scalable by design</h3>
-      <p>Architecture that grows the moment your business does, without painful rebuilds or migrations six months in.</p>
-    </div>
-  </div>
+  <div class="center mt-cta"><a class="link-arrow" href="products.html">See all 8 products <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
 </section>
 
-<section class="sec">
-  <div class="sec-head">
-    <span class="eyebrow">Featured products</span>
-    <h2 class="h2">Work that ships.</h2>
-    <p class="lead">A selection of platforms and systems we have designed and delivered.</p>
-  </div>
+<section class="sec wrap">
+  <div class="sec-head"><span class="eyebrow">Services</span><h2 class="h2">Built to fit, from first idea to support.</h2><p class="lead">One team designs, builds and supports your system.</p></div>
   <div class="grid g3">
     <div class="card reveal" data-d="1">
-      <div class="num">Real Estate · SaaS</div><h3>Property Management Platform</h3><p>Multi-tenant SaaS for property businesses with double-entry accounting, automated accruals, supplier ledgers, and VAT reporting.</p>
-      <div class="chip-row"><span class="chip">Django</span><span class="chip">SaaS</span><span class="chip">Accounting</span></div>
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><h3>Custom software and websites</h3><p>Business systems, web applications and static or dynamic websites, built around the way you work.</p>
     </div>
     <div class="card reveal" data-d="2">
-      <div class="num">Retail · SaaS</div><h3><a class="card-link-title" href="http://mykashop.online/" target="_blank" rel="noopener noreferrer">Mykashop</a></h3><p>One platform for stock, sales, debtors, expenses, and business performance. Built for shops, supermarkets, pharmacies, hardware stores, restaurants, and any growing retail business that needs real control.</p>
-      <div class="chip-row"><span class="chip">POS</span><span class="chip">Inventory</span><span class="chip">Multi-tenant</span></div><a class="live-link" href="http://mykashop.online/" target="_blank" rel="noopener noreferrer">Visit live site <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div><h3>ERP and business systems</h3><p>ERP, CRM, inventory, school and health systems that connect every part of your operation.</p>
     </div>
     <div class="card reveal" data-d="3">
-      <div class="num">Healthcare · EMR</div><h3>Medical Records & Inventory</h3><p>Electronic medical records with prescriptions, dispensing, automatic stock deduction, and lab management.</p>
-      <div class="chip-row"><span class="chip">EMR</span><span class="chip">Inventory</span><span class="chip">Compliance</span></div>
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M9 6h6a2 2 0 0 1 2 2v7"/></svg></div><h3>Automation</h3><p>Replace manual work with workflows, approvals and digital records.</p>
+    </div>
+    <div class="card reveal" data-d="1">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><h3>Data and analytics</h3><p>Dashboards and reports that show where the business stands today.</p>
+    </div>
+    <div class="card reveal" data-d="2">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div><h3>Cloud services</h3><p>Business email, collaboration and migration that grow with your team.</p>
+    </div>
+    <div class="card reveal" data-d="3">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></div><h3>Support and maintenance</h3><p>Monitoring, security updates and improvements after launch.</p>
     </div>
   </div>
-  <div class="center mt-cta"><a class="btn btn-ghost" href="products.html">See all products <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a></div>
+  <div class="center mt-cta"><a class="link-arrow" href="solutions.html">All services <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
 </section>
 
-<section class="sec">
-  <div class="cta-band reveal">
-    <div class="mkbg"><svg class="mk" viewBox="0 0 100 94"><g fill="#fff"><path d="M27 14 L45 14 C47 14 48 16 47 18 L38 41 C37 43 34 43 33 41 L24 19 C23 16 24 14 27 14 Z"/><path d="M58 14 L84 14 C86 14 87 16 87 18 L87 34 C87 37 84 38 82 36 L74 30 L34 78 C33 79 31 80 29 80 L18 80 C15 80 14 77 16 75 L58 14 Z"/><path d="M73 78 L55 78 C53 78 52 76 53 74 L62 51 C63 49 66 49 67 51 L76 73 C77 76 76 78 73 78 Z"/></g></svg></div>
+<section class="sec wrap">
+  <div class="sec-head"><span class="eyebrow">How we work</span><h2 class="h2">Five steps to a running system.</h2></div>
+  <ol class="process">
+    <li class="step reveal" data-d="1"><span class="dot">1</span><h3>Discover</h3><p>We learn how your business actually runs before proposing anything.</p></li>
+    <li class="step reveal" data-d="2"><span class="dot">2</span><h3>Design</h3><p>We map the system to your workflow, simply and on purpose.</p></li>
+    <li class="step reveal" data-d="3"><span class="dot">3</span><h3>Build</h3><p>Progress you can see every week.</p></li>
+    <li class="step reveal" data-d="4"><span class="dot">4</span><h3>Ship</h3><p>We deploy, test and train your team.</p></li>
+    <li class="step reveal" data-d="1"><span class="dot">5</span><h3>Support</h3><p>We stay for updates and growth after launch.</p></li>
+  </ol>
+</section>
+
+<section class="sec wrap">
+  <div class="sec-head"><span class="eyebrow">Industries</span><h2 class="h2">Who we build for.</h2></div>
+  <div class="chips"><a class="chip" href="industries.html">Healthcare</a><a class="chip" href="industries.html">Manufacturing</a><a class="chip" href="industries.html">Retail</a><a class="chip" href="industries.html">SACCOs and finance</a><a class="chip" href="industries.html">Pharmacy</a><a class="chip" href="industries.html">Hospitality</a><a class="chip" href="industries.html">Real estate</a><a class="chip" href="industries.html">Education</a><a class="chip" href="industries.html">Logistics</a><a class="chip" href="industries.html">NGOs</a><a class="chip" href="industries.html">Government</a></div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap">
     <h2>Let's build something that fits.</h2><p>Tell us how your business runs. We'll turn it into software that keeps it simple.</p>
-    <div class="row-cta"><a class="btn btn-primary" href="contact.html">Start a Project <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a><a class="btn btn-ghost" href="mailto:ternah22@gmail.com">ternah22@gmail.com</a></div>
+    <div class="row-cta">
+      <a class="btn btn-primary btn-lg" href="contact.html">Start a project <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="btn btn-ghost btn-lg btn-wa" href="https://wa.me/256787770007" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> WhatsApp us</a>
+    </div>
   </div>
 </section>
 </main>
@@ -236,50 +180,33 @@
 <footer>
   <div class="foot">
     <div>
-      <a class="brand" href="index.html"><svg class="mk" viewBox="0 0 100 94" style="width:34px;height:32px"><g fill="#fff"><path d="M27 14 L45 14 C47 14 48 16 47 18 L38 41 C37 43 34 43 33 41 L24 19 C23 16 24 14 27 14 Z"/><path d="M58 14 L84 14 C86 14 87 16 87 18 L87 34 C87 37 84 38 82 36 L74 30 L34 78 C33 79 31 80 29 80 L18 80 C15 80 14 77 16 75 L58 14 Z"/><path d="M73 78 L55 78 C53 78 52 76 53 74 L62 51 C63 49 66 49 67 51 L76 73 C77 76 76 78 73 78 Z"/></g></svg><span class="wm">TERNAH</span></a>
-      <p style="margin-top:20px">Software Company Ltd. Building Africa's digital future: practical, scalable, reliable software, crafted to fit.</p>
+      <a class="brand" href="index.html" aria-label="Ternah home"><span class="logo" aria-hidden="true">T</span><span class="wm">Ternah</span></a>
+      <p>Software built around the way your business already runs. Made in Kampala, Uganda.</p>
     </div>
     <div>
       <h4>Company</h4>
       <a href="about.html">About</a><a href="solutions.html">Solutions</a>
-      <a href="industries.html">Industries</a><a href="products.html">Products</a><a href="insights.html">Insights</a>
+      <a href="industries.html">Industries</a><a href="insights.html">Insights</a>
     </div>
     <div>
-      <h4>Solutions</h4>
-      <a href="solutions.html">Custom Software</a><a href="solutions.html">ERP &amp; Business Systems</a>
-      <a href="solutions.html">Automation</a><a href="solutions.html">Data &amp; Analytics</a><a href="solutions.html">Cloud Solutions</a>
+      <h4>Products</h4>
+      <a href="products.html#ternah-health">Ternah Health</a><a href="products.html#ternah-factories">Ternah for Factories</a><a href="products.html#mykashop">Mykashop</a><a href="products.html#sacco">SACCO platform</a>
+      <a href="products.html">All products</a>
     </div>
     <div>
       <h4>Get in touch</h4>
       <a href="mailto:ternah22@gmail.com">ternah22@gmail.com</a>
-      <a href="https://wa.me/256787770007" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-      <a href="contact.html">Start a Project</a>
+      <a href="https://wa.me/256787770007" target="_blank" rel="noopener noreferrer">WhatsApp +256 787 770007</a>
+      <a href="contact.html">Start a project</a>
     </div>
   </div>
   <div class="foot-bot">
-    <span>© <span id="yr"></span> Ternah Software Company Ltd. All rights reserved.</span>
-    <span class="slg">Keep it simple.</span>
+    <span>© 2026 Ternah Software Company Ltd</span>
+    <span>Kampala, Uganda · Keep it simple.</span>
   </div>
 </footer>
 
-<!-- floating contact buttons -->
-<div class="fab-group">
-  <a class="fab fab-wa" href="https://wa.me/256787770007" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" data-tip="WhatsApp">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-    </svg>
-  </a>
-  <a class="fab fab-email" href="mailto:ternah22@gmail.com" aria-label="Send us an email" data-tip="Email us">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>
-    </svg>
-  </a>
-  <a class="fab fab-call" href="tel:+256787770007" aria-label="Call us" data-tip="Call us">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.13 12.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
-    </svg>
-  </a>
-</div>
+<a class="fab-wa" href="https://wa.me/256787770007" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
 
 <script src="assets/js/main.js"></script>
 </body>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ternahwebsite.onrender.com/sitemap.xml

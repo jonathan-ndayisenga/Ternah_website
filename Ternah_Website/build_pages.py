@@ -1,228 +1,326 @@
-﻿#!/usr/bin/env python3
-"""Builds the multi-page Ternah site: standalone .html files sharing one CSS + JS."""
+#!/usr/bin/env python3
+"""Builds the multi-page Ternah site: standalone .html files sharing one CSS + JS.
 
-import os, pathlib
+Run:  python build_pages.py
+Never hand-edit the generated .html files; edit this script and rebuild.
+Real photos and screenshots are picked up automatically when they exist
+(see IMAGE SLOTS below); until then a labelled placeholder is shown.
+"""
+
+import os, pathlib, datetime
+from html import escape
 OUT = str(pathlib.Path(__file__).parent)  # writes next to this script
 
-MARK_PATHS = ('<path d="M27 14 L45 14 C47 14 48 16 47 18 L38 41 C37 43 34 43 33 41 L24 19 C23 16 24 14 27 14 Z"/>'
-              '<path d="M58 14 L84 14 C86 14 87 16 87 18 L87 34 C87 37 84 38 82 36 L74 30 L34 78 C33 79 31 80 29 80 L18 80 C15 80 14 77 16 75 L58 14 Z"/>'
-              '<path d="M73 78 L55 78 C53 78 52 76 53 74 L62 51 C63 49 66 49 67 51 L76 73 C77 76 76 78 73 78 Z"/>')
+# ================= SITE SETTINGS — change these in one place =================
+COMPANY      = 'Ternah Software Company Ltd'
+SITE_URL     = 'https://ternahwebsite.onrender.com'   # switch to the Ternah domain once it is live
+EMAIL        = 'ternah22@gmail.com'                    # switch to hello@<domain> once domain email exists
+PHONE        = '+256 787 770007'
+PHONE_TEL    = '+256787770007'
+WHATSAPP     = 'https://wa.me/256787770007'
+OFFICE       = 'Kampala, Uganda'
+COMPANY_REG  = ''   # e.g. 'Reg. no. 80020001234567'; shown in the footer when set
+FORM_ENDPOINT = ''  # e.g. 'https://formspree.io/f/xxxx'; empty = form opens the visitor's email app
+ANALYTICS_DOMAIN = ''  # e.g. 'ternah.co.ug' to load Plausible; empty = no analytics
 
-def MK(color, cls="mk", style=""):
-    return f'<svg class="{cls}" viewBox="0 0 100 94"{f" style=\"{style}\"" if style else ""}><g fill="{color}">{MARK_PATHS}</g></svg>'
+def exists(rel):
+    return os.path.exists(os.path.join(OUT, rel))
 
+# ================= ICONS =================
 ARROW = ('<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" '
-         'stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>')
+         'stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>')
+EXT = ('<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+       '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>')
+CAMERA = ('<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'
+          '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>')
+WA_SVG = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>')
 
+def _i(body):
+    return f'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{body}</svg>'
 ICONS = {
- 'code':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
- 'layers':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
- 'flow':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M9 6h6a2 2 0 0 1 2 2v7"/></svg>',
- 'chart':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
- 'cloud':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
- 'support':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>',
- 'edu':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
- 'health':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
- 'truck':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
- 'cart':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
- 'globe':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
- 'bank':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>',
- 'gov':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/></svg>',
- 'mail':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>',
- 'phone':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
- 'pin':'<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+ 'code':   _i('<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>'),
+ 'layers': _i('<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>'),
+ 'flow':   _i('<rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M9 6h6a2 2 0 0 1 2 2v7"/>'),
+ 'chart':  _i('<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>'),
+ 'cloud':  _i('<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>'),
+ 'support':_i('<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>'),
+ 'edu':    _i('<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>'),
+ 'health': _i('<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>'),
+ 'truck':  _i('<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>'),
+ 'cart':   _i('<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>'),
+ 'globe':  _i('<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'),
+ 'bank':   _i('<line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/>'),
+ 'gov':    _i('<path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/>'),
+ 'factory':_i('<path d="M2 20h20V9l-6 4V9l-6 4V4H2z"/>'),
+ 'bed':    _i('<path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"/>'),
+ 'pill':   _i('<path d="M10.5 20.5 3.5 13.5a5 5 0 0 1 7-7l7 7a5 5 0 0 1-7 7z"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/>'),
+ 'home':   _i('<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'),
+ 'mail':   _i('<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>'),
+ 'phone':  _i('<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>'),
+ 'chat':   _i('<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>'),
+ 'pin':    _i('<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'),
 }
 
-# ---------------- shared shell ----------------
-NAV_ITEMS = [('index','Home'),('about','About'),('solutions','Solutions'),
-             ('industries','Industries'),('products','Products'),('insights','Insights'),('contact','Contact')]
+# ================= SHARED SHELL =================
+NAV_ITEMS = [('solutions','Solutions'),('products','Products'),('industries','Industries'),
+             ('about','About'),('insights','Insights'),('contact','Contact')]
 
-def nav_links():
-    out=[]
-    for slug,label in NAV_ITEMS:
-        href = 'index.html' if slug=='index' else f'{slug}.html'
-        out.append(f'<a href="{href}" data-nav="{slug}">{label}</a>')
-    return "\n      ".join(out)
+def brand():
+    return '<a class="brand" href="index.html" aria-label="Ternah home"><span class="logo" aria-hidden="true">T</span><span class="wm">Ternah</span></a>'
 
-def header_html():
+def header_html(slug):
+    links = "\n      ".join(
+        f'<a href="{s}.html" data-nav="{s}"{" aria-current=\"page\"" if s==slug else ""}>{label}</a>'
+        for s,label in NAV_ITEMS)
     return f'''<header id="hdr">
   <div class="nav">
-    <a class="brand" href="index.html">
-      {MK('#fff')}
-      <span class="wm">TERNAH</span>
-    </a>
-    <nav class="navlinks" id="navlinks">
-      {nav_links()}
+    {brand()}
+    <nav class="navlinks" id="navlinks" aria-label="Main">
+      {links}
+      <a class="btn btn-primary nav-cta-m" href="contact.html">Start a project</a>
     </nav>
-    <a class="nav-cta" href="contact.html">Start a Project</a>
-    <div class="burger" id="burger"><span></span><span></span><span></span></div>
+    <a class="btn btn-primary" href="contact.html">Start a project</a>
+    <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span><span></span></button>
   </div>
 </header>'''
 
 def footer_html():
+    reg = f' · {escape(COMPANY_REG)}' if COMPANY_REG else ''
     return f'''<footer>
   <div class="foot">
     <div>
-      <a class="brand" href="index.html">{MK('#fff','mk','width:34px;height:32px')}<span class="wm">TERNAH</span></a>
-      <p style="margin-top:20px">Software Company Ltd. Building Africa's digital future: practical, scalable, reliable software, crafted to fit.</p>
+      {brand()}
+      <p>Software built around the way your business already runs. Made in {OFFICE}.</p>
     </div>
     <div>
       <h4>Company</h4>
       <a href="about.html">About</a><a href="solutions.html">Solutions</a>
-      <a href="industries.html">Industries</a><a href="products.html">Products</a><a href="insights.html">Insights</a>
+      <a href="industries.html">Industries</a><a href="insights.html">Insights</a>
     </div>
     <div>
-      <h4>Solutions</h4>
-      <a href="solutions.html">Custom Software</a><a href="solutions.html">ERP &amp; Business Systems</a>
-      <a href="solutions.html">Automation</a><a href="solutions.html">Data &amp; Analytics</a><a href="solutions.html">Cloud Solutions</a>
+      <h4>Products</h4>
+      {"".join(f'<a href="products.html#{p["key"]}">{p["name"]}</a>' for p in PRODUCTS[:4])}
+      <a href="products.html">All products</a>
     </div>
     <div>
       <h4>Get in touch</h4>
-      <a href="mailto:ternah22@gmail.com">ternah22@gmail.com</a>
-      <a href="https://wa.me/256787770007" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-      <a href="contact.html">Start a Project</a>
+      <a href="mailto:{EMAIL}">{EMAIL}</a>
+      <a href="{WHATSAPP}" target="_blank" rel="noopener noreferrer">WhatsApp {PHONE}</a>
+      <a href="contact.html">Start a project</a>
     </div>
   </div>
   <div class="foot-bot">
-    <span>© <span id="yr"></span> Ternah Software Company Ltd. All rights reserved.</span>
-    <span class="slg">Keep it simple.</span>
+    <span>© {datetime.date.today().year} {COMPANY}{reg}</span>
+    <span>{OFFICE} · Keep it simple.</span>
   </div>
 </footer>'''
 
-SITE_URL  = 'https://ternah.onrender.com'   # update to your custom domain when ready
-OG_IMAGE  = f'{SITE_URL}/assets/og-image.svg'
+OG_IMAGE = f'{SITE_URL}/assets/og-image.png'
 
 def page(slug, title, desc, body):
-    canonical = f'{SITE_URL}/{slug}.html' if slug != 'index' else SITE_URL
+    canonical = f'{SITE_URL}/{slug}.html' if slug != 'index' else f'{SITE_URL}/'
+    analytics = (f'<script defer data-domain="{ANALYTICS_DOMAIN}" src="https://plausible.io/js/script.js"></script>\n'
+                 if ANALYTICS_DOMAIN else '')
     return f'''<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-
-<!-- canonical -->
 <link rel="canonical" href="{canonical}">
 
-<!-- favicon -->
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="shortcut icon" href="assets/favicon.svg">
-<meta name="theme-color" content="#2f4cff">
+<link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#14233A">
 
-<!-- open graph -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Ternah Software Company Ltd">
+<meta property="og:site_name" content="{COMPANY}">
 <meta property="og:url" content="{canonical}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:image" content="{OG_IMAGE}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:locale" content="en_US">
-
-<!-- twitter / x card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{desc}">
 <meta name="twitter:image" content="{OG_IMAGE}">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/ternah-ui/fonts/HankenGrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/ternah-ui/tokens.css">
 <link rel="stylesheet" href="assets/css/styles.css">
-</head>
+{analytics}</head>
 <body data-page="{slug}">
 
-{header_html()}
+{header_html(slug)}
 
-<main class="fade-in">
+<main>
 {body}
 </main>
 
 {footer_html()}
 
-<!-- floating contact buttons -->
-<div class="fab-group">
-  <a class="fab fab-wa" href="https://wa.me/256787770007" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" data-tip="WhatsApp">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-    </svg>
-  </a>
-  <a class="fab fab-email" href="mailto:ternah22@gmail.com" aria-label="Send us an email" data-tip="Email us">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>
-    </svg>
-  </a>
-  <a class="fab fab-call" href="tel:+256787770007" aria-label="Call us" data-tip="Call us">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.13 12.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
-    </svg>
-  </a>
-</div>
+<a class="fab-wa" href="{WHATSAPP}" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">{WA_SVG}</a>
 
 <script src="assets/js/main.js"></script>
 </body>
 </html>'''
 
-# ---------------- content data ----------------
+# ================= IMAGE SLOTS =================
+# Drop real files at these paths and rebuild; the placeholder is replaced automatically.
+#   assets/img/team-kampala.webp           landscape team photo, >= 1600 x 1000
+#   assets/img/screens/<product-key>.webp  product screenshot, 3:2, e.g. 1440 x 960
+#   assets/img/founders/<n>.webp           founder portrait, 4:5
+TEAM_PHOTO     = 'assets/img/team-kampala.webp'
+TEAM_PHOTO_ALT = 'The Ternah team in the Kampala office'   # name the people in the photo once it exists
+
+def photo_or_placeholder(path, alt, label, w, h, lazy=True):
+    if exists(path):
+        return f'<img src="{path}" alt="{escape(alt)}" width="{w}" height="{h}"{" loading=\"lazy\"" if lazy else ""}>'
+    return f'<div class="photo-ph" role="img" aria-label="{escape(label)}">{CAMERA}<span>[{label}]</span></div>'
+
+# ---- product dashboards, drawn in HTML until real screenshots exist ----
+# Each tile: (title, number, unit, warn_number, warn_unit, pills, span, flags)
+HEALTH_DASH = dict(
+  org='[Hospital name]', org_sub='Ternah Health', user=('AD','[First name]','Hospital admin'),
+  nav=['Home','Reception','Doctor','Nursing','Laboratory','Sonography','Inventory','Finance','Hospital admin'],
+  search='Search patient by name, phone or patient number',
+  greet='Good morning, [First name]', sub='[Hospital name] · here is where every department stands right now.',
+  tiles=[
+    ('Reception','6','waiting at the desk',None,None,[],2,''),
+    ('Doctor','7','patients waiting','42 min','longest wait',['Open queue',"Today's consultations"],2,'raised'),
+    ('Laboratory','3','results pending',None,None,[],1,''),
+    ('Nursing','4','awaiting triage',None,None,[],1,''),
+    ('Sonography','2','scans queued',None,None,[],1,''),
+    ('Inventory','4','items below reorder level',None,None,[],1,'warn'),
+    ('Finance','UGX 2.4M','collected today',None,None,[],2,''),
+    ('Hospital admin',None,'Nothing needs your attention',None,None,[],2,''),
+  ])
+FACTORY_DASH = dict(
+  org='[Factory name]', org_sub='Ternah for Factories', user=('JN','[First name]','Manager'),
+  nav=['Home','Production','Branch & stock','Cashier','Finance','Staff'],
+  search='Search products, batches, customers or receipts',
+  greet='Good afternoon, [First name]', sub='[Factory name] · here is where the factory stands right now.',
+  tiles=[
+    ('Production','2','batches in progress','1','formula short of materials',['Start batch','Formulas','Distribution'],2,'raised'),
+    ('Branch & stock','3','stock movements awaiting approval',None,None,[],2,''),
+    ('Cashier','UGX 640K','sales today',None,None,[],2,''),
+    ('Finance','5','debtors overdue',None,None,[],1,'warn'),
+    ('Staff',None,'Nothing needs your attention',None,None,[],1,''),
+  ])
+
+def dash_html(d):
+    nav = "".join(f'<a class="{"on" if i==0 else ""}">{escape(x)}</a>' for i,x in enumerate(d['nav']))
+    tiles = []
+    for t,n,u,wn,wu,pills,span,flags in d['tiles']:
+        warn = 'warn' in flags
+        cls = 't' + (' s2' if span==2 else '') + (' raised' if 'raised' in flags else '')
+        if n is None:
+            val = f'<div class="calm">{escape(u)}</div>'
+        else:
+            val = f'<span class="n{" amber" if warn else ""}">{escape(n)}</span><span class="u">{escape(u)}</span>'
+            if wn: val += f'<span class="n w">{escape(wn)}</span><span class="u">{escape(wu)}</span>'
+        pl = f'<div class="pills">{"".join(f"<span>{escape(p)}</span>" for p in pills)}</div>' if pills else ''
+        tiles.append(f'<div class="{cls}"><div class="tt"><span class="ti{" w" if warn else ""}"></span>{escape(t)}</div>{val}{pl}</div>')
+    ini,name,role = d['user']
+    return f'''<div class="dash" aria-hidden="true">
+        <div class="sb"><div class="sb-brand"><span class="sb-logo">T</span><div><div class="sb-name">{escape(d["org"])}</div><div class="sb-sub">{escape(d["org_sub"])}</div></div></div>{nav}
+          <div class="sb-user"><span class="sb-av">{ini}</span><div>{escape(name)}<br><span class="sb-sub">{escape(role)}</span></div></div></div>
+        <div class="main"><div class="top"><div class="search">{escape(d["search"])}</div><div class="date">Wednesday, 30 September</div></div>
+          <div class="greet">{escape(d["greet"])}</div><div class="greet-sub">{escape(d["sub"])}</div>
+          <div class="tiles">{"".join(tiles)}</div></div>
+      </div>'''
+
+DASHES = {'ternah-health': HEALTH_DASH, 'ternah-factories': FACTORY_DASH}
+
+def screenshot(p, lazy=True):
+    """Real screenshot if assets/img/screens/<key>.webp exists, else the HTML dashboard, else a placeholder."""
+    path = f'assets/img/screens/{p["key"]}.webp'
+    alt = f'{p["name"]} home screen'
+    if exists(path):
+        inner = f'<img src="{path}" alt="{escape(alt)}" width="1440" height="960"{" loading=\"lazy\"" if lazy else ""}>'
+    elif p['key'] in DASHES:
+        inner = f'<div role="img" aria-label="{escape(alt)}" style="width:100%;height:100%">{dash_html(DASHES[p["key"]])}</div>'
+    else:
+        inner = f'<div class="prod-ph" role="img" aria-label="Screenshot of {escape(p["name"])} coming soon">{CAMERA}<span>[{escape(p["name"])} screenshot]</span></div>'
+    return f'<div class="shot">{inner}</div>'
+
+# ================= CONTENT =================
+# Product names must match the names used inside the products themselves.
+# 'link' = live site; without one the card shows "Book a demo".
+PRODUCTS = [
+ dict(key='ternah-health', name='Ternah Health', sector='Hospitals & clinics',
+      who='For hospitals and clinics that want every department, from reception to finance, on one screen.',
+      features=['Patient queue through reception, doctor, nursing, lab and sonography',
+                'Pharmacy and stock with reorder alerts','Billing and daily collections']),
+ dict(key='ternah-factories', name='Ternah for Factories', sector='Manufacturing',
+      who='For manufacturers who need production, branch stock and sales in one place.',
+      features=['Production batches and formulas, with material shortfalls flagged',
+                'Stock movements between branches, with approvals','Cashier, debtors and staff']),
+ dict(key='mykashop', name='Mykashop', sector='Shops & retail', link='https://mykashop.online/',
+      who='For shops, supermarkets, hardware stores and restaurants that need real control of stock and sales.',
+      features=['Point of sale and stock','Debtors and expenses','Daily business performance']),
+ dict(key='sacco', name='SACCO platform', sector='SACCOs',
+      who='For SACCOs that want members, savings and loans in one system instead of ledgers.',
+      features=['Member onboarding and accounts, including fixed deposits',
+                'Teller deposits and withdrawals','Loan assessment, disbursement and printable slips']),
+ dict(key='property', name='Property management', sector='Real estate',
+      who='For property businesses managing tenants, suppliers and their books together.',
+      features=['Double-entry accounting with automated accruals','Supplier ledgers','VAT reporting']),
+ dict(key='pharmacy', name='Pharmacy management', sector='Pharmacies',
+      who='For clinics, hospitals and standalone pharmacies.',
+      features=['Prescriptions and dispensing','Drug stock with expiry tracking','Supplier management and sales reports']),
+ dict(key='hospitality', name='Hospitality suite', sector='Hospitality',
+      who='For bars, restaurants, lodges and gyms run from one account.',
+      features=['Bar, restaurant and lodge modules','Gym and service queues','One licence across every module']),
+ dict(key='queueflow', name='QueueFlow', sector='Service businesses',
+      who='For service businesses that move customers and jobs through stages.',
+      features=['Operator boards in Kanban style','Queues for several branches','Live updates for every operator']),
+]
+
 SOLUTIONS = [
- ('code','Custom Software Development','Enterprise systems, web applications, and business platforms engineered around your exact processes.',['Enterprise Software','Web Applications','Business Management Systems','E-Commerce Platforms']),
- ('layers','ERP & Business Systems','Unified ERP, CRM, inventory, school and healthcare information systems that connect every part of your operation.',['ERP Systems','CRM Systems','Inventory Management','School & Healthcare Systems']),
- ('flow','Automation','Replace manual work with intelligent workflows, approvals, and digital documentation that run themselves.',['Business Process Automation','Workflow Management','Digital Documentation','Org Digitization']),
- ('chart','Data & Analytics','Turn raw data into decisions with dashboards, reporting, and decision-support built for clarity.',['BI Dashboards','Data Analytics','Reporting Systems','Decision Support']),
- ('cloud','Cloud Solutions','Business email, collaboration, migration, and infrastructure that scale with your team.',['Business Email','Cloud Collaboration','Google Workspace','Data Migration']),
- ('support','Support & Managed Services','Maintenance, monitoring, security updates and optimization that keep everything running.',['Software Maintenance','System Monitoring','Security Updates','Performance Optimization']),
+ ('code','Custom software and websites','Business systems, web applications and static or dynamic websites, built around the way you work.',['Business management systems','Web applications','Static and dynamic websites','E-commerce']),
+ ('layers','ERP and business systems','ERP, CRM, inventory, school and health systems that connect every part of your operation.',['ERP systems','CRM systems','Inventory management','School and health systems']),
+ ('flow','Automation','Replace manual work with workflows, approvals and digital records.',['Process automation','Workflow management','Digital documentation','Approvals']),
+ ('chart','Data and analytics','Dashboards and reports that show where the business stands today.',['Dashboards','Data analysis','Reporting','Decision support']),
+ ('cloud','Cloud services','Business email, collaboration and migration that grow with your team.',['Business email','Google Workspace','Cloud collaboration','Data migration']),
+ ('support','Support and maintenance','Monitoring, security updates and improvements after launch.',['Maintenance','Monitoring','Security updates','Performance tuning']),
 ]
+SOL_FILTERS = ['software','erp','automation','data','cloud','support']
+
+# One list; the home-page chips and the Industries page both read from it.
 INDUSTRIES = [
- ('edu','Education','School management, e-learning, and student information systems for institutions of every size.'),
- ('health','Healthcare','Patient records, clinic operations, and health information systems built for reliability.'),
- ('truck','Logistics','Fleet, supply chain, and delivery platforms that track and optimize every movement.'),
- ('cart','Retail & Commerce','POS, inventory, and e-commerce systems that connect storefronts to the cloud.'),
- ('globe','NGOs & Development','Field data collection, M&E dashboards, and donor reporting for impact organizations.'),
- ('gov','Government','Digital public services, monitoring platforms, and secure institutional systems.'),
- ('bank','Financial Services','Secure platforms for payments, lending, and member management at scale.'),
- ('layers','Enterprises & SMEs','Operational platforms that help growing businesses move faster with less friction.'),
+ ('health','Healthcare','Hospitals and clinics: patient queues, labs, pharmacy and billing.'),
+ ('factory','Manufacturing','Production batches, formulas, branch stock and distribution.'),
+ ('cart','Retail','Shops and supermarkets: point of sale, stock and debtors.'),
+ ('bank','SACCOs and finance','Members, savings, loans and teller operations.'),
+ ('pill','Pharmacy','Dispensing, prescriptions and drug stock with expiry dates.'),
+ ('bed','Hospitality','Bars, restaurants, lodges and gyms.'),
+ ('home','Real estate','Property accounts, tenants, suppliers and VAT.'),
+ ('edu','Education','School management and student information systems.'),
+ ('truck','Logistics','Fleet, deliveries and supply chain tracking.'),
+ ('globe','NGOs','Field data collection, monitoring and donor reporting.'),
+ ('gov','Government','Digital public services and monitoring platforms.'),
 ]
-VALUES = [
- ('Innovation','We continuously seek better ways to solve complex challenges through technology.'),
- ('Excellence','We maintain the highest standards in everything we design, develop, and deliver.'),
- ('Integrity','We operate with honesty, accountability, and professionalism.'),
- ('Reliability','We build systems and partnerships that our clients can depend upon.'),
- ('Collaboration','Great solutions are achieved through teamwork and strong client relationships.'),
- ('Impact','We measure success by the positive transformation our solutions create.'),
+
+PROCESS_STEPS = [
+ ('Discover','We learn how your business actually runs before proposing anything.'),
+ ('Design','We map the system to your workflow, simply and on purpose.'),
+ ('Build','Progress you can see every week.'),
+ ('Ship','We deploy, test and train your team.'),
+ ('Support','We stay for updates and growth after launch.'),
 ]
-OBJECTIVES = [
- ('01','Deliver Excellence','Fast, secure, reliable, scalable software that lets organizations operate efficiently and grow confidently.'),
- ('02','Accelerate Transformation','Move businesses from manual processes to intelligent digital systems that improve decision-making.'),
- ('03','African-Centered Solutions','Technology designed to solve the unique challenges and opportunities of African markets.'),
- ('04','Foster Innovation','A culture of continuous innovation using emerging technologies for practical, sustainable solutions.'),
- ('05','Support Growth','Contributing to economic development through technology, skills, and digital empowerment.'),
- ('06','Lasting Partnerships','Trusted relationships built on consistent value, reliability, and measurable results.'),
+
+# Founders: fill in names, roles and photos (assets/img/founders/1.webp, 2.webp).
+FOUNDERS = [
+ ('[Co-founder name]','Co-founder, [role]'),
+ ('[Co-founder name]','Co-founder, [role]'),
 ]
-WHY = [
- ('01','Built to fit you','Software shaped around your exact processes, not a rigid template you bend to.'),
- ('02','African insight','Local understanding of the markets, constraints, and opportunities you operate in.'),
- ('03','Fast delivery','Pragmatic engineering that ships in weeks, not quarters.'),
- ('04','Scalable by design','Architecture that grows the moment your business does.'),
- ('05','End-to-end ownership','From strategy to deployment to support: one accountable team.'),
-]
-PROJECTS = [
- ('Real Estate · SaaS','Property Management Platform','Multi-tenant SaaS for property businesses with double-entry accounting, automated accruals, supplier ledgers, and VAT reporting.',['Django','SaaS','Accounting']),
- ('Retail · SaaS','Mykashop','One platform for stock, sales, debtors, expenses, and business performance. Built for shops, supermarkets, pharmacies, hardware stores, restaurants, and any growing retail business that needs real control.',['POS','Inventory','Multi-tenant'],'http://mykashop.online/'),
- ('Healthcare · EMR','Medical Records & Inventory','Electronic medical records with prescriptions, dispensing, automatic stock deduction, and lab management.',['EMR','Inventory','Compliance']),
- ('Web · Development','Static and Dynamic Websites','Professional static and dynamic websites for businesses, institutions, and organizations — fast to deploy, built to convert, and easy to manage.',['HTML/CSS','React','CMS']),
- ('Hospitality · Multi-tenant','Hospitality Operations Suite','Bar, restaurant, lodge, gym and service-queue modules under a super-admin licensing model.',['Multi-tenant','POS','Licensing']),
- ('Operations · Workflow','Queue & Workflow System','Kanban-style operator boards and multi-tenant queue management for service businesses.',['Kanban','Workflow','Realtime']),
- ('Healthcare · Pharmacy','Pharmacy Management System','End-to-end pharmacy operations covering drug inventory, dispensing, prescriptions, expiry tracking, supplier management, and sales reporting — built for clinics, hospitals, and standalone pharmacies.',['Dispensing','Inventory','Compliance']),
-]
-TESTIMONIALS = [
- ('Ternah understood our operation before writing a single line of code. The system fits exactly how we work.','Operations Director','SME, Kampala'),
- ('Fast, reliable, and genuinely invested in the outcome. They delivered ahead of schedule and stayed for support.','Program Manager','Development Agency'),
- ('The dashboards changed how our leadership makes decisions. Data we never had visibility into is now front and centre.','Finance Lead','Retail Group'),
-]
+
 INSIGHTS = [
- ('Digital Transformation','From manual to intelligent: a practical roadmap','How African organizations can move off spreadsheets and paper without disrupting daily operations.','8 min read'),
+ ('Digital Transformation','From manual to intelligent: a practical roadmap','How organisations can move off spreadsheets and paper without disrupting daily operations.','8 min read'),
  ('Technology Trends','Why offline-first matters in African markets','Designing software that performs where connectivity is intermittent, and why it wins.','6 min read'),
  ('Guides','Choosing between off-the-shelf and custom software','A decision framework for when to buy, when to build, and how to avoid expensive mistakes.','10 min read'),
  ('Data & Analytics','Turning dashboards into decisions','The difference between reporting that informs and reporting that drives action.','7 min read'),
@@ -230,293 +328,181 @@ INSIGHTS = [
  ('Technology Trends','Building for scale from day one','Architecture choices that save you a painful rebuild as your user base grows.','9 min read'),
 ]
 
-# ---------------- content lists for homepage ----------------
-PROCESS_STEPS = [
- ('Discover', 'We learn how your business actually runs before proposing anything.'),
- ('Design',   'We map the system to your exact workflow, simply and intentionally.'),
- ('Build',    'Pragmatic engineering with weekly visible progress you can follow.'),
- ('Ship',     'We deploy, test, and make sure every part lands correctly.'),
- ('Support',  'We stay for maintenance, updates, and growth long after launch.'),
-]
-INDUSTRIES_TICKER = ['Education','Healthcare','Logistics','Retail','NGOs','Government','Finance','Hospitality','Agriculture','Pharmacy','Real Estate','Manufacturing']
+# ================= COMPONENTS =================
+def sec_head(eyebrow, h2, lead=None, center=False):
+    lp = f'<p class="lead">{lead}</p>' if lead else ''
+    return f'<div class="sec-head{" center" if center else ""}"><span class="eyebrow">{eyebrow}</span><h2 class="h2">{h2}</h2>{lp}</div>'
 
-# ---------------- component templates ----------------
-SOL_FILTERS = ['software','erp','automation','data','cloud','support']
-def sol_card(i, s):
-    ic,t,d,items = s
-    lis = "".join(f'<li>{x}</li>' for x in items)
-    filt = SOL_FILTERS[i] if i < len(SOL_FILTERS) else 'all'
-    green = ' green-accent' if filt in ('erp','data','support') else ''
-    return f'''    <div class="card{green} reveal" id="sol-{filt}" data-d="{(i%3)+1}" data-filter="{filt}">
-      <div class="ico">{ICONS[ic]}</div>
-      <h3>{t}</h3><p>{d}</p>
-      <ul>{lis}</ul>
-    </div>'''
+def product_card(i, p, full=False):
+    feats = f'<ul>{"".join(f"<li>{escape(f)}</li>" for f in p["features"])}</ul>' if full else ''
+    if p.get('link'):
+        act = f'<a class="btn btn-ghost" href="{p["link"]}" target="_blank" rel="noopener noreferrer">Visit {escape(p["name"])} {EXT}</a>'
+    else:
+        act = f'<a class="btn btn-ghost" href="contact.html?product={p["key"]}">Book a demo {ARROW}</a>'
+    return f'''    <article class="card prod reveal" id="{p["key"]}" data-d="{i%3+1}">
+      <div class="frame">{screenshot(p)}</div>
+      <div class="body">
+        <div class="kicker">{escape(p["sector"])}</div>
+        <h3>{escape(p["name"])}</h3>
+        <p class="for">{escape(p["who"])}</p>
+        {feats}
+        <div class="act"{"" if full else " style=\"margin-top:24px\""}>{act}</div>
+      </div>
+    </article>'''
 
-def rows_tpl(arr):
-    rows = "".join(f'''
-    <div class="row reveal">
-      <span class="rn">{n}</span>
-      <div><div class="rt">{t}</div></div>
-      <div class="rd">{d}</div>
-      {ARROW}
-    </div>''' for n,t,d in arr)
-    return f'<div class="rows">{rows}</div>'
+def process_html():
+    return '<ol class="process">' + "".join(f'''
+    <li class="step reveal" data-d="{i%4+1}"><span class="dot">{i+1}</span><h3>{t}</h3><p>{d}</p></li>'''
+        for i,(t,d) in enumerate(PROCESS_STEPS)) + '\n  </ol>'
 
-def ind_card(x):
-    ic,t,d = x
-    return f'''    <div class="ind reveal"><div class="ico">{ICONS[ic]}</div><h3>{t}</h3><p>{d}</p></div>'''
-
-LIVE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'
-
-def proj_card(i,p):
-    cat,t,d,tags,*rest = p
-    url = rest[0] if rest else None
-    lis = "".join(f'<li>{x}</li>' for x in tags)
-    heading = f'<h3><a class="card-link-title" href="{url}" target="_blank" rel="noopener noreferrer">{t}</a></h3>' if url else f'<h3>{t}</h3>'
-    live = f'<a class="live-link" href="{url}" target="_blank" rel="noopener noreferrer">Visit live site {LIVE_SVG}</a>' if url else ''
-    return f'''    <div class="card reveal" data-d="{(i%3)+1}">
-      <div class="num">{cat}</div>{heading}<p>{d}</p><ul>{lis}</ul>{live}
-    </div>'''
-
-def svc_block(i, s):
-    ic,t,d,_ = s
-    filt = SOL_FILTERS[i] if i < len(SOL_FILTERS) else 'all'
-    num  = str(i+1).zfill(2)
-    return f'''    <div class="svc-item reveal" id="sol-{filt}" data-d="{(i%3)+1}" data-filter="{filt}">
-      <div class="svc-num">{num}</div>
-      <div class="svc-ico">{ICONS[ic]}</div>
-      <h3>{t}</h3>
-      <p>{d}</p>
-    </div>'''
-
-def proj_card_slim(i,p):
-    cat,t,d,tags,*rest = p
-    url = rest[0] if rest else None
-    chips = "".join(f'<span class="chip">{x}</span>' for x in tags)
-    heading = f'<h3><a class="card-link-title" href="{url}" target="_blank" rel="noopener noreferrer">{t}</a></h3>' if url else f'<h3>{t}</h3>'
-    live = f'<a class="live-link" href="{url}" target="_blank" rel="noopener noreferrer">Visit live site {LIVE_SVG}</a>' if url else ''
-    return f'''    <div class="card reveal" data-d="{(i%3)+1}">
-      <div class="num">{cat}</div>{heading}<p>{d}</p>
-      <div class="chip-row">{chips}</div>{live}
-    </div>'''
-
-def cta_band(h2, p, primary=('Start a Project','contact.html'), ghost=None):
-    pbtn = f'<a class="btn btn-primary" href="{primary[1]}">{primary[0]} {ARROW}</a>'
-    gbtn = f'<a class="btn btn-ghost" href="{ghost[1]}">{ghost[0]}</a>' if ghost else ''
-    return f'''<section class="sec">
-  <div class="cta-band reveal">
-    <div class="mkbg">{MK('#fff')}</div>
+def cta_band(h2, p, primary=('Start a project','contact.html')):
+    return f'''<section class="cta-band">
+  <div class="wrap">
     <h2>{h2}</h2><p>{p}</p>
-    <div class="row-cta">{pbtn}{gbtn}</div>
+    <div class="row-cta">
+      <a class="btn btn-primary btn-lg" href="{primary[1]}">{primary[0]} {ARROW}</a>
+      <a class="btn btn-ghost btn-lg btn-wa" href="{WHATSAPP}" target="_blank" rel="noopener noreferrer">{WA_SVG} WhatsApp us</a>
+    </div>
   </div>
 </section>'''
 
+def card(i, ic, t, d, items=None, attrs=''):
+    lis = f'<ul>{"".join(f"<li>{x}</li>" for x in items)}</ul>' if items else ''
+    return f'''    <div class="card reveal" data-d="{i%3+1}"{attrs}>
+      <div class="ico">{ICONS[ic]}</div><h3>{t}</h3><p>{d}</p>{lis}
+    </div>'''
+
+def frame(p, cls):
+    return f'<figure class="frame {cls}">{screenshot(p, lazy=False)}<figcaption class="cap">{escape(p["name"])}</figcaption></figure>'
+
+FLAG = '<span class="flag" aria-hidden="true">' + '<i></i>'*6 + '</span>'
+
 # ================= PAGE BODIES =================
-
-home_body = f'''<section class="hero">
-  <div class="hero-veil"></div>
-  <div class="hero-inner">
-    <div class="eyebrow reveal in">Ternah Software Company Ltd</div>
-    <h1 class="reveal in" data-d="1" style="margin-top:24px">Keep<br>it <span class="kick">simple.</span></h1>
-    <div class="sub reveal in" data-d="2">We build software that works.</div>
-    <p class="lead reveal in" data-d="3">Custom-built systems, crafted to fit the exact way your business runs, powering teams, organizations, and communities across Africa.</p>
-    <div class="hero-cta reveal in" data-d="4">
-      <a class="btn btn-primary" href="contact.html">Start a Project {ARROW}</a>
-      <a class="btn btn-ghost" href="solutions.html">Explore Solutions</a>
-    </div>
-    <div class="hero-tags reveal in" data-d="5">
-      {"".join(f'<button class="tag" data-scroll="sol-{s}">{x}</button>' for x,s in [('Custom Software','software'),('ERP &amp; CRM','erp'),('Automation','automation'),('Data &amp; Analytics','data'),('Cloud','cloud'),('Support','support')])}
-    </div>
+home_body = f'''<section class="hero wrap">
+  <span class="origin">{FLAG}Built in {OFFICE}</span>
+  <h1>Keep it simple.<span class="l2">We build software that works.</span></h1>
+  <p class="lead">Systems built around the way your business already runs, for hospitals, factories, shops and SACCOs.</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary btn-lg" href="contact.html">Start a project</a>
+    <a class="btn btn-ghost btn-lg" href="#products">See our products</a>
   </div>
-  <div class="scroll-ind"><div class="line"></div>Scroll</div>
-</section>
-
-<section class="sec">
-  <div class="stats">
-    <div class="stat reveal"><div class="n">100%</div><div class="l">Custom-built to fit</div></div>
-    <div class="stat reveal" data-d="1"><div class="n">9+</div><div class="l">Industries served</div></div>
-    <div class="stat green reveal" data-d="2"><div class="n">Weeks</div><div class="l">Not quarters to ship</div></div>
-    <div class="stat reveal" data-d="3"><div class="n">Africa</div><div class="l">Built for the future</div></div>
+  <div class="stage">
+    <div class="photo">{photo_or_placeholder(TEAM_PHOTO, TEAM_PHOTO_ALT, 'Team photo, Kampala office', 1600, 1050, lazy=False)}</div>
+    {frame(PRODUCTS[0], 'f-left')}
+    {frame(PRODUCTS[1], 'f-right')}
   </div>
 </section>
 
-<section class="sec" style="padding-top:20px">
-  <div class="sec-head">
-    <span class="eyebrow">What we build</span>
-    <h2 class="h2">Six ways we<br>move you forward.</h2>
-    <p class="lead">From a single tool to a full platform: design, build, and support — under one accountable team.</p>
-  </div>
-  <div class="svc-grid">
-{chr(10).join(svc_block(i,s) for i,s in enumerate(SOLUTIONS))}
-  </div>
-  <div class="center mt-cta"><a class="btn btn-ghost" href="solutions.html">All solutions {ARROW}</a></div>
-</section>
-
-<section class="sec">
-  <div class="sec-head">
-    <span class="eyebrow">How we work</span>
-    <h2 class="h2">Simple process.<br>Real delivery.</h2>
-    <p class="lead">Five steps from your first conversation to a running system.</p>
-  </div>
-  <div class="process-track">
-{chr(10).join(f"""    <div class="process-step reveal" data-d="{i+1}">
-      <div class="process-dot">{i+1}</div>
-      <h4>{t}</h4>
-      <p>{d}</p>
-    </div>""" for i,(t,d) in enumerate(PROCESS_STEPS))}
-  </div>
-</section>
-
-<div class="marquee-section">
-  <div class="marquee-track">
-    {"".join(f'<span class="marquee-item">{ind}</span><span class="marquee-sep">&nbsp;·&nbsp;</span>' for ind in INDUSTRIES_TICKER * 2)}
-  </div>
-</div>
-
-<section class="sec">
-  <div class="sec-head">
-    <span class="eyebrow">Why Ternah</span>
-    <h2 class="h2">A partner, not<br>just a vendor.</h2>
-  </div>
-  <div class="why-grid">
-    <div class="why-block reveal">
-      <div class="bn">01</div>
-      <div class="accent-line"></div>
-      <h3>Built to fit you</h3>
-      <p>Software shaped around your exact processes, not a rigid template you bend to fit. We start by understanding how you already work.</p>
-    </div>
-    <div class="why-block reveal" data-d="1">
-      <div class="bn">02</div>
-      <div class="accent-line"></div>
-      <h3>African insight</h3>
-      <p>Local understanding of the markets, constraints, connectivity, and opportunities you actually operate in. Not imported assumptions.</p>
-    </div>
-    <div class="why-block reveal" data-d="2">
-      <div class="bn">03</div>
-      <div class="accent-line"></div>
-      <h3>Scalable by design</h3>
-      <p>Architecture that grows the moment your business does, without painful rebuilds or migrations six months in.</p>
-    </div>
-  </div>
-</section>
-
-<section class="sec">
-  <div class="sec-head">
-    <span class="eyebrow">Featured products</span>
-    <h2 class="h2">Work that ships.</h2>
-    <p class="lead">A selection of platforms and systems we have designed and delivered.</p>
-  </div>
+<section class="sec wrap" id="products">
+  {sec_head('Products', 'Software already at work.', 'Products we build and run, each designed around one kind of business.')}
   <div class="grid g3">
-{chr(10).join(proj_card_slim(i,p) for i,p in enumerate(PROJECTS[:3]))}
+{chr(10).join(product_card(i,p) for i,p in enumerate(PRODUCTS[:3]))}
   </div>
-  <div class="center mt-cta"><a class="btn btn-ghost" href="products.html">See all products {ARROW}</a></div>
+  <div class="center mt-cta"><a class="link-arrow" href="products.html">See all {len(PRODUCTS)} products {ARROW}</a></div>
 </section>
 
-{cta_band("Let's build something that fits.", "Tell us how your business runs. We'll turn it into software that keeps it simple.", ghost=('ternah22@gmail.com','mailto:ternah22@gmail.com'))}'''
+<section class="sec wrap">
+  {sec_head('Services', 'Built to fit, from first idea to support.', 'One team designs, builds and supports your system.')}
+  <div class="grid g3">
+{chr(10).join(card(i,ic,t,d) for i,(ic,t,d,_) in enumerate(SOLUTIONS))}
+  </div>
+  <div class="center mt-cta"><a class="link-arrow" href="solutions.html">All services {ARROW}</a></div>
+</section>
 
-about_body = f'''<section class="phead">
+<section class="sec wrap">
+  {sec_head('How we work', 'Five steps to a running system.')}
+  {process_html()}
+</section>
+
+<section class="sec wrap">
+  {sec_head('Industries', 'Who we build for.')}
+  <div class="chips">{"".join(f'<a class="chip" href="industries.html">{t}</a>' for _,t,_ in INDUSTRIES)}</div>
+</section>
+
+{cta_band("Let's build something that fits.", "Tell us how your business runs. We'll turn it into software that keeps it simple.")}'''
+
+founder_cards = "\n".join(f'''      <div class="founder">
+        <div class="pic">{photo_or_placeholder(f"assets/img/founders/{i+1}.webp", n, "Founder photo", 800, 1000)}</div>
+        <h3>{n}</h3><p>{r}</p>
+      </div>''' for i,(n,r) in enumerate(FOUNDERS))
+
+about_body = f'''<section class="phead wrap">
   <span class="eyebrow">About Ternah</span>
-  <h1>More than code.<br>A digital partner.</h1>
-  <p class="lead">TERNAH Software Company Ltd is an African software development and digital transformation company building innovative, reliable, and scalable technology for businesses, institutions, and communities.</p>
+  <h1>Two founders. One name.</h1>
+  <p class="lead">{COMPANY} builds software for hospitals, factories, shops and SACCOs from our office in {OFFICE}.</p>
 </section>
 
-<section class="sec" style="padding-top:20px">
-  <div class="split">
+<section class="sec wrap">
+  <div class="story">
     <div>
       <span class="eyebrow">Our story</span>
-      <h2 class="h2" style="margin:20px 0 24px">Software, crafted to fit.</h2>
-      <p class="lead" style="margin-bottom:18px">We started Ternah on a simple conviction: technology should fit the way you already work, not force you to work the way it wants.</p>
-      <p class="lead">We combine technical depth, business understanding, and local insight to create software that solves real problems across Africa. We help organizations embrace digital transformation, improve efficiency, and unlock new opportunities, and we stay for the long term.</p>
+      <h2 class="h2" style="margin-bottom:24px">How Ternah started.</h2>
+      <p><strong>Ternah was founded by two co-founders, [Co-founder name] and [Co-founder name]. The name joins both of theirs: [how the two names make "Ternah"].</strong></p>
+      <p>[The founding story in two or three sentences: when you started, the first problem you solved, and for whom.]</p>
+      <p>We started on one conviction: software should fit the way a business already works, not force it to work the way the software wants. So we begin every project by learning how the business runs, then build the simplest system that fits it, and stay to support it after launch.</p>
+      <div class="office">
+        <span class="ico">{ICONS['pin']}</span>
+        <p><strong>Our office</strong><br>{OFFICE}</p>
+      </div>
     </div>
-    <div class="visual reveal">{MK('#cdd6ff')}</div>
+    <div class="founders">
+{founder_cards}
+    </div>
   </div>
 </section>
 
-<section class="sec">
+<section class="sec wrap">
   <div class="grid g2">
-    <div class="card feat reveal"><div class="num">Our Vision</div><h3 style="font-size:30px;line-height:1.25">To become Africa's leading software company, driving digital transformation through innovative, reliable, locally relevant technology.</h3></div>
-    <div class="card reveal" data-d="1"><div class="num">Our Mission</div><h3 style="font-size:30px;line-height:1.25">To empower businesses, institutions, and communities across Africa with affordable, scalable, impactful digital solutions, fostering innovation and indigenous technology.</h3></div>
+    <div class="card reveal"><div class="kicker">What we believe</div><p style="color:var(--ink)">Good software is practical. It is fast, secure and reliable, it is built for the conditions it runs in, including patchy internet and busy front desks, and it grows with the business instead of needing a rebuild.</p></div>
+    <div class="card reveal" data-d="1"><div class="kicker">What we are working toward</div><p style="color:var(--ink)">Affordable, dependable systems for the organisations that keep Uganda running: clinics, factories, shops and SACCOs, with products built and supported here.</p></div>
   </div>
 </section>
 
-<section class="sec">
-  <div class="sec-head"><span class="eyebrow">Strategic objectives</span><h2 class="h2">What drives us.</h2></div>
-  {rows_tpl(OBJECTIVES)}
-</section>
+{cta_band("Ready when you are.", "Tell us where your organisation wants to go, and we'll show you the simplest software that gets it there.", primary=('Get in touch','contact.html'))}'''
 
-<section class="sec">
-  <div class="sec-head"><span class="eyebrow">Our values</span><h2 class="h2">What we stand on.</h2></div>
-  <div class="grid g3">
-{chr(10).join(f'''    <div class="card reveal" data-d="{(i%3)+1}"><div class="ico">{MK('#7c92ff')}</div><h3>{t}</h3><p>{d}</p></div>''' for i,(t,d) in enumerate(VALUES))}
-  </div>
-</section>
-
-{cta_band("Ready when you are.", "Let's talk about where your organization wants to go, and how software gets it there.", primary=('Get in touch','contact.html'))}'''
-
-solutions_body = f'''<section class="phead">
+solutions_body = f'''<section class="phead wrap">
   <span class="eyebrow">Solutions</span>
-  <h1>From idea to<br>deployment.</h1>
-  <p class="lead">A complete toolkit for digital transformation, designed, built, and supported by one accountable team.</p>
+  <h1>From idea to a running system.</h1>
+  <p class="lead">Six services, designed, built and supported by one accountable team.</p>
 </section>
-<section class="sec" style="padding-top:20px">
-  <div class="filter-bar" id="solFilter">
-    <button class="pill active" data-filter="all">All</button>
-    <button class="pill" data-filter="software">Custom Software</button>
-    <button class="pill green-pill" data-filter="erp">ERP &amp; Systems</button>
-    <button class="pill" data-filter="automation">Automation</button>
-    <button class="pill green-pill" data-filter="data">Data &amp; Analytics</button>
-    <button class="pill" data-filter="cloud">Cloud</button>
-    <button class="pill green-pill" data-filter="support">Support</button>
+<section class="sec wrap">
+  <div class="filter-bar" id="solFilter" role="group" aria-label="Filter services">
+    <button class="pill active" type="button" data-filter="all">All</button>
+    {"".join(f'<button class="pill" type="button" data-filter="{SOL_FILTERS[i]}">{t}</button>' for i,(_,t,_,_) in enumerate(SOLUTIONS))}
   </div>
   <div class="grid g3" id="solGrid">
-{chr(10).join(sol_card(i,s) for i,s in enumerate(SOLUTIONS))}
+{chr(10).join(card(i,ic,t,d,items,f' id="sol-{SOL_FILTERS[i]}" data-filter="{SOL_FILTERS[i]}"') for i,(ic,t,d,items) in enumerate(SOLUTIONS))}
   </div>
 </section>
-<section class="sec">
-  <div class="split">
-    <div>
-      <span class="eyebrow">How we work</span>
-      <h2 class="h2" style="margin:20px 0 30px">A process built<br>around clarity.</h2>
-      {rows_tpl([('01','Discover','We learn how your business actually runs before proposing anything.'),('02','Design','We map the system to your processes: simple, scalable, intentional.'),('03','Build','Pragmatic engineering with progress you can see, week by week.'),('04','Support','We deploy, monitor, and keep improving long after launch.')])}
-    </div>
-    <div class="visual reveal">{MK('#cdd6ff')}</div>
-  </div>
+<section class="sec wrap">
+  {sec_head('How we work', 'A process built around clarity.')}
+  {process_html()}
 </section>
-{cta_band("Not sure where to start?", "Tell us the problem. We'll help you find the simplest path to solving it.", primary=('Book a consultation','contact.html'))}'''
+{cta_band("Not sure where to start?", "Tell us the problem. We'll help you find the simplest way to solve it.", primary=('Book a consultation','contact.html'))}'''
 
-industries_body = f'''<section class="phead">
+industries_body = f'''<section class="phead wrap">
   <span class="eyebrow">Industries</span>
-  <h1>Built for how<br>Africa works.</h1>
-  <p class="lead">We bring sector-specific understanding to every build, so the software fits the realities of your field, not a generic template.</p>
+  <h1>Built for the way your sector works.</h1>
+  <p class="lead">We bring what we have learned in each sector to every build, so the software fits the realities of your field.</p>
 </section>
-<section class="sec" style="padding-top:20px">
+<section class="sec wrap">
   <div class="ind-grid">
-{chr(10).join(ind_card(x) for x in INDUSTRIES)}
+{chr(10).join(card(i,ic,t,d) for i,(ic,t,d) in enumerate(INDUSTRIES))}
   </div>
 </section>
-{cta_band("Don't see your sector?", "If your organization runs on processes, we can build software for it. Let's talk.", primary=('Start a conversation','contact.html'))}'''
+{cta_band("Don't see your sector?", "If your organisation runs on processes, we can build software for it.", primary=('Start a conversation','contact.html'))}'''
 
-products_body = f'''<section class="phead">
+products_body = f'''<section class="phead wrap">
   <span class="eyebrow">Products</span>
-  <h1>Work that ships.</h1>
-  <p class="lead">A selection of products, platforms, and systems we've designed and built across industries and markets.</p>
+  <h1>Software already at work.</h1>
+  <p class="lead">Each product is built around one kind of business. Book a demo and we will walk you through it with your own workflow in mind.</p>
 </section>
-<section class="sec" style="padding-top:20px">
+<section class="sec wrap">
   <div class="grid g3">
-{chr(10).join(proj_card(i,p) for i,p in enumerate(PROJECTS))}
+{chr(10).join(product_card(i,p,full=True) for i,p in enumerate(PRODUCTS))}
   </div>
 </section>
-<section class="sec">
-  <div class="sec-head"><span class="eyebrow">Client testimonials</span><h2 class="h2">What clients say.</h2></div>
-  <div class="grid g3">
-{chr(10).join(f'''    <div class="quote reveal" data-d="{i+1}">
-      <div class="q">&ldquo;{q}&rdquo;</div>
-      <div class="who"><div class="av">{n[0]}</div><div><div class="nm">{n}</div><div class="rl">{r}</div></div></div>
-    </div>''' for i,(q,n,r) in enumerate(TESTIMONIALS))}
-  </div>
-</section>
-{cta_band("Your product could be next.", "Bring us a challenge. We'll bring the simplest software that solves it.")}'''
+{cta_band("Need something none of these do?", "Bring us the problem. We'll build the simplest software that solves it.")}'''
 
 BUY_VS_BUILD_SLUG = 'buy-vs-build'
 ARTICLE_SLUGS = {
@@ -547,7 +533,7 @@ BUY_VS_BUILD_MODAL = f'''
       <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="modal-eyebrow">Guides &nbsp;·&nbsp; Decision Frameworks</div>
-    <h1 id="modal-title-bvb">Buy vs. Build:<br>A Framework for Smarter Decisions</h1>
+    <h2 class="modal-title" id="modal-title-bvb">Buy vs. Build:<br>A Framework for Smarter Decisions</h2>
     <div class="modal-byline">
       <div class="modal-av">J</div>
       <div>
@@ -649,7 +635,7 @@ OFFLINE_FIRST_MODAL = f'''
       <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="modal-eyebrow">Technology Trends &nbsp;·&nbsp; African Markets</div>
-    <h1 id="modal-title-off">Why Offline-First Matters<br>in African Markets</h1>
+    <h2 class="modal-title" id="modal-title-off">Why Offline-First Matters<br>in African Markets</h2>
     <div class="modal-byline">
       <div class="modal-av">J</div>
       <div>
@@ -743,7 +729,7 @@ MANUAL_INTEL_MODAL = f'''
       <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="modal-eyebrow">Digital Transformation &nbsp;·&nbsp; Practical Roadmap</div>
-    <h1 id="modal-title-mti">From Manual to Intelligent:<br>A Practical Roadmap</h1>
+    <h2 class="modal-title" id="modal-title-mti">From Manual to Intelligent:<br>A Practical Roadmap</h2>
     <div class="modal-byline">
       <div class="modal-av">J</div>
       <div>
@@ -849,7 +835,7 @@ DASHBOARDS_MODAL = f'''
       <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="modal-eyebrow">Data &amp; Analytics &nbsp;·&nbsp; Decision Intelligence</div>
-    <h1 id="modal-title-dash">Turning Dashboards<br>into Decisions</h1>
+    <h2 class="modal-title" id="modal-title-dash">Turning Dashboards<br>into Decisions</h2>
     <div class="modal-byline">
       <div class="modal-av" style="background:linear-gradient(135deg,var(--green-soft),var(--green))">S</div>
       <div>
@@ -946,7 +932,7 @@ AUTOMATION_ROI_MODAL = f'''
       <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="modal-eyebrow">Digital Transformation &nbsp;·&nbsp; ROI</div>
-    <h1 id="modal-title-auto">Automation That<br>Pays for Itself</h1>
+    <h2 class="modal-title" id="modal-title-auto">Automation That<br>Pays for Itself</h2>
     <div class="modal-byline">
       <div class="modal-av" style="background:linear-gradient(135deg,var(--green-soft),var(--green))">S</div>
       <div>
@@ -1044,7 +1030,7 @@ SCALE_MODAL = f'''
       <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="modal-eyebrow">Technology Trends &nbsp;·&nbsp; Architecture</div>
-    <h1 id="modal-title-scale">Building for Scale<br>from Day One</h1>
+    <h2 class="modal-title" id="modal-title-scale">Building for Scale<br>from Day One</h2>
     <div class="modal-byline">
       <div class="modal-av" style="background:linear-gradient(135deg,var(--green-soft),var(--green))">S</div>
       <div>
@@ -1135,12 +1121,21 @@ SCALE_MODAL = f'''
   </div>
 </div>'''
 
-insights_body = f'''<section class="phead">
+def insight_card(i, ins):
+    cat,t,d,meta = ins
+    slug = ARTICLE_SLUGS.get(t)
+    attrs = f' data-open="{slug}" tabindex="0" role="button" aria-haspopup="dialog"' if slug else ''
+    read_link = f'<div class="art-read">Read article {READ_SVG}</div>' if slug else ''
+    return f'''    <article class="art{" clickable" if slug else ""} reveal" data-d="{i%3+1}"{attrs}>
+      <div class="body"><div class="cat">{cat}</div><h3>{t}</h3><p>{d}</p><div class="meta">{meta}</div>{read_link}</div>
+    </article>'''
+
+insights_body = f'''<section class="phead wrap">
   <span class="eyebrow">Insights</span>
-  <h1>Ideas worth<br>building on.</h1>
-  <p class="lead">Articles, technology trends, and practical guides on digital transformation across Africa.</p>
+  <h1>Ideas worth building on.</h1>
+  <p class="lead">Practical guides on software, data and digital transformation, written by the Ternah team.</p>
 </section>
-<section class="sec" style="padding-top:20px">
+<section class="sec wrap">
   <div class="grid g3">
 {chr(10).join(insight_card(i,ins) for i,ins in enumerate(INSIGHTS))}
   </div>
@@ -1153,43 +1148,61 @@ insights_body = f'''<section class="phead">
 {AUTOMATION_ROI_MODAL}
 {SCALE_MODAL}'''
 
-contact_body = f'''<section class="phead">
+def field(fid, label, kind='input', type_='text', required=True, placeholder='', auto=''):
+    req = '<span class="req" aria-hidden="true">*</span>' if required else ' <span class="opt">(optional)</span>'
+    r = ' required aria-required="true"' if required else ''
+    ac = f' autocomplete="{auto}"' if auto else ''
+    ctl = (f'<textarea id="{fid}" name="{fid}"{r} placeholder="{placeholder}" aria-describedby="{fid}_err"></textarea>' if kind=='textarea'
+           else f'<input id="{fid}" name="{fid}" type="{type_}"{r}{ac} placeholder="{placeholder}" aria-describedby="{fid}_err">')
+    return f'''      <div class="field"><label for="{fid}">{label}{req}</label>{ctl}<div class="err" id="{fid}_err"></div></div>'''
+
+contact_body = f'''<section class="phead wrap">
   <span class="eyebrow">Contact</span>
-  <h1>Let's keep<br>it simple.</h1>
-  <p class="lead">Tell us about your project or challenge. We'll get back to you fast.</p>
+  <h1>Let's keep it simple.</h1>
+  <p class="lead">Tell us about your project or the problem you want solved. We reply within one working day.</p>
 </section>
-<section class="sec" style="padding-top:20px">
+<section class="sec wrap">
   <div class="contact-wrap">
-    <div>
-      <div class="field"><label>Name</label><input id="f_name" type="text" placeholder="Your name"></div>
-      <div class="field"><label>Email</label><input id="f_email" type="email" placeholder="you@company.com"></div>
-      <div class="field"><label>Company / Organization</label><input id="f_co" type="text" placeholder="Optional"></div>
-      <div class="field"><label>How can we help?</label><textarea id="f_msg" placeholder="Tell us what you're trying to build or solve…"></textarea></div>
-      <button class="btn btn-primary" id="sendBtn">Send message {ARROW}</button>
-      <div id="formMsg"></div>
-    </div>
+    <form class="card form-card" id="contactForm" action="{FORM_ENDPOINT}" method="POST" novalidate data-email="{EMAIL}">
+{field('name','Your name',auto='name',placeholder='Full name')}
+{field('email','Email',type_='email',auto='email',placeholder='you@company.com')}
+{field('phone','Phone or WhatsApp',type_='tel',required=False,auto='tel',placeholder='+256 …')}
+{field('organisation','Organisation',required=False,auto='organization',placeholder='Hospital, factory, shop or SACCO')}
+{field('message','How can we help?',kind='textarea',placeholder="Tell us what you're trying to build or solve")}
+      <input type="hidden" name="product" id="product">
+      <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+      <button class="btn btn-primary btn-lg" type="submit" id="sendBtn">Send message {ARROW}</button>
+      <p class="form-note">Fields marked * are required.</p>
+      <div id="formMsg" role="status" aria-live="polite"></div>
+    </form>
     <div class="contact-info">
-      <div class="ci"><div class="ico">{ICONS['mail']}</div><div><div class="k">Email</div><a class="v" href="mailto:ternah22@gmail.com">ternah22@gmail.com</a></div></div>
-      <div class="ci"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;stroke:var(--blue)"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.13 12.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="k">WhatsApp</div><a class="v" href="https://wa.me/256787770007" target="_blank" rel="noopener noreferrer">Chat with us</a></div></div>
-      <div class="ci"><div class="ico">{ICONS['pin']}</div><div><div class="k">Based in</div><div class="v">Africa, serving the continent</div></div></div>
-      <div class="ci" style="border:none"><div class="ico">{MK('#7c92ff')}</div><div><div class="k">Brand promise</div><div class="v" style="font-size:16px;font-weight:600">Practical, scalable, reliable.<br>Built for Africa's future.</div></div></div>
+      <div class="ci"><span class="ico">{ICONS['mail']}</span><div><div class="k">Email</div><a class="v" href="mailto:{EMAIL}">{EMAIL}</a></div></div>
+      <div class="ci"><span class="ico">{ICONS['chat']}</span><div><div class="k">WhatsApp</div><a class="v" href="{WHATSAPP}" target="_blank" rel="noopener noreferrer">Chat with us</a></div></div>
+      <div class="ci"><span class="ico">{ICONS['phone']}</span><div><div class="k">Phone</div><a class="v" href="tel:{PHONE_TEL}">{PHONE}</a></div></div>
+      <div class="ci"><span class="ico">{ICONS['pin']}</span><div><div class="k">Office</div><div class="v">{OFFICE}</div></div></div>
     </div>
   </div>
 </section>'''
 
 # ================= WRITE FILES =================
 PAGES = [
- ('index','Ternah Software Company Ltd | Keep it simple.','Ternah Software Company Ltd builds custom software, ERP, automation, data and cloud solutions for businesses across Africa.',home_body),
- ('about','About | Ternah Software Company Ltd','An African software development and digital transformation company building reliable, scalable technology.',about_body),
- ('solutions','Solutions | Ternah Software Company Ltd','Custom software, ERP & business systems, automation, data & analytics, cloud and support services.',solutions_body),
- ('industries','Industries | Ternah Software Company Ltd','Software built for education, healthcare, logistics, retail, NGOs, government, finance and enterprises across Africa.',industries_body),
- ('products','Products | Ternah Software Company Ltd','Products, platforms, and systems we have designed and built across industries and markets.',products_body),
- ('insights','Insights | Ternah Software Company Ltd','Articles, technology trends, and practical guides on digital transformation across Africa.',insights_body),
- ('contact','Contact | Ternah Software Company Ltd','Get in touch with Ternah Software Company Ltd. Email ternah22@gmail.com or call +256 787 770007.',contact_body),
+ ('index', f'{COMPANY} | Keep it simple.', 'Software built around the way your business already runs, for hospitals, factories, shops and SACCOs. Built in Kampala, Uganda.', home_body),
+ ('about', f'About | {COMPANY}', 'Who we are: the founders of Ternah and how we build software from our office in Kampala, Uganda.', about_body),
+ ('solutions', f'Solutions | {COMPANY}', 'Custom software and websites, ERP and business systems, automation, data and analytics, cloud services, and support.', solutions_body),
+ ('industries', f'Industries | {COMPANY}', 'Software for healthcare, manufacturing, retail, SACCOs, pharmacy, hospitality, real estate and more.', industries_body),
+ ('products', f'Products | {COMPANY}', 'Ternah Health, Ternah for Factories, Mykashop, a SACCO platform and more: products built for one kind of business each.', products_body),
+ ('insights', f'Insights | {COMPANY}', 'Practical guides on software, data and digital transformation from the Ternah team.', insights_body),
+ ('contact', f'Contact | {COMPANY}', f'Start a project with Ternah. Email {EMAIL}, WhatsApp or call {PHONE}. Office in {OFFICE}.', contact_body),
 ]
 
 for slug,title,desc,body in PAGES:
     fn = os.path.join(OUT, f'{slug}.html')
     open(fn,'w',encoding='utf-8').write(page(slug,title,desc,body))
     print('wrote', fn)
-print('done —', len(PAGES), 'pages')
+
+today = datetime.date.today().isoformat()
+urls = "".join(f'  <url><loc>{SITE_URL}/{"" if s=="index" else s+".html"}</loc><lastmod>{today}</lastmod></url>\n' for s,*_ in PAGES)
+open(os.path.join(OUT,'sitemap.xml'),'w',encoding='utf-8').write(
+    f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
+open(os.path.join(OUT,'robots.txt'),'w',encoding='utf-8').write(f'User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n')
+print('done —', len(PAGES), 'pages + sitemap.xml + robots.txt')
