@@ -26,6 +26,15 @@ ANALYTICS_DOMAIN = ''  # e.g. 'ternah.co.ug' to load Plausible; empty = no analy
 def exists(rel):
     return os.path.exists(os.path.join(OUT, rel))
 
+
+# Ternah mark (left triangle, rising arrow, lower triangle). viewBox 0 0 100 94.
+MARK_PATHS = ('<path d="M27 14 L45 14 C47 14 48 16 47 18 L38 41 C37 43 34 43 33 41 L24 19 C23 16 24 14 27 14 Z"/>'
+              '<path d="M58 14 L84 14 C86 14 87 16 87 18 L87 34 C87 37 84 38 82 36 L74 30 L34 78 C33 79 31 80 29 80 L18 80 C15 80 14 77 16 75 L58 14 Z"/>'
+              '<path d="M73 78 L55 78 C53 78 52 76 53 74 L62 51 C63 49 66 49 67 51 L76 73 C77 76 76 78 73 78 Z"/>')
+
+def MK(cls='mk'):
+    return f'<svg class="{cls}" viewBox="0 0 100 94" aria-hidden="true"><g fill="currentColor">{MARK_PATHS}</g></svg>'
+
 # ================= ICONS =================
 ARROW = ('<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" '
          'stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>')
@@ -66,7 +75,7 @@ NAV_ITEMS = [('solutions','Solutions'),('products','Products'),('industries','In
              ('about','About'),('insights','Insights'),('contact','Contact')]
 
 def brand():
-    return '<a class="brand" href="index.html" aria-label="Ternah home"><span class="logo" aria-hidden="true">T</span><span class="wm">Ternah</span></a>'
+    return f'<a class="brand" href="index.html" aria-label="Ternah home">{MK("logo")}<span class="wm">Ternah</span></a>'
 
 def header_html(slug):
     links = "\n      ".join(
@@ -226,7 +235,7 @@ def dash_html(d):
         tiles.append(f'<div class="{cls}"><div class="tt"><span class="ti{" w" if warn else ""}"></span>{escape(t)}</div>{val}{pl}</div>')
     ini,name,role = d['user']
     return f'''<div class="dash" aria-hidden="true">
-        <div class="sb"><div class="sb-brand"><span class="sb-logo">T</span><div><div class="sb-name">{escape(d["org"])}</div><div class="sb-sub">{escape(d["org_sub"])}</div></div></div>{nav}
+        <div class="sb"><div class="sb-brand">{MK("sb-logo")}<div><div class="sb-name">{escape(d["org"])}</div><div class="sb-sub">{escape(d["org_sub"])}</div></div></div>{nav}
           <div class="sb-user"><span class="sb-av">{ini}</span><div>{escape(name)}<br><span class="sb-sub">{escape(role)}</span></div></div></div>
         <div class="main"><div class="top"><div class="search">{escape(d["search"])}</div><div class="date">Wednesday, 30 September</div></div>
           <div class="greet">{escape(d["greet"])}</div><div class="greet-sub">{escape(d["sub"])}</div>

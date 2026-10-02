@@ -54,7 +54,7 @@ header{position:sticky;top:0;z-index:100;background:rgba(244,243,239,.85);backdr
 header.scrolled{border-color:var(--border)}
 .nav{max-width:calc(var(--maxw) + var(--gutter)*2);margin:0 auto;padding:0 var(--gutter);height:80px;display:flex;align-items:center;justify-content:space-between;gap:24px}
 .brand{display:flex;align-items:center;gap:12px;flex:none}
-.brand .logo{width:36px;height:36px;border-radius:10px;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:18px}
+.brand .logo{width:38px;height:36px;color:var(--nav)}
 .brand .wm{font-weight:600;font-size:20px;letter-spacing:-.01em;color:var(--ink)}
 .navlinks{display:flex;align-items:center;gap:4px}
 .navlinks a{font-size:16px;font-weight:500;color:var(--ink);padding:8px 14px;border-radius:10px;transition:background .2s,color .2s}
@@ -107,7 +107,7 @@ header.scrolled{border-color:var(--border)}
 .dash{display:flex;width:100%;height:100%;font-family:var(--font);color:var(--ink);text-align:left;line-height:1.25}
 .dash .sb{width:17.5cqw;background:var(--nav);color:var(--nav-text);padding:1.6cqw 1.2cqw;display:flex;flex-direction:column;flex:none}
 .dash .sb-brand{display:flex;align-items:center;gap:.9cqw;margin-bottom:2cqw}
-.dash .sb-logo{width:2.8cqw;height:2.8cqw;border-radius:.6cqw;background:#fff;color:var(--nav);font-size:1.5cqw;font-weight:600;display:flex;align-items:center;justify-content:center}
+.dash .sb-logo{width:2.8cqw;height:2.6cqw;color:#fff;flex:none}
 .dash .sb-name{font-size:1.05cqw;color:#fff;font-weight:600}
 .dash .sb-sub{font-size:.75cqw;opacity:.7}
 .dash .sb a{display:block;font-size:.95cqw;padding:.75cqw 1cqw;border-radius:.6cqw}
@@ -302,7 +302,7 @@ footer{background:var(--nav);color:var(--nav-text);margin-top:0}
 main > :last-child:not(.cta-band){margin-bottom:var(--sec-gap)}
 .foot{max-width:calc(var(--maxw) + var(--gutter)*2);margin:0 auto;padding:72px var(--gutter) 48px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
 .foot a.brand{display:flex;padding:0}
-.foot .brand .logo{background:#fff;color:var(--nav)}
+.foot .brand .logo{color:#fff}
 .foot .brand .wm{color:#fff}
 .foot p{font-size:15px;margin-top:20px;max-width:320px}
 .foot h4{font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:14px}
