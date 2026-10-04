@@ -384,11 +384,10 @@ def card(i, ic, t, d, items=None, attrs=''):
 def frame(p, cls):
     return f'<figure class="frame {cls}">{screenshot(p, lazy=False)}<figcaption class="cap">{escape(p["name"])}</figcaption></figure>'
 
-FLAG = '<span class="flag" aria-hidden="true">' + '<i></i>'*6 + '</span>'
 
 # ================= PAGE BODIES =================
 home_body = f'''<section class="hero wrap">
-  <span class="origin">{FLAG}Built in {OFFICE}</span>
+  <span class="origin">Built in {OFFICE}</span>
   <h1>Keep it simple.<span class="l2">We build software that works.</span></h1>
   <p class="lead">Systems built around the way your business already runs, for hospitals, factories, shops and SACCOs.</p>
   <div class="hero-cta">
