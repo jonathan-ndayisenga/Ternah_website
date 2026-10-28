@@ -26,7 +26,6 @@ Drop files at these paths and rebuild; placeholders are replaced automatically.
   Keys: ternah-health, ternah-factories, mykashop, sacco, property, pharmacy,
   hospitality, queueflow. Until a file exists, Ternah Health and Ternah for
   Factories show an HTML drawing of their home screen; the others show a placeholder.
-- `assets/img/founders/1.webp`, `2.webp` — founder portraits, 4:5.
 
 ## Theme
 Colours, type and radii come from `assets/ternah-ui/tokens.css`, the same file

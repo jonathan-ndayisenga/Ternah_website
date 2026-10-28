@@ -181,7 +181,6 @@ def page(slug, title, desc, body):
 # Drop real files at these paths and rebuild; the placeholder is replaced automatically.
 #   assets/img/team-kampala.webp           landscape team photo, >= 1600 x 1000
 #   assets/img/screens/<product-key>.webp  product screenshot, 3:2, e.g. 1440 x 960
-#   assets/img/founders/<n>.webp           founder portrait, 4:5
 TEAM_PHOTO     = 'assets/img/team-kampala.webp'
 TEAM_PHOTO_ALT = 'The Ternah team in the Kampala office'   # name the people in the photo once it exists
 
@@ -333,12 +332,6 @@ PROCESS_STEPS = [
  ('Support','We stay for updates and growth after launch.'),
 ]
 
-# Founders: fill in names, roles and photos (assets/img/founders/1.webp, 2.webp).
-FOUNDERS = [
- ('[Co-founder name]','Co-founder, [role]'),
- ('[Co-founder name]','Co-founder, [role]'),
-]
-
 INSIGHTS = [
  ('Digital Transformation','From manual to intelligent: a practical roadmap','How organisations can move off spreadsheets and paper without disrupting daily operations.','8 min read'),
  ('Technology Trends','Why offline-first matters in African markets','Designing software that performs where connectivity is intermittent, and why it wins.','6 min read'),
@@ -440,14 +433,9 @@ home_body = f'''<section class="hero wrap">
 
 {cta_band("Let's build something that fits.", "Tell us how your business runs. We'll turn it into software that keeps it simple.")}'''
 
-founder_cards = "\n".join(f'''      <div class="founder">
-        <div class="pic">{photo_or_placeholder(f"assets/img/founders/{i+1}.webp", n, "Founder photo", 800, 1000)}</div>
-        <h3>{n}</h3><p>{r}</p>
-      </div>''' for i,(n,r) in enumerate(FOUNDERS))
-
 about_body = f'''<section class="phead wrap">
   <span class="eyebrow">About Ternah</span>
-  <h1>Two founders. One name.</h1>
+  <h1>Software that works the way you do.</h1>
   <p class="lead">{COMPANY} builds software for hospitals, factories, shops and SACCOs from our office in {OFFICE}.</p>
 </section>
 
@@ -456,16 +444,17 @@ about_body = f'''<section class="phead wrap">
     <div>
       <span class="eyebrow">Our story</span>
       <h2 class="h2" style="margin-bottom:24px">How Ternah started.</h2>
-      <p><strong>Ternah was founded by two co-founders, [Co-founder name] and [Co-founder name]. The name joins both of theirs: [how the two names make "Ternah"].</strong></p>
-      <p>[The founding story in two or three sentences: when you started, the first problem you solved, and for whom.]</p>
-      <p>We started on one conviction: software should fit the way a business already works, not force it to work the way the software wants. So we begin every project by learning how the business runs, then build the simplest system that fits it, and stay to support it after launch.</p>
+      <p><strong>Ternah was founded by two directors with one idea: help businesses work the way they already work, instead of forcing them into the shape of ready-made SaaS systems.</strong></p>
+      <p>So the people who will use our products take part in building them. We show working software early, watch how it fits their day, and adjust it together, week by week. Some call this Agile development. To us it is simply how software that fits gets made.</p>
+      <p>Every project starts with learning how the business runs. Then we build the simplest system that fits it, and we stay to support it after launch.</p>
       <div class="office">
         <span class="ico">{ICONS['pin']}</span>
         <p><strong>Our office</strong><br>{OFFICE}</p>
       </div>
     </div>
-    <div class="founders">
-{founder_cards}
+    <div class="brand-panel" aria-hidden="true">
+      {MK("mark")}
+      <span>Keep it simple.</span>
     </div>
   </div>
 </section>
@@ -1206,7 +1195,7 @@ contact_body = f'''<section class="phead wrap">
 # ================= WRITE FILES =================
 PAGES = [
  ('index', f'{COMPANY} | Keep it simple.', 'Software built around the way your business already runs, for hospitals, factories, shops and SACCOs. Built in Kampala, Uganda.', home_body),
- ('about', f'About | {COMPANY}', 'Who we are: the founders of Ternah and how we build software from our office in Kampala, Uganda.', about_body),
+ ('about', f'About | {COMPANY}', 'How Ternah builds software with the people who use it, from our office in Kampala, Uganda.', about_body),
  ('solutions', f'Solutions | {COMPANY}', 'Custom software and websites, ERP and business systems, automation, data and analytics, cloud services, and support.', solutions_body),
  ('industries', f'Industries | {COMPANY}', 'Software for healthcare, manufacturing, retail, SACCOs, pharmacy, hospitality, real estate and more.', industries_body),
  ('products', f'Products | {COMPANY}', 'Ternah Health, Ternah for Factories, Mykashop, a SACCO platform and more: products built for one kind of business each.', products_body),
