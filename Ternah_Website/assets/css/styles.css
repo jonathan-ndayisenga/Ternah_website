@@ -122,7 +122,9 @@ header.scrolled{border-color:var(--border)}
 .dash .t.s2{grid-column:span 2}
 .dash .t.raised{box-shadow:0 .6cqw 1.6cqw rgba(21,32,46,.10)}
 .dash .tt{display:flex;align-items:center;gap:.8cqw;font-size:.95cqw;font-weight:600;margin-bottom:1.6cqw}
-.dash .ti{width:2.2cqw;height:2.2cqw;border-radius:.6cqw;background:var(--icon-bg);flex:none}
+.dash .ti{width:2.2cqw;height:2.2cqw;border-radius:.6cqw;background:var(--icon-bg);flex:none;display:flex;align-items:center;justify-content:center}
+.dash .ti svg{width:60%;height:60%;stroke:var(--ink)}
+.dash .ti.w svg{stroke:var(--warn)}
 .dash .ti.w{background:var(--warn-bg)}
 .dash .n{font-size:2.2cqw;font-weight:600;margin-right:.4cqw}
 .dash .n.amber{color:var(--warn)}
@@ -381,20 +383,23 @@ main > :last-child:not(.cta-band){margin-bottom:var(--sec-gap)}
   .fab-wa{right:16px;bottom:16px}
 }
 
-/* hero without a team photo: products lead */
-.stage.stage-products{height:auto;margin:56px auto 0;padding-bottom:96px}
-.stage.stage-products .frame{position:relative}
-.stage.stage-products .f-main{width:820px;margin:0 40px 0 auto}
-.stage.stage-products .f-main .cap{text-align:right}
-.stage.stage-products .f-over{position:absolute;left:0;bottom:0;width:420px}
-@media (max-width:1100px){
-  .stage.stage-products{margin-bottom:0}
-  .stage.stage-products .f-main{width:78%;margin-right:0}
-  .stage.stage-products .f-over{width:44%;top:auto;bottom:0}
-}
+/* hero product switcher (shown until the team photo exists) */
+.showcase{max-width:960px;margin:56px auto 0}
+.showcase .tabs{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-pill);padding:5px;margin-bottom:24px}
+.showcase [role=tab]{font-family:var(--font);font-size:16px;font-weight:500;color:var(--muted);background:none;border:0;border-radius:var(--r-pill);padding:10px 20px;cursor:pointer;transition:background .2s,color .2s}
+.showcase [role=tab]:hover{color:var(--ink)}
+.showcase [role=tab][aria-selected=true]{background:var(--nav);color:#fff}
+.showcase .panel{animation:panelin .35s var(--ease)}
+@keyframes panelin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.showcase .frame{text-align:left}
+.showcase .cap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 10px 6px}
+.showcase .cap strong{color:var(--ink);font-weight:600}
+.showcase .cap-who{color:var(--muted);margin-left:8px}
+.showcase .cap .link-arrow{font-size:15px;flex:none}
 @media (max-width:600px){
-  .stage.stage-products{margin-top:40px;padding-bottom:0}
-  .stage.stage-products .f-main{width:100%}
-  .stage.stage-products .f-over{display:none}
-  .stage.stage-products .frame .cap{display:block;text-align:left}
+  .showcase{margin-top:40px}
+  .showcase .tabs{display:flex;width:100%}
+  .showcase [role=tab]{flex:1;padding:10px 8px;font-size:15px}
+  .showcase .frame .cap{display:flex}
+  .showcase .cap-who{display:none}
 }

@@ -231,7 +231,8 @@ def dash_html(d):
             val = f'<span class="n{" amber" if warn else ""}">{escape(n)}</span><span class="u">{escape(u)}</span>'
             if wn: val += f'<span class="n w">{escape(wn)}</span><span class="u">{escape(wu)}</span>'
         pl = f'<div class="pills">{"".join(f"<span>{escape(p)}</span>" for p in pills)}</div>' if pills else ''
-        tiles.append(f'<div class="{cls}"><div class="tt"><span class="ti{" w" if warn else ""}"></span>{escape(t)}</div>{val}{pl}</div>')
+        icon = ICONS.get(TILE_ICONS.get(t, ''), '')
+        tiles.append(f'<div class="{cls}"><div class="tt"><span class="ti{" w" if warn else ""}">{icon}</span>{escape(t)}</div>{val}{pl}</div>')
     ini,name,role = d['user']
     return f'''<div class="dash" aria-hidden="true">
         <div class="sb"><div class="sb-brand">{MK("sb-logo")}<div><div class="sb-name">{escape(d["org"])}</div><div class="sb-sub">{escape(d["org_sub"])}</div></div></div>{nav}
@@ -240,6 +241,10 @@ def dash_html(d):
           <div class="greet">{escape(d["greet"])}</div><div class="greet-sub">{escape(d["sub"])}</div>
           <div class="tiles">{"".join(tiles)}</div></div>
       </div>'''
+
+TILE_ICONS = {'Reception':'chat','Doctor':'health','Laboratory':'layers','Nursing':'support','Sonography':'chart',
+              'Inventory':'cart','Finance':'bank','Hospital admin':'gov','Production':'factory',
+              'Branch & stock':'truck','Cashier':'cart','Staff':'support'}
 
 DASHES = {'ternah-health': HEALTH_DASH, 'ternah-factories': FACTORY_DASH}
 
@@ -407,18 +412,35 @@ def frame(p, cls):
 
 
 
+# Products in the hero switcher, in tab order. Each needs a screenshot or a drawn dashboard.
+SHOWCASE = ['pharmacy', 'ternah-health', 'ternah-factories']
+
+def short_name(p):
+    return p['name'].replace('Ternah for ', '').replace('Ternah ', '')
+
 def hero_stage():
-    """Team photo with two product screens over its edges once the photo exists;
-    until then the products lead: Ternah Pharmacy large, Ternah Health over its corner."""
+    """Team photo with two product screens over its edges once assets/img/team-kampala.webp
+    exists; until then a product switcher visitors can click through."""
     if exists(TEAM_PHOTO):
         return f'''<div class="stage">
     <div class="photo">{photo_or_placeholder(TEAM_PHOTO, TEAM_PHOTO_ALT, 'Team photo, Kampala office', 1600, 1050, lazy=False)}</div>
     {frame(PRODUCTS[0], 'f-left')}
     {frame(PRODUCTS[1], 'f-right')}
   </div>'''
-    return f'''<div class="stage stage-products">
-    {frame(PRODUCTS[1], 'f-main')}
-    {frame(PRODUCTS[0], 'f-over')}
+    items = [next(p for p in PRODUCTS if p['key'] == k) for k in SHOWCASE]
+    tabs = "".join(
+        f'<button type="button" role="tab" id="tab-{p["key"]}" aria-controls="panel-{p["key"]}" '
+        f'aria-selected="{"true" if i == 0 else "false"}" tabindex="{0 if i == 0 else -1}">{escape(short_name(p))}</button>'
+        for i, p in enumerate(items))
+    panels = "".join(f'''
+    <div class="panel" role="tabpanel" id="panel-{p["key"]}" aria-labelledby="tab-{p["key"]}"{"" if i == 0 else " hidden"}>
+      <figure class="frame">{screenshot(p, lazy=False)}
+        <figcaption class="cap"><span class="cap-text"><strong>{escape(p["name"])}</strong> <span class="cap-who">{escape(p["sector"])}</span></span>
+          <a class="link-arrow" href="products.html#{p["key"]}">See product {ARROW}</a></figcaption>
+      </figure>
+    </div>''' for i, p in enumerate(items))
+    return f'''<div class="showcase" id="showcase">
+    <div class="tabs" role="tablist" aria-label="Ternah products">{tabs}</div>{panels}
   </div>'''
 
 # ================= PAGE BODIES =================

@@ -172,3 +172,40 @@ if(burger && navlinks){
     });
   });
 })();
+
+/* ---- hero product switcher: tabs, arrow keys, gentle auto-advance ---- */
+(function(){
+  const root = document.getElementById('showcase');
+  if(!root) return;
+  const tabs = [...root.querySelectorAll('[role=tab]')];
+  const panels = tabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
+  let current = 0, auto = !matchMedia('(prefers-reduced-motion: reduce)').matches, paused = false, timer;
+
+  function select(i, focus){
+    current = (i + tabs.length) % tabs.length;
+    tabs.forEach((t, k) => {
+      const on = k === current;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      panels[k].hidden = !on;
+    });
+    if(focus) tabs[current].focus();
+    schedule();
+  }
+  function schedule(){
+    clearTimeout(timer);
+    if(auto && !paused) timer = setTimeout(() => select(current + 1), 6000);
+  }
+  function stop(){ auto = false; clearTimeout(timer); }
+
+  tabs.forEach((t, i) => t.addEventListener('click', () => { stop(); select(i); }));
+  root.querySelector('[role=tablist]').addEventListener('keydown', e => {
+    const moves = {ArrowRight: current + 1, ArrowLeft: current - 1, Home: 0, End: tabs.length - 1};
+    if(e.key in moves){ e.preventDefault(); stop(); select(moves[e.key], true); }
+  });
+  root.addEventListener('mouseenter', () => { paused = true; clearTimeout(timer); });
+  root.addEventListener('mouseleave', () => { paused = false; schedule(); });
+  root.addEventListener('focusin', () => { paused = true; clearTimeout(timer); });
+  root.addEventListener('focusout', e => { if(!root.contains(e.relatedTarget)){ paused = false; schedule(); } });
+  schedule();
+})();
