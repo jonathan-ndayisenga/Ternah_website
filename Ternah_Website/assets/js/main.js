@@ -116,41 +116,11 @@ if(burger && navlinks){
   });
 })();
 
-/* ---- article modals ---- */
+/* ---- articles used to open as pop-ups at insights.html#<slug>; send old links to the article page ---- */
 (function(){
-  let lastTrigger = null;
-  function openModal(trigger){
-    const modal = document.getElementById('modal-' + trigger.dataset.open);
-    if(!modal) return;
-    lastTrigger = trigger;
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    modal.querySelector('.modal-close')?.focus();
-  }
-  function closeModal(modal){
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
-    lastTrigger?.focus();
-    if(location.hash) history.replaceState(null, '', location.pathname + location.search);
-  }
-  document.querySelectorAll('[data-open]').forEach(trigger=>{
-    trigger.addEventListener('click', ()=> openModal(trigger));
-    trigger.addEventListener('keydown', e=>{
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openModal(trigger); }
-    });
-  });
-  document.querySelectorAll('.modal-close').forEach(btn=>{
-    btn.addEventListener('click', ()=> closeModal(btn.closest('.modal-overlay')));
-  });
-  document.querySelectorAll('.modal-overlay').forEach(overlay=>{
-    overlay.addEventListener('click', e=>{ if(e.target === overlay) closeModal(overlay); });
-  });
-  document.addEventListener('keydown', e=>{
-    if(e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(closeModal);
-  });
-  // Home page teasers link to insights.html#<slug>: open that article on arrival
-  const fromHash = location.hash.length > 1 && document.querySelector(`[data-open="${CSS.escape(location.hash.slice(1))}"]`);
-  if(fromHash) openModal(fromHash);
+  const slug = location.hash.slice(1);
+  const card = slug && document.querySelector(`[data-slug="${CSS.escape(slug)}"]`);
+  if(card) location.replace(card.getAttribute('href'));
 })();
 
 /* ---- solutions filter pills ---- */

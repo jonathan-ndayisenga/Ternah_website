@@ -260,20 +260,6 @@ header.scrolled{border-color:var(--border)}
 .art-read{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-weight:500;font-size:16px}
 .art-read svg{width:16px;height:16px;stroke:currentColor}
 
-/* article modal */
-.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(21,32,46,.5);display:flex;align-items:flex-start;justify-content:center;padding:32px 20px 40px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--surface);border-radius:var(--r-card);max-width:760px;width:100%;padding:48px 56px;position:relative;margin:auto}
-.modal-close{position:absolute;top:20px;right:20px;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center}
-.modal-close:hover{background:var(--bg)}
-.modal-close svg{width:18px;height:18px;stroke:var(--ink);stroke-width:2}
-.modal-eyebrow{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
-.modal h1,.modal .modal-title{font-size:36px;line-height:1.15;letter-spacing:-.02em;font-weight:600}
-.modal-byline{display:flex;align-items:center;gap:14px;margin:18px 0 32px;padding-bottom:24px;border-bottom:1px solid var(--border)}
-.modal-av{width:40px;height:40px;border-radius:50%;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;flex:none}
-.modal-byline .name{font-weight:600;font-size:15px}
-.modal-byline .role{font-size:14px;color:var(--muted)}
-.modal-byline .read-time{margin-left:auto;font-size:14px;color:var(--muted);white-space:nowrap}
 .article-body h2{font-size:24px;margin:34px 0 14px}
 .article-body h3{font-size:19px;margin:24px 0 8px}
 .article-body p{font-size:17px;line-height:1.65;color:#2E3946;margin-bottom:16px}
@@ -378,9 +364,6 @@ main > :last-child:not(.cta-band){margin-bottom:var(--sec-gap)}
   .cta-band h2{font-size:30px}
   .cta-band .row-cta{flex-direction:column;align-items:stretch}
   .foot{grid-template-columns:1fr;gap:28px;padding-top:56px}
-  .modal{padding:40px 22px}
-  .modal h1{font-size:28px}
-  .modal-byline{flex-wrap:wrap}.modal-byline .read-time{margin-left:0}
   .article-body table{font-size:14px}.article-body th,.article-body td{padding:9px 10px}
   .fab-wa{right:16px;bottom:16px}
 }
@@ -556,7 +539,6 @@ header{background:rgba(255,255,255,.88)}
 .art-feature .meta{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:500}
 .art-feature .meta svg{width:16px;height:16px;stroke:currentColor}
 .recent{margin-bottom:32px}
-.modal-cover{width:100%;border-radius:16px;aspect-ratio:16/9;object-fit:cover;margin-bottom:28px}
 
 @media (max-width:1024px){
   .hero-top{grid-template-columns:1fr;gap:24px}
@@ -588,3 +570,60 @@ header{background:rgba(255,255,255,.88)}
 @media (max-width:600px){ .art-feature .ov{padding:24px 22px} }
 .case-feature img{aspect-ratio:4/3;object-position:22% 50%}
 .hero::before{left:15%;right:0;width:auto;transform:none}
+
+/* =========================================================
+   Article pages (insights/<slug>.html): white, roomy, easy to read
+   ========================================================= */
+.back-link{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:500;color:var(--muted)}
+.back-link:hover{color:var(--blue)}
+.back-link svg{width:16px;height:16px;stroke:currentColor}
+.post-head{padding-top:40px}
+.post-cover{display:block;width:100%;aspect-ratio:21/9;object-fit:cover;border-radius:var(--r-photo);margin-top:20px;box-shadow:var(--shadow-frame)}
+.post-intro{display:grid;grid-template-columns:1.7fr 1fr;gap:64px;margin-top:48px;padding-bottom:40px;border-bottom:1px solid var(--border)}
+.post-intro h1{font-size:48px;letter-spacing:-.025em;line-height:1.1;margin-top:4px}
+.post-intro .lead{font-size:20px;margin-top:18px}
+.post-meta{display:grid;gap:22px;align-content:start;padding-top:8px}
+.post-meta dt{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.post-meta dd{font-size:17px;color:var(--ink);font-weight:500;margin-top:4px}
+.post-meta dd span{display:block;font-size:15px;font-weight:400;color:var(--muted)}
+
+/* the reading column: ~68 characters a line, larger type, generous spacing */
+.post-body{max-width:700px;margin:56px auto 0}
+.post-body p{font-size:19px;line-height:1.75;color:#1F2A37;margin-bottom:22px}
+.post-body li{font-size:18px;line-height:1.7;color:#1F2A37;margin-bottom:10px}
+.post-body ul,.post-body ol{margin-bottom:24px}
+.post-body h2{font-size:30px;letter-spacing:-.015em;line-height:1.2;margin:52px 0 16px}
+.post-body h3{font-size:22px;line-height:1.3;margin:36px 0 10px}
+.post-body blockquote{border-left-color:var(--blue);background:#EFF4FF;margin:32px 0}
+.post-body blockquote p{font-size:21px;line-height:1.5}
+.post-body .callout{background:#EFF4FF}
+.post-body table{font-size:16px}
+.post-body td{color:#1F2A37}
+.post-body .article-cta{margin-top:56px}
+
+.post-next h2{margin-bottom:28px}
+.prevnext{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.prevnext .art .thumb{aspect-ratio:21/9}
+.pn-label{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--blue)}
+.pn-label svg{width:14px;height:14px;stroke:currentColor}
+.prevnext .art:last-child .body{text-align:right}
+.more-arts{margin-top:24px}
+.post-next > .back-link{margin-top:36px}
+
+@media (max-width:1024px){
+  .post-intro{grid-template-columns:1fr;gap:32px}
+  .post-meta{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:600px){
+  .post-cover{aspect-ratio:16/10;border-radius:18px}
+  .post-intro{margin-top:32px}
+  .post-intro h1{font-size:34px}
+  .post-intro .lead{font-size:18px}
+  .post-meta{grid-template-columns:1fr 1fr}
+  .post-body{margin-top:40px}
+  .post-body p{font-size:18px}
+  .post-body li{font-size:17px}
+  .post-body h2{font-size:25px;margin-top:40px}
+  .prevnext{grid-template-columns:1fr}
+  .prevnext .art:last-child .body{text-align:left}
+}

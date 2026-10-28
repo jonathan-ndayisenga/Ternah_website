@@ -8,7 +8,7 @@ never hand-edit the HTML. Edit the script, then run `python build_pages.py`.
 build_pages.py              all content, page templates, sitemap.xml + robots.txt
 assets/ternah-ui/           copy of the shared ternah-ui tokens + Hanken Grotesk font
 assets/css/styles.css       website styles (uses the tokens; never redefine them)
-assets/js/main.js           menu, reveals, contact form, article modals, filters
+assets/js/main.js           menu, reveals, contact form, hero switcher, filters
 assets/img/                 photos and product screenshots (see below)
 tools/make_images.py        regenerates favicon-32.png, apple-touch-icon.png, og-image.png
 tools/make_illustrations.py draws the blue product illustrations in assets/img/art/<product>.svg
@@ -50,3 +50,9 @@ Build command `python build_pages.py`, publish directory `./`.
 Only Ternah Health has a case study for now (`CASES` in `build_pages.py`), shown under the
 product grid on the Products page. It describes the type of hospital, not a named client.
 Put a client's name in `setting` only once they have agreed.
+
+## Articles
+Each Insights article is its own page at `insights/<slug>.html`, built by `article_body()` in
+`build_pages.py`. The text sits in the `*_MODAL` blocks (named from when articles opened as pop-ups).
+The reading order follows `INSIGHTS`; Previous / Next wrap around, so every article leads on to another.
+Pages in `insights/` use `<base href="../">`, so links inside them are written from the site root.

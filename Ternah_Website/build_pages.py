@@ -38,6 +38,8 @@ def MK(cls='mk'):
 # ================= ICONS =================
 ARROW = ('<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" '
          'stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>')
+BACK = ('<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" '
+        'stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>')
 EXT = ('<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
        '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>')
 CAMERA = ('<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'
@@ -126,15 +128,18 @@ def footer_html():
 
 OG_IMAGE = f'{SITE_URL}/assets/og-image.png'
 
-def page(slug, title, desc, body):
-    canonical = f'{SITE_URL}/{slug}.html' if slug != 'index' else f'{SITE_URL}/'
+def page(slug, title, desc, body, path=None):
+    """slug picks the active nav item; path (e.g. 'insights/offline-first.html') is where the file lives."""
+    path = path or ('' if slug == 'index' else f'{slug}.html')
+    canonical = f'{SITE_URL}/{path}'
+    base = '<base href="../">\n' if '/' in path else ''
     analytics = (f'<script defer data-domain="{ANALYTICS_DOMAIN}" src="https://plausible.io/js/script.js"></script>\n'
                  if ANALYTICS_DOMAIN else '')
     return f'''<!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{base}<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <link rel="canonical" href="{canonical}">
@@ -529,7 +534,7 @@ def facts_strip():
 
 def insight_teaser(i, ins):
     cat,t,d,meta = ins
-    return f'''    <a class="art reveal" data-d="{i%3+1}" href="insights.html#{ARTICLE_SLUGS[t]}">
+    return f'''    <a class="art reveal" data-d="{i%3+1}" href="insights/{ARTICLE_SLUGS[t]}.html">
       <div class="thumb"><img src="{article_cover(ARTICLE_SLUGS[t])}" alt="" width="1200" height="675" loading="lazy"></div>
       <div class="body"><div class="cat">{cat}</div><h3>{t}</h3><p>{d}</p><div class="meta">{meta}</div><div class="art-read">Read article {ARROW}</div></div>
     </a>'''
@@ -733,7 +738,7 @@ def insight_card(i, ins):
     return f'''    <article class="art{extra_cls} reveal" data-d="{(i%3)+1}"{open_attr}>
       <div class="thumb">{MK('#fff')}</div>
       <div class="body"><div class="cat">{cat}</div><h3>{t}</h3><p>{d}</p><div class="meta">{meta}</div>{read_link}</div>
-    </article>'''
+    </{tag}>'''
 
 BUY_VS_BUILD_MODAL = f'''
 <div class="modal-overlay" id="modal-{BUY_VS_BUILD_SLUG}" role="dialog" aria-modal="true" aria-labelledby="modal-title-bvb">
@@ -1333,25 +1338,21 @@ SCALE_MODAL = f'''
 def insight_card(i, ins):
     cat,t,d,meta = ins
     slug = ARTICLE_SLUGS.get(t)
-    attrs = f' data-open="{slug}" tabindex="0" role="button" aria-haspopup="dialog"' if slug else ''
+    href = f' href="insights/{slug}.html" data-slug="{slug}"' if slug else ''
     read_link = f'<div class="art-read">Read article {READ_SVG}</div>' if slug else ''
     thumb = f'<div class="thumb"><img src="{article_cover(slug)}" alt="" width="1200" height="675" loading="lazy"></div>' if slug else ''
-    return f'''    <article class="art{" clickable" if slug else ""} reveal" data-d="{i%3+1}"{attrs}>
+    tag = 'a' if slug else 'article'
+    return f'''    <{tag} class="art reveal" data-d="{i%3+1}"{href}>
       {thumb}<div class="body"><div class="cat">{cat}</div><h3>{t}</h3><p>{d}</p><div class="meta">{meta}</div>{read_link}</div>
     </article>'''
 
 def featured_insight(ins):
     cat,t,d,meta = ins
     slug = ARTICLE_SLUGS[t]
-    return f'''<article class="art-feature clickable reveal" data-open="{slug}" tabindex="0" role="button" aria-haspopup="dialog">
+    return f'''<a class="art-feature reveal" href="insights/{slug}.html" data-slug="{slug}">
     <img src="{article_cover(slug)}" alt="" width="1200" height="675">
     <div class="ov"><span class="cat">Featured · {cat}</span><h2>{t}</h2><p>{d}</p><span class="meta">{meta} · Read article {ARROW}</span></div>
-  </article>'''
-
-def with_cover(modal, slug):
-    """Article modals open with their cover image."""
-    return modal.replace('</button>\n    <div class="modal-eyebrow">',
-        f'</button>\n    <img class="modal-cover" src="{article_cover(slug)}" alt="" width="1200" height="675" loading="lazy">\n    <div class="modal-eyebrow">', 1)
+  </a>'''
 
 FEATURED = next(x for x in INSIGHTS if x[1] in ARTICLE_SLUGS)
 
@@ -1369,13 +1370,7 @@ insights_body = f'''<section class="phead wrap">
 {chr(10).join(insight_card(i,ins) for i,ins in enumerate(x for x in INSIGHTS if x is not FEATURED))}
   </div>
 </section>
-{cta_band("Let's turn insight into action.", "Reading about transformation is one thing. Let's build yours.", primary=('Talk to us','contact.html'))}
-{with_cover(BUY_VS_BUILD_MODAL, 'buy-vs-build')}
-{with_cover(OFFLINE_FIRST_MODAL, 'offline-first')}
-{with_cover(MANUAL_INTEL_MODAL, 'manual-to-intelligent')}
-{with_cover(DASHBOARDS_MODAL, 'dashboards-to-decisions')}
-{with_cover(AUTOMATION_ROI_MODAL, 'automation-roi')}
-{with_cover(SCALE_MODAL, 'scale-from-day-one')}'''
+{cta_band("Let's turn insight into action.", "Reading about transformation is one thing. Let's build yours.", primary=('Talk to us','contact.html'))}'''
 
 contact_body = f'''<section class="phead wrap">
   <span class="eyebrow">Contact</span>
@@ -1394,6 +1389,78 @@ contact_body = f'''<section class="phead wrap">
   </div>
 </section>'''
 
+
+# ================= ARTICLE PAGES =================
+# Each article is its own page at insights/<slug>.html. The text lives in the *_MODAL blocks above
+# (written when articles opened as pop-ups); parse_article() lifts the parts out of that markup.
+ARTICLE_SOURCES = {'buy-vs-build': BUY_VS_BUILD_MODAL, 'offline-first': OFFLINE_FIRST_MODAL,
+                   'manual-to-intelligent': MANUAL_INTEL_MODAL, 'dashboards-to-decisions': DASHBOARDS_MODAL,
+                   'automation-roi': AUTOMATION_ROI_MODAL, 'scale-from-day-one': SCALE_MODAL}
+
+def _between(html, start, end):
+    a = html.index(start) + len(start)
+    return html[a:html.index(end, a)]
+
+def parse_article(html):
+    return dict(topic=_between(html, '<div class="modal-eyebrow">', '</div>'),
+                title=_between(html, '<h2 class="modal-title"', '</h2>').split('>', 1)[1].replace('<br>', ' '),
+                author=_between(html, '<div class="name">', '</div>'),
+                role=_between(html, '<div class="role">', '</div>'),
+                body=html[html.index('<div class="article-body">') + len('<div class="article-body">'):
+                          html.rindex('\n    </div>\n  </div>\n</div>')])
+
+# Reading order follows the Insights page; Previous/Next wrap around so every article leads on.
+ARTICLE_LIST = [(ARTICLE_SLUGS[t], cat, t, d, meta) for cat, t, d, meta in INSIGHTS if t in ARTICLE_SLUGS]
+
+def article_link_card(slug, label=None):
+    _, cat, t, d, meta = next(x for x in ARTICLE_LIST if x[0] == slug)
+    lab = f'<span class="pn-label">{label}</span>' if label else f'<div class="cat">{cat}</div>'
+    return f'''<a class="art" href="insights/{slug}.html">
+      <div class="thumb"><img src="{article_cover(slug)}" alt="" width="1200" height="675" loading="lazy"></div>
+      <div class="body">{lab}<h3>{t}</h3><div class="meta">{meta}</div></div>
+    </a>'''
+
+def article_body(i):
+    slug, cat, t, d, meta = ARTICLE_LIST[i]
+    a = parse_article(ARTICLE_SOURCES[slug])
+    n = len(ARTICLE_LIST)
+    prev_slug, next_slug = ARTICLE_LIST[(i - 1) % n][0], ARTICLE_LIST[(i + 1) % n][0]
+    others = [x[0] for x in ARTICLE_LIST if x[0] not in (slug, prev_slug, next_slug)][:3]
+    return f'''<article class="post">
+<section class="wrap post-head">
+  <a class="back-link" href="insights.html">{BACK} All articles</a>
+  <img class="post-cover" src="{article_cover(slug)}" alt="" width="1200" height="675">
+  <div class="post-intro">
+    <div>
+      <span class="eyebrow">{cat}</span>
+      <h1>{a["title"]}</h1>
+      <p class="lead">{d}</p>
+    </div>
+    <dl class="post-meta">
+      <div><dt>Topic</dt><dd>{a["topic"]}</dd></div>
+      <div><dt>Reading time</dt><dd>{meta}</dd></div>
+      <div><dt>Written by</dt><dd>{a["author"]}<span>{a["role"]}</span></dd></div>
+    </dl>
+  </div>
+</section>
+<section class="wrap">
+  <div class="article-body post-body">{a["body"]}
+  </div>
+</section>
+</article>
+<section class="sec wrap post-next">
+  <h2 class="h2">Keep reading</h2>
+  <nav class="prevnext" aria-label="Previous and next article">
+    {article_link_card(prev_slug, f"{BACK} Previous article")}
+    {article_link_card(next_slug, f"Next article {ARROW}")}
+  </nav>
+  <div class="grid g3 more-arts">
+    {"".join(article_link_card(x) for x in others)}
+  </div>
+  <a class="back-link" href="insights.html">{BACK} All articles</a>
+</section>
+{cta_band("Let's turn insight into action.", "Reading about it is one thing. Tell us what you want to fix and we'll build it with you.", primary=('Talk to us','contact.html'))}'''
+
 # ================= WRITE FILES =================
 PAGES = [
  ('index', f'{COMPANY} | Keep it simple.', 'Software built around the way your business already runs, for hospitals, factories, shops and SACCOs. Built in Kampala, Uganda.', home_body),
@@ -1410,9 +1477,16 @@ for slug,title,desc,body in PAGES:
     open(fn,'w',encoding='utf-8').write(page(slug,title,desc,body))
     print('wrote', fn)
 
+os.makedirs(os.path.join(OUT, 'insights'), exist_ok=True)
+for i, (slug, cat, t, d, meta) in enumerate(ARTICLE_LIST):
+    path = f'insights/{slug}.html'
+    open(os.path.join(OUT, path), 'w', encoding='utf-8').write(page('insights', f'{t} | {COMPANY}', d, article_body(i), path=path))
+    print('wrote', path)
+
 today = datetime.date.today().isoformat()
 urls = "".join(f'  <url><loc>{SITE_URL}/{"" if s=="index" else s+".html"}</loc><lastmod>{today}</lastmod></url>\n' for s,*_ in PAGES)
+urls += "".join(f'  <url><loc>{SITE_URL}/insights/{slug}.html</loc><lastmod>{today}</lastmod></url>\n' for slug,*_ in ARTICLE_LIST)
 open(os.path.join(OUT,'sitemap.xml'),'w',encoding='utf-8').write(
     f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
 open(os.path.join(OUT,'robots.txt'),'w',encoding='utf-8').write(f'User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n')
-print('done —', len(PAGES), 'pages + sitemap.xml + robots.txt')
+print('done —', len(PAGES), 'pages,', len(ARTICLE_LIST), 'articles + sitemap.xml + robots.txt')
