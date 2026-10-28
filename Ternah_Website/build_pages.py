@@ -259,6 +259,10 @@ def screenshot(p, lazy=True):
 # ================= CONTENT =================
 # Product names must match the names used inside the products themselves.
 # 'link' = live site; without one the card shows "Book a demo".
+# Live product sites. Switch to the real domains once they exist (keep https).
+PHARMACY_URL = 'https://ternah-pharmacy.onrender.com/pharmacy/'
+PEARL_URL    = 'http://147.182.138.32/'
+
 PRODUCTS = [
  dict(key='ternah-health', name='Ternah Health', sector='Hospitals & clinics',
       who='For hospitals and clinics that want every department, from reception to finance, on one screen.',
@@ -271,6 +275,16 @@ PRODUCTS = [
  dict(key='mykashop', name='Mykashop', sector='Shops & retail', link='https://mykashop.online/',
       who='For shops, supermarkets, hardware stores and restaurants that need real control of stock and sales.',
       features=['Point of sale and stock','Debtors and expenses','Daily business performance']),
+ dict(key='pharmacy', name='Ternah Pharmacy', sector='Pharmacies', link=PHARMACY_URL,
+      who='For pharmacies with one branch or many: dispensing, payments, stock and accounts in one place, even when the internet drops.',
+      features=['Prescription to receipt: cash, mobile money, card, insurance or credit',
+                'Batch stock with low-stock and expiry alerts',
+                'Books that keep themselves, with branch-by-branch comparison']),
+ dict(key='pearl-educate', name='Pearl Educate', sector='Education · launching', link=PEARL_URL,
+      who='Ten-minute courses for children, made by teachers we have checked. Parents pay by mobile money. The first courses are being reviewed now.',
+      features=['Short lessons with practice quizzes, hints and no scores',
+                'Questions come back after 1, 3, 7, 14 and 30 days',
+                'Certificates anyone can check online']),
  dict(key='sacco', name='SACCO platform', sector='SACCOs',
       who='For SACCOs that want members, savings and loans in one system instead of ledgers.',
       features=['Member onboarding and accounts, including fixed deposits',
@@ -278,9 +292,6 @@ PRODUCTS = [
  dict(key='property', name='Property management', sector='Real estate',
       who='For property businesses managing tenants, suppliers and their books together.',
       features=['Double-entry accounting with automated accruals','Supplier ledgers','VAT reporting']),
- dict(key='pharmacy', name='Pharmacy management', sector='Pharmacies',
-      who='For clinics, hospitals and standalone pharmacies.',
-      features=['Prescriptions and dispensing','Drug stock with expiry tracking','Supplier management and sales reports']),
  dict(key='hospitality', name='Hospitality suite', sector='Hospitality',
       who='For bars, restaurants, lodges and gyms run from one account.',
       features=['Bar, restaurant and lodge modules','Gym and service queues','One licence across every module']),
@@ -308,7 +319,7 @@ INDUSTRIES = [
  ('pill','Pharmacy','Dispensing, prescriptions and drug stock with expiry dates.'),
  ('bed','Hospitality','Bars, restaurants, lodges and gyms.'),
  ('home','Real estate','Property accounts, tenants, suppliers and VAT.'),
- ('edu','Education','School management and student information systems.'),
+ ('edu','Education','Short courses for children, school management and student information systems.'),
  ('truck','Logistics','Fleet, deliveries and supply chain tracking.'),
  ('globe','NGOs','Field data collection, monitoring and donor reporting.'),
  ('gov','Government','Digital public services and monitoring platforms.'),
