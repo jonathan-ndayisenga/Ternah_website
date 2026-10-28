@@ -408,18 +408,17 @@ def frame(p, cls):
 
 
 def hero_stage():
-    """Centre: the team photo once assets/img/team-kampala.webp exists; until then
-    the Pearl Educate screen. Ternah Health and Ternah Pharmacy overlap its edges."""
+    """Team photo with two product screens over its edges once the photo exists;
+    until then the products lead: Ternah Pharmacy large, Ternah Health over its corner."""
     if exists(TEAM_PHOTO):
-        centre = photo_or_placeholder(TEAM_PHOTO, TEAM_PHOTO_ALT, 'Team photo, Kampala office', 1600, 1050, lazy=False)
-    else:
-        pearl = next(p for p in PRODUCTS if p['key'] == 'pearl-educate')
-        centre = (f'<img src="assets/img/screens/pearl-educate.webp" alt="Pearl Educate home page" width="1224" height="816">'
-                  f'<span class="photo-tag">{pearl["name"]}</span>')
-    return f'''<div class="stage">
-    <div class="photo">{centre}</div>
+        return f'''<div class="stage">
+    <div class="photo">{photo_or_placeholder(TEAM_PHOTO, TEAM_PHOTO_ALT, 'Team photo, Kampala office', 1600, 1050, lazy=False)}</div>
     {frame(PRODUCTS[0], 'f-left')}
     {frame(PRODUCTS[1], 'f-right')}
+  </div>'''
+    return f'''<div class="stage stage-products">
+    {frame(PRODUCTS[1], 'f-main')}
+    {frame(PRODUCTS[0], 'f-over')}
   </div>'''
 
 # ================= PAGE BODIES =================
