@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img"><defs>
+  <linearGradient id="bg-ternah-health" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0B1F4D"/><stop offset=".55" stop-color="#1D4ED8"/><stop offset="1" stop-color="#3B82F6"/>
+  </linearGradient>
+  <radialGradient id="glow-ternah-health" cx=".78" cy=".18" r=".55">
+    <stop offset="0" stop-color="#93C5FD" stop-opacity=".55"/><stop offset="1" stop-color="#93C5FD" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="sheen-ternah-health" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+  <pattern id="dots-ternah-health" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#fff" fill-opacity=".12"/></pattern>
+</defs>
+<rect width="800" height="500" fill="url(#bg-ternah-health)"/>
+<rect width="800" height="500" fill="url(#dots-ternah-health)"/>
+<rect width="800" height="500" fill="url(#glow-ternah-health)"/>
+<circle cx="80" cy="470" r="160" fill="#60A5FA" fill-opacity=".18"/>
+<rect x="120" y="70" width="560" height="360" rx="28" fill="#fff" fill-opacity=".10" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+<rect x="121" y="71" width="558" height="150" rx="27" fill="url(#sheen-ternah-health)"/>
+<polyline points="160,260 270,260 300,200 340,330 380,170 420,290 450,260 640,260" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<g transform="translate(560,120)"><rect width="76" height="76" rx="18" fill="#fff"/>
+<path d="M38 18v40M18 38h40" stroke="#1D4ED8" stroke-width="10" stroke-linecap="round"/></g>
+<g fill="#fff"><circle cx="190" cy="370" r="14" fill-opacity="1.00"/><circle cx="234" cy="370" r="14" fill-opacity="0.82"/><circle cx="278" cy="370" r="14" fill-opacity="0.64"/><circle cx="322" cy="370" r="14" fill-opacity="0.46"/><circle cx="366" cy="370" r="14" fill-opacity="0.28"/></g>
+<g><rect x="560" y="340" width="170" height="64" rx="16" fill="#fff" fill-opacity=".92"/><rect x="576" y="356" width="70" height="8" rx="4" fill="#94A3B8"/><rect x="576" y="376" width="138" height="10" rx="5" fill="#DBEAFE"/><rect x="576" y="376" width="97" height="10" rx="5" fill="#2563EB"/></g></svg>

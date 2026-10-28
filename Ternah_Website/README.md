@@ -11,6 +11,7 @@ assets/css/styles.css       website styles (uses the tokens; never redefine them
 assets/js/main.js           menu, reveals, contact form, article modals, filters
 assets/img/                 photos and product screenshots (see below)
 tools/make_images.py        regenerates favicon-32.png, apple-touch-icon.png, og-image.png
+tools/make_illustrations.py draws the blue case-study illustrations in assets/img/art/<product>.svg
 ```
 
 ## Settings (top of build_pages.py)
@@ -41,3 +42,8 @@ python -m http.server 8000
 
 ## Deploy (Render static site or any static host)
 Build command `python build_pages.py`, publish directory `./`.
+
+## Case studies
+Each product has a short case study in `CASES` in `build_pages.py` (setting, problem, what we set up, what changed).
+They describe the type of business, not a named client. Put a client's name in `setting` only once they have agreed.
+A new product needs a `CASES` entry and a motif in `tools/make_illustrations.py`.

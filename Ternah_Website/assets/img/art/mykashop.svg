@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img"><defs>
+  <linearGradient id="bg-mykashop" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0B1F4D"/><stop offset=".55" stop-color="#1D4ED8"/><stop offset="1" stop-color="#3B82F6"/>
+  </linearGradient>
+  <radialGradient id="glow-mykashop" cx=".78" cy=".18" r=".55">
+    <stop offset="0" stop-color="#93C5FD" stop-opacity=".55"/><stop offset="1" stop-color="#93C5FD" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="sheen-mykashop" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+  <pattern id="dots-mykashop" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#fff" fill-opacity=".12"/></pattern>
+</defs>
+<rect width="800" height="500" fill="url(#bg-mykashop)"/>
+<rect width="800" height="500" fill="url(#dots-mykashop)"/>
+<rect width="800" height="500" fill="url(#glow-mykashop)"/>
+<circle cx="80" cy="470" r="160" fill="#60A5FA" fill-opacity=".18"/>
+<rect x="120" y="70" width="560" height="360" rx="28" fill="#fff" fill-opacity=".10" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+<rect x="121" y="71" width="558" height="150" rx="27" fill="url(#sheen-mykashop)"/>
+<path d="M190 200h300l-20 50H210z" fill="#fff"/>
+<path d="M210 250h260v120H210z" fill="#fff" fill-opacity=".85"/>
+<g fill="#93C5FD"><path d="M190 200h30l-6 50h-30z"/><path d="M250 200h30l-6 50h-30z"/><path d="M310 200h30l-6 50h-30z"/><path d="M370 200h30l-6 50h-30z"/><path d="M430 200h30l-6 50h-30z"/></g>
+<rect x="300" y="290" width="70" height="80" rx="6" fill="#1D4ED8"/>
+<g transform="translate(540,150)" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0h22l20 90h80l16-60H34"/><circle cx="52" cy="112" r="10"/><circle cx="112" cy="112" r="10"/></g>
+<g fill="#fff"><rect x="545" y="320" width="7" height="50"/><rect x="557" y="320" width="4" height="50"/><rect x="569" y="320" width="4" height="50"/><rect x="581" y="320" width="7" height="50"/><rect x="593" y="320" width="4" height="50"/><rect x="605" y="320" width="4" height="50"/><rect x="617" y="320" width="7" height="50"/><rect x="629" y="320" width="4" height="50"/><rect x="641" y="320" width="4" height="50"/><rect x="653" y="320" width="7" height="50"/></g></svg>

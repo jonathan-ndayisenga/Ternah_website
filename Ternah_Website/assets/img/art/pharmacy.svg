@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img"><defs>
+  <linearGradient id="bg-pharmacy" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0B1F4D"/><stop offset=".55" stop-color="#1D4ED8"/><stop offset="1" stop-color="#3B82F6"/>
+  </linearGradient>
+  <radialGradient id="glow-pharmacy" cx=".78" cy=".18" r=".55">
+    <stop offset="0" stop-color="#93C5FD" stop-opacity=".55"/><stop offset="1" stop-color="#93C5FD" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="sheen-pharmacy" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+  <pattern id="dots-pharmacy" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#fff" fill-opacity=".12"/></pattern>
+</defs>
+<rect width="800" height="500" fill="url(#bg-pharmacy)"/>
+<rect width="800" height="500" fill="url(#dots-pharmacy)"/>
+<rect width="800" height="500" fill="url(#glow-pharmacy)"/>
+<circle cx="80" cy="470" r="160" fill="#60A5FA" fill-opacity=".18"/>
+<rect x="120" y="70" width="560" height="360" rx="28" fill="#fff" fill-opacity=".10" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+<rect x="121" y="71" width="558" height="150" rx="27" fill="url(#sheen-pharmacy)"/>
+<g transform="rotate(-30 300 250)"><rect x="200" y="215" width="200" height="70" rx="35" fill="#fff"/>
+<path d="M300 215h65a35 35 0 0 1 0 70h-65z" fill="#93C5FD"/></g>
+<g transform="rotate(25 470 300)"><rect x="420" y="275" width="130" height="46" rx="23" fill="#fff" fill-opacity=".9"/>
+<path d="M485 275h42a23 23 0 0 1 0 46h-42z" fill="#60A5FA"/></g>
+<g transform="translate(560,110)"><rect x="12" y="0" width="56" height="22" rx="6" fill="#fff"/>
+<rect x="0" y="26" width="80" height="110" rx="16" fill="#fff" fill-opacity=".9"/>
+<path d="M40 60v40M20 80h40" stroke="#1D4ED8" stroke-width="8" stroke-linecap="round"/></g>
+<g><rect x="160" y="340" width="190" height="64" rx="16" fill="#fff" fill-opacity=".92"/><rect x="176" y="356" width="80" height="8" rx="4" fill="#94A3B8"/><rect x="176" y="376" width="158" height="10" rx="5" fill="#DBEAFE"/><rect x="176" y="376" width="55" height="10" rx="5" fill="#2563EB"/></g></svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img"><defs>
+  <linearGradient id="bg-ternah-factories" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0B1F4D"/><stop offset=".55" stop-color="#1D4ED8"/><stop offset="1" stop-color="#3B82F6"/>
+  </linearGradient>
+  <radialGradient id="glow-ternah-factories" cx=".78" cy=".18" r=".55">
+    <stop offset="0" stop-color="#93C5FD" stop-opacity=".55"/><stop offset="1" stop-color="#93C5FD" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="sheen-ternah-factories" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+  <pattern id="dots-ternah-factories" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#fff" fill-opacity=".12"/></pattern>
+</defs>
+<rect width="800" height="500" fill="url(#bg-ternah-factories)"/>
+<rect width="800" height="500" fill="url(#dots-ternah-factories)"/>
+<rect width="800" height="500" fill="url(#glow-ternah-factories)"/>
+<circle cx="80" cy="470" r="160" fill="#60A5FA" fill-opacity=".18"/>
+<rect x="120" y="70" width="560" height="360" rx="28" fill="#fff" fill-opacity=".10" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+<rect x="121" y="71" width="558" height="150" rx="27" fill="url(#sheen-ternah-factories)"/>
+<path d="M170 380V240l90 50v-50l90 50v-50l90 50V150h60v230z" fill="#fff" fill-opacity=".92"/>
+<g fill="#1D4ED8"><rect x="200" y="320" width="34" height="30" rx="5"/><rect x="270" y="320" width="34" height="30" rx="5"/><rect x="340" y="320" width="34" height="30" rx="5"/><rect x="410" y="320" width="34" height="30" rx="5"/></g>
+<g transform="translate(590,190)" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle r="42"/><circle r="14"/>
+<line x1="0" y1="-42" x2="0" y2="-58" transform="rotate(0)"/><line x1="0" y1="-42" x2="0" y2="-58" transform="rotate(45)"/><line x1="0" y1="-42" x2="0" y2="-58" transform="rotate(90)"/><line x1="0" y1="-42" x2="0" y2="-58" transform="rotate(135)"/><line x1="0" y1="-42" x2="0" y2="-58" transform="rotate(180)"/><line x1="0" y1="-42" x2="0" y2="-58" transform="rotate(225)"/><line x1="0" y1="-42" x2="0" y2="-58" transform="rotate(270)"/><line x1="0" y1="-42" x2="0" y2="-58" transform="rotate(315)"/></g>
+<g><rect x="530" y="330" width="160" height="64" rx="16" fill="#fff" fill-opacity=".92"/><rect x="546" y="346" width="60" height="8" rx="4" fill="#94A3B8"/><rect x="546" y="366" width="128" height="10" rx="5" fill="#DBEAFE"/><rect x="546" y="366" width="105" height="10" rx="5" fill="#2563EB"/></g></svg>

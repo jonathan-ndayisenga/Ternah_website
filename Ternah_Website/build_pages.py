@@ -310,6 +310,47 @@ PRODUCTS = [
       features=['Operator boards in Kanban style','Queues for several branches','Live updates for every operator']),
 ]
 
+# Brief case studies, one per product. They describe the type of business, not a named
+# client; swap in a client's name only once they have agreed to it.
+CASES = {
+ 'ternah-health': dict(setting='A private hospital with outpatients, a lab and a pharmacy',
+    problem='Patients queued at every desk, and lab results travelled to doctors on paper.',
+    built='Reception, doctor, lab and pharmacy on one patient record, with a live queue on each screen.',
+    result='Results reach the doctor the moment the lab saves them, and reception can see who is waiting where.'),
+ 'pharmacy': dict(setting='A pharmacy with two branches',
+    problem='Stock was counted by hand, and expired batches were found on the shelf, too late.',
+    built='Dispensing with cash, mobile money and insurance, and batch stock for both branches that keeps working when the internet drops.',
+    result='Low-stock and expiry alerts arrive before the shelf runs out, and the owner compares branches from one screen.'),
+ 'ternah-factories': dict(setting='A manufacturer with a factory and sales branches',
+    problem='Production, branch stock and sales lived in separate books, so shortages showed up mid-batch.',
+    built='Production batches and formulas, stock transfers with approvals, and a cashier for each branch.',
+    result='Material shortfalls are flagged before a batch starts, and every transfer leaves an approval trail.'),
+ 'mykashop': dict(setting='A busy hardware shop',
+    problem='Sales went into a notebook, and debtors were hard to keep track of.',
+    built='Point of sale, stock, debtors and expenses in one system.',
+    result="The owner sees the day's performance at closing time and knows exactly who owes what."),
+ 'pearl-educate': dict(setting='Parents who want trusted lessons at home',
+    problem='Parents wanted short lessons they could trust for their children, and an easy way to pay.',
+    built='Ten-minute courses from teachers we have checked, quizzes that come back on a schedule, and mobile-money payment.',
+    result='Children practise in short sessions and earn certificates anyone can check online. The first courses are in review now.'),
+ 'sacco': dict(setting='A SACCO moving off paper ledgers',
+    problem='Savings and loans were kept in ledgers, and every loan slip was written by hand.',
+    built='Member accounts and fixed deposits, teller deposits and withdrawals, and loans from assessment to disbursement.',
+    result='Tellers serve members from one screen, and loan slips print straight from the system.'),
+ 'property': dict(setting='A property business with tenants and suppliers',
+    problem='Rent, supplier bills and VAT were reconciled by hand at month end.',
+    built='Double-entry accounts with automated accruals, supplier ledgers and VAT reports.',
+    result='Month end closes from the system, with VAT figures ready to file.'),
+ 'hospitality': dict(setting='A lodge with a bar, restaurant and gym',
+    problem='Each part of the business ran on its own tool, or on none at all.',
+    built='Bar, restaurant, lodge and gym modules under one licence.',
+    result='The owner runs every outlet from one account and sees them side by side.'),
+ 'queueflow': dict(setting='A service business with several branches',
+    problem='Jobs were tracked on whiteboards, so nobody could see what was stuck.',
+    built='Kanban-style boards for operators and queues across branches, with live updates.',
+    result='Every operator sees the same board, and stalled jobs stand out.'),
+}
+
 SOLUTIONS = [
  ('code','Custom software and websites','Business systems, web applications and static or dynamic websites, built around the way you work.',['Business management systems','Web applications','Static and dynamic websites','E-commerce']),
  ('layers','ERP and business systems','ERP, CRM, inventory, school and health systems that connect every part of your operation.',['ERP systems','CRM systems','Inventory management','School and health systems']),
@@ -380,6 +421,7 @@ def product_card(i, p, full=False):
         <p class="for">{escape(p["who"])}</p>
         {feats}
         <div class="act"{"" if full else " style=\"margin-top:24px\""}>{act}</div>
+        {f'<a class="link-arrow case-link" href="#case-{p["key"]}">Read the case study {ARROW}</a>' if full else ''}
       </div>
     </article>'''
 
@@ -394,6 +436,7 @@ def product_card_text(i, p):
       <p>{escape(p["who"])}</p>
       <ul>{"".join(f"<li>{escape(f)}</li>" for f in p["features"])}</ul>
       <div style="margin-top:20px">{act}</div>
+      <a class="link-arrow case-link" href="#case-{p["key"]}">Read the case study {ARROW}</a>
     </article>'''
 
 def process_html():
@@ -521,6 +564,35 @@ def cta_form_band(h2, p):
   </div>
 </section>'''
 
+def case_card(i, p):
+    c = CASES[p['key']]
+    return f"""    <article class="case reveal" id="case-{p["key"]}" data-d="{i%3+1}">
+      <img src="assets/img/art/{p["key"]}.svg" alt="" width="800" height="500" loading="lazy">
+      <div class="body">
+        <div class="kicker">{escape(p["name"])}</div>
+        <h3>{escape(c["setting"])}</h3>
+        <dl>
+          <dt>The problem</dt><dd>{escape(c["problem"])}</dd>
+          <dt>What we set up</dt><dd>{escape(c["built"])}</dd>
+          <dt>What changed</dt><dd>{escape(c["result"])}</dd>
+        </dl>
+      </div>
+    </article>"""
+
+def cases_band(items, head, lead, more=None):
+    """Shiny blue band of case-study cards; sits between the plainer sections."""
+    link = f'<div class="center mt-cta"><a class="link-arrow" href="{more[1]}">{more[0]} {ARROW}</a></div>' if more else ''
+    return f"""<section class="band-blue" id="cases">
+  <div class="wrap">
+    {sec_head('Case studies', head, lead)}
+    <div class="grid g3">
+{chr(10).join(case_card(i,p) for i,p in enumerate(items))}
+    </div>
+    <p class="band-note">We describe the type of business rather than naming clients.</p>
+    {link}
+  </div>
+</section>"""
+
 # ================= PAGE BODIES =================
 home_body = f'''<section class="hero wrap">
   <span class="origin">Built in {OFFICE}</span>
@@ -554,6 +626,8 @@ home_body = f'''<section class="hero wrap">
   {sec_head('How we work', 'Five steps to a running system.')}
   {process_html()}
 </section>
+
+{cases_band([next(p for p in PRODUCTS if p['key']==k) for k in SHOWCASE], 'What changes when the software fits.', 'Three short stories: the problem, what we set up, and what changed.', more=('All case studies','products.html#cases'))}
 
 <section class="sec wrap">
   {sec_head('Industries', 'Who we build for.')}
@@ -653,6 +727,7 @@ products_body = f'''<section class="phead wrap">
 {chr(10).join(product_card_text(i,p) for i,p in enumerate(x for x in PRODUCTS if not has_visual(x)))}
   </div>
 </section>
+{cases_band(PRODUCTS, 'One short story for every product.', 'The problem a business brought us, what we set up, and what changed.')}
 {cta_band("Need something none of these do?", "Bring us the problem. We'll build the simplest software that solves it.")}'''
 
 BUY_VS_BUILD_SLUG = 'buy-vs-build'
