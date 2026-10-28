@@ -267,15 +267,17 @@ def screenshot(p, lazy=True):
 # Product names must match the names used inside the products themselves.
 # 'link' = live site; without one the card shows "Book a demo".
 # Live product sites. Switch to the real domains once they exist (keep https).
+HEALTH_URL   = 'https://shark-app-7ssb2.ondigitalocean.app/welcome/'
 PHARMACY_URL = 'https://ternah-pharmacy.onrender.com/pharmacy/'
 PEARL_URL    = 'http://147.182.138.32/'
 MYKASHOP_URL = None  # https://mykashop.online/ was not responding on 28 Oct 2026; restore once it is back up
 
 PRODUCTS = [
- dict(key='ternah-health', name='Ternah Health', sector='Hospitals & clinics',
-      who='For hospitals and clinics that want every department, from reception to finance, on one screen.',
-      features=['Patient queue through reception, doctor, nursing, lab and sonography',
-                'Pharmacy and stock with reorder alerts','Billing and daily collections']),
+ dict(key='ternah-health', name='Ternah Health', sector='Hospitals & clinics', link=HEALTH_URL,
+      who='For hospitals and clinics that want reception, doctor, lab, nursing, pharmacy, home care and finance on one patient record.',
+      features=['Live queues for reception, doctor, nurse, lab and scans',
+                'Lab results that reach the doctor the moment they are ready',
+                'Subscribe only to the modules you run, set up the same day']),
  dict(key='pharmacy', name='Ternah Pharmacy', sector='Pharmacies', link=PHARMACY_URL,
       who='For pharmacies with one branch or many: dispensing, payments, stock and accounts in one place, even when the internet drops.',
       features=['Prescription to receipt: cash, mobile money, card, insurance or credit',
