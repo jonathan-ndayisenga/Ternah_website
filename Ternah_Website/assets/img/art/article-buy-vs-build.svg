@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid slice" role="img"><defs><linearGradient id="c-buy-vs-build" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#0B1F4D"/><stop offset=".55" stop-color="#1D4ED8"/><stop offset="1" stop-color="#3B82F6"/></linearGradient>
+<radialGradient id="cg-buy-vs-build" cx=".8" cy=".15" r=".6"><stop offset="0" stop-color="#93C5FD" stop-opacity=".5"/><stop offset="1" stop-color="#93C5FD" stop-opacity="0"/></radialGradient>
+<pattern id="cd-buy-vs-build" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" fill="#fff" fill-opacity=".12"/></pattern></defs>
+<rect width="1200" height="675" fill="url(#c-buy-vs-build)"/><rect width="1200" height="675" fill="url(#cd-buy-vs-build)"/><rect width="1200" height="675" fill="url(#cg-buy-vs-build)"/>
+<circle cx="120" cy="640" r="220" fill="#60A5FA" fill-opacity=".16"/>
+<path d="M600 560V170" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<g transform="translate(600 210)"><path d="M0 0h230l40 40-40 40H0z" fill="#fff"/><path d="M0 110h-230l-40 40 40 40H0z" fill="#fff" fill-opacity=".85"/>
+<rect x="30" y="28" width="120" height="24" rx="12" fill="#2563EB"/><rect x="-200" y="138" width="120" height="24" rx="12" fill="#1E3A8A"/></g>
+<g transform="translate(240 450)"><rect x="0" y="0" width="56" height="56" rx="8" fill="#fff" fill-opacity="0.95"/><rect x="62" y="0" width="56" height="56" rx="8" fill="#fff" fill-opacity="0.95"/><rect x="124" y="0" width="56" height="56" rx="8" fill="#fff" fill-opacity="0.95"/><rect x="31" y="-62" width="56" height="56" rx="8" fill="#fff" fill-opacity="0.80"/><rect x="93" y="-62" width="56" height="56" rx="8" fill="#fff" fill-opacity="0.80"/><rect x="62" y="-124" width="56" height="56" rx="8" fill="#fff" fill-opacity="0.65"/></g>
+<g transform="translate(820 420)"><path d="M0 40L90 0L180 40L90 80Z" fill="#fff"/><path d="M0 40V140L90 180V80Z" fill="#fff" fill-opacity=".75"/><path d="M180 40V140L90 180V80Z" fill="#fff" fill-opacity=".55"/></g></svg>

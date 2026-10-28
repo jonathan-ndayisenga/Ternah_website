@@ -178,16 +178,15 @@ def page(slug, title, desc, body):
 </html>'''
 
 # ================= IMAGE SLOTS =================
-# Drop real files at these paths and rebuild; the placeholder is replaced automatically.
-#   assets/img/team-kampala.webp           landscape team photo, >= 1600 x 1000
+# Drop real files at these paths and rebuild; the drawing is replaced automatically.
+#   assets/img/hero/<product-key>.webp     hero photo, 16:9, e.g. 1600 x 900 (people on the left half)
+#   assets/img/articles/<slug>.webp        article cover, 16:9, e.g. 1200 x 675
 #   assets/img/screens/<product-key>.webp  product screenshot, 3:2, e.g. 1440 x 960
-TEAM_PHOTO     = 'assets/img/team-kampala.webp'
-TEAM_PHOTO_ALT = 'The Ternah team in the Kampala office'   # name the people in the photo once it exists
+def art(photo, drawing):
+    return photo if exists(photo) else drawing
 
-def photo_or_placeholder(path, alt, label, w, h, lazy=True):
-    if exists(path):
-        return f'<img src="{path}" alt="{escape(alt)}" width="{w}" height="{h}"{" loading=\"lazy\"" if lazy else ""}>'
-    return f'<div class="photo-ph" role="img" aria-label="{escape(label)}">{CAMERA}<span>[{label}]</span></div>'
+def article_cover(slug):
+    return art(f'assets/img/articles/{slug}.webp', f'assets/img/art/article-{slug}.svg')
 
 # ---- product dashboards, drawn in HTML until real screenshots exist ----
 # Each tile: (title, number, unit, warn_number, warn_unit, pills, span, flags)
@@ -310,45 +309,13 @@ PRODUCTS = [
       features=['Operator boards in Kanban style','Queues for several branches','Live updates for every operator']),
 ]
 
-# Brief case studies, one per product. They describe the type of business, not a named
+# Brief case studies (only Ternah Health for now). They describe the type of business, not a named
 # client; swap in a client's name only once they have agreed to it.
 CASES = {
  'ternah-health': dict(setting='A private hospital with outpatients, a lab and a pharmacy',
     problem='Patients queued at every desk, and lab results travelled to doctors on paper.',
     built='Reception, doctor, lab and pharmacy on one patient record, with a live queue on each screen.',
     result='Results reach the doctor the moment the lab saves them, and reception can see who is waiting where.'),
- 'pharmacy': dict(setting='A pharmacy with two branches',
-    problem='Stock was counted by hand, and expired batches were found on the shelf, too late.',
-    built='Dispensing with cash, mobile money and insurance, and batch stock for both branches that keeps working when the internet drops.',
-    result='Low-stock and expiry alerts arrive before the shelf runs out, and the owner compares branches from one screen.'),
- 'ternah-factories': dict(setting='A manufacturer with a factory and sales branches',
-    problem='Production, branch stock and sales lived in separate books, so shortages showed up mid-batch.',
-    built='Production batches and formulas, stock transfers with approvals, and a cashier for each branch.',
-    result='Material shortfalls are flagged before a batch starts, and every transfer leaves an approval trail.'),
- 'mykashop': dict(setting='A busy hardware shop',
-    problem='Sales went into a notebook, and debtors were hard to keep track of.',
-    built='Point of sale, stock, debtors and expenses in one system.',
-    result="The owner sees the day's performance at closing time and knows exactly who owes what."),
- 'pearl-educate': dict(setting='Parents who want trusted lessons at home',
-    problem='Parents wanted short lessons they could trust for their children, and an easy way to pay.',
-    built='Ten-minute courses from teachers we have checked, quizzes that come back on a schedule, and mobile-money payment.',
-    result='Children practise in short sessions and earn certificates anyone can check online. The first courses are in review now.'),
- 'sacco': dict(setting='A SACCO moving off paper ledgers',
-    problem='Savings and loans were kept in ledgers, and every loan slip was written by hand.',
-    built='Member accounts and fixed deposits, teller deposits and withdrawals, and loans from assessment to disbursement.',
-    result='Tellers serve members from one screen, and loan slips print straight from the system.'),
- 'property': dict(setting='A property business with tenants and suppliers',
-    problem='Rent, supplier bills and VAT were reconciled by hand at month end.',
-    built='Double-entry accounts with automated accruals, supplier ledgers and VAT reports.',
-    result='Month end closes from the system, with VAT figures ready to file.'),
- 'hospitality': dict(setting='A lodge with a bar, restaurant and gym',
-    problem='Each part of the business ran on its own tool, or on none at all.',
-    built='Bar, restaurant, lodge and gym modules under one licence.',
-    result='The owner runs every outlet from one account and sees them side by side.'),
- 'queueflow': dict(setting='A service business with several branches',
-    problem='Jobs were tracked on whiteboards, so nobody could see what was stuck.',
-    built='Kanban-style boards for operators and queues across branches, with live updates.',
-    result='Every operator sees the same board, and stalled jobs stand out.'),
 }
 
 SOLUTIONS = [
@@ -421,7 +388,7 @@ def product_card(i, p, full=False):
         <p class="for">{escape(p["who"])}</p>
         {feats}
         <div class="act"{"" if full else " style=\"margin-top:24px\""}>{act}</div>
-        {f'<a class="link-arrow case-link" href="#case-{p["key"]}">Read the case study {ARROW}</a>' if full else ''}
+        {f'<a class="link-arrow case-link" href="#case-{p["key"]}">Read the case study {ARROW}</a>' if full and p["key"] in CASES else ''}
       </div>
     </article>'''
 
@@ -430,13 +397,13 @@ def product_card_text(i, p):
         act = f'<a class="link-arrow" href="{p["link"]}" target="_blank" rel="noopener noreferrer">Visit {escape(p["name"])} {EXT}</a>'
     else:
         act = f'<a class="link-arrow" href="contact.html?product={p["key"]}">Book a demo {ARROW}</a>'
-    return f'''    <article class="card reveal" id="{p["key"]}" data-d="{i%3+1}">
+    return f'''    <article class="card prod-text reveal" id="{p["key"]}" data-d="{i%3+1}">
+      <img class="card-art" src="assets/img/art/{p["key"]}.svg" alt="" width="800" height="500" loading="lazy">
       <div class="kicker">{escape(p["sector"])}</div>
       <h3>{escape(p["name"])}</h3>
       <p>{escape(p["who"])}</p>
       <ul>{"".join(f"<li>{escape(f)}</li>" for f in p["features"])}</ul>
       <div style="margin-top:20px">{act}</div>
-      <a class="link-arrow case-link" href="#case-{p["key"]}">Read the case study {ARROW}</a>
     </article>'''
 
 def process_html():
@@ -461,40 +428,53 @@ def card(i, ic, t, d, items=None, attrs=''):
       <div class="ico">{ICONS[ic]}</div><h3>{t}</h3><p>{d}</p>{lis}
     </div>'''
 
-def frame(p, cls):
-    return f'<figure class="frame {cls}">{screenshot(p, lazy=False)}<figcaption class="cap">{escape(p["name"])}</figcaption></figure>'
 
 
-
-# Products in the hero switcher, in tab order. Each needs a screenshot or a drawn dashboard.
-SHOWCASE = ['pharmacy', 'ternah-health', 'ternah-factories']
-
-def short_name(p):
-    return p['name'].replace('Ternah for ', '').replace('Ternah ', '')
+# Hero slides, in tab order: a scene of the product at work, its live screen, and a brief.
+HERO_SLIDES = [
+ dict(key='ternah-health', tab='Ternah Health',
+      alt='Illustration: a doctor with a tablet and a nurse with a clipboard in a hospital',
+      title='How Ternah Health works in a hospital',
+      brief='A patient is registered once at reception. The doctor sees them in a live queue and orders tests, '
+            'the lab result reaches the doctor the moment it is saved, and the pharmacy and finance desk work '
+            'from the same record. Every department sees one patient, not a pile of paper.',
+      more=('How it runs in a hospital', 'products.html#case-ternah-health')),
+ dict(key='ternah-factories', tab='Ternah for Factories',
+      alt='Illustration: two factory workers in hard hats with a tablet and a clipboard beside a production line',
+      title='What Ternah for Factories changes for manufacturers',
+      brief='Production batches follow their formulas, and missing materials are flagged before a batch starts '
+            'instead of halfway through. Stock moves between the factory and its branches with approvals, and '
+            'cashiers, debtors and staff sit in the same system, so the owner sees production and sales in one place.',
+      more=('See the product', 'products.html#ternah-factories')),
+]
 
 def hero_stage():
-    """Team photo with two product screens over its edges once assets/img/team-kampala.webp
-    exists; until then a product switcher visitors can click through."""
-    if exists(TEAM_PHOTO):
-        return f'''<div class="stage">
-    <div class="photo">{photo_or_placeholder(TEAM_PHOTO, TEAM_PHOTO_ALT, 'Team photo, Kampala office', 1600, 1050, lazy=False)}</div>
-    {frame(PRODUCTS[0], 'f-left')}
-    {frame(PRODUCTS[1], 'f-right')}
-  </div>'''
-    items = [next(p for p in PRODUCTS if p['key'] == k) for k in SHOWCASE]
+    """Product switcher: each slide is a scene with the product's screen over it and a brief underneath."""
+    items = [(sl, next(p for p in PRODUCTS if p['key'] == sl['key'])) for sl in HERO_SLIDES]
     tabs = "".join(
         f'<button type="button" role="tab" id="tab-{p["key"]}" aria-controls="panel-{p["key"]}" '
-        f'aria-selected="{"true" if i == 0 else "false"}" tabindex="{0 if i == 0 else -1}">{escape(short_name(p))}</button>'
-        for i, p in enumerate(items))
+        f'aria-selected="{"true" if i == 0 else "false"}" tabindex="{0 if i == 0 else -1}">{escape(sl["tab"])}</button>'
+        for i, (sl, p) in enumerate(items))
+    def primary(p):
+        if p.get('link'):
+            return f'<a class="btn btn-primary" href="{p["link"]}" target="_blank" rel="noopener noreferrer">Visit {escape(p["name"])} {EXT}</a>'
+        return f'<a class="btn btn-primary" href="contact.html?product={p["key"]}">Book a demo {ARROW}</a>'
+    def scene_img(p):
+        return art(f'assets/img/hero/{p["key"]}.webp', f'assets/img/art/hero-{p["key"]}.svg')
     panels = "".join(f'''
     <div class="panel" role="tabpanel" id="panel-{p["key"]}" aria-labelledby="tab-{p["key"]}"{"" if i == 0 else " hidden"}>
-      <figure class="frame">{screenshot(p, lazy=False)}
-        <figcaption class="cap"><span class="cap-text"><strong>{escape(p["name"])}</strong> <span class="cap-who">{escape(p["sector"])}</span></span>
-          <a class="link-arrow" href="products.html#{p["key"]}">See product {ARROW}</a></figcaption>
-      </figure>
-    </div>''' for i, p in enumerate(items))
+      <div class="scene">
+        <img class="scene-img" src="{scene_img(p)}" alt="{escape(sl["alt"])}" width="1600" height="900"{"" if i == 0 else ' loading="lazy"'}>
+        <div class="frame scene-screen">{screenshot(p, lazy=i > 0)}</div>
+      </div>
+      <div class="brief">
+        <div><span class="kicker">{escape(p["name"])} · {escape(p["sector"])}</span><h2>{escape(sl["title"])}</h2></div>
+        <div><p>{escape(sl["brief"])}</p>
+          <div class="brief-cta">{primary(p)}<a class="link-arrow" href="{sl["more"][1]}">{sl["more"][0]} {ARROW}</a></div></div>
+      </div>
+    </div>''' for i, (sl, p) in enumerate(items))
     return f'''<div class="showcase" id="showcase">
-    <div class="tabs" role="tablist" aria-label="Ternah products">{tabs}</div>{panels}
+    <div class="tabs" role="tablist" aria-label="Ternah products at work">{tabs}</div>{panels}
   </div>'''
 
 # "What do you need?" options; ?product=<key> links preselect 'demo'
@@ -545,6 +525,7 @@ def facts_strip():
 def insight_teaser(i, ins):
     cat,t,d,meta = ins
     return f'''    <a class="art reveal" data-d="{i%3+1}" href="insights.html#{ARTICLE_SLUGS[t]}">
+      <div class="thumb"><img src="{article_cover(ARTICLE_SLUGS[t])}" alt="" width="1200" height="675" loading="lazy"></div>
       <div class="body"><div class="cat">{cat}</div><h3>{t}</h3><p>{d}</p><div class="meta">{meta}</div><div class="art-read">Read article {ARROW}</div></div>
     </a>'''
 
@@ -564,43 +545,37 @@ def cta_form_band(h2, p):
   </div>
 </section>'''
 
-def case_card(i, p):
-    c = CASES[p['key']]
-    return f"""    <article class="case reveal" id="case-{p["key"]}" data-d="{i%3+1}">
-      <img src="assets/img/art/{p["key"]}.svg" alt="" width="800" height="500" loading="lazy">
-      <div class="body">
-        <div class="kicker">{escape(p["name"])}</div>
-        <h3>{escape(c["setting"])}</h3>
-        <dl>
-          <dt>The problem</dt><dd>{escape(c["problem"])}</dd>
-          <dt>What we set up</dt><dd>{escape(c["built"])}</dd>
-          <dt>What changed</dt><dd>{escape(c["result"])}</dd>
-        </dl>
-      </div>
-    </article>"""
-
-def cases_band(items, head, lead, more=None):
-    """Shiny blue band of case-study cards; sits between the plainer sections."""
-    link = f'<div class="center mt-cta"><a class="link-arrow" href="{more[1]}">{more[0]} {ARROW}</a></div>' if more else ''
-    return f"""<section class="band-blue" id="cases">
-  <div class="wrap">
-    {sec_head('Case studies', head, lead)}
-    <div class="grid g3">
-{chr(10).join(case_card(i,p) for i,p in enumerate(items))}
+def health_case():
+    """One case study, shown under Ternah Health on the Products page."""
+    p = next(x for x in PRODUCTS if x['key'] == 'ternah-health'); c = CASES['ternah-health']
+    img = art('assets/img/hero/ternah-health.webp', 'assets/img/art/hero-ternah-health.svg')
+    return f'''<section class="band-blue" id="case-ternah-health">
+  <div class="wrap case-feature">
+    <img src="{img}" alt="" width="1600" height="900" loading="lazy">
+    <div>
+      <span class="eyebrow">Case study · {escape(p["name"])}</span>
+      <h2 class="h2">{escape(c["setting"])}</h2>
+      <dl>
+        <dt>The problem</dt><dd>{escape(c["problem"])}</dd>
+        <dt>What we set up</dt><dd>{escape(c["built"])}</dd>
+        <dt>What changed</dt><dd>{escape(c["result"])}</dd>
+      </dl>
+      <p class="band-note">We describe the type of hospital rather than naming it.</p>
     </div>
-    <p class="band-note">We describe the type of business rather than naming clients.</p>
-    {link}
   </div>
-</section>"""
+</section>'''
 
 # ================= PAGE BODIES =================
 home_body = f'''<section class="hero wrap">
-  <span class="origin">Built in {OFFICE}</span>
-  <h1>Keep it simple.<span class="l2">We build software that works.</span></h1>
-  <p class="lead">Systems built around the way your business already runs, for hospitals, factories, shops and SACCOs.</p>
-  <div class="hero-cta">
-    <a class="btn btn-primary btn-lg" href="contact.html">Start a project</a>
-    <a class="btn btn-ghost btn-lg" href="#products">See our products</a>
+  <div class="hero-top">
+    <h1>Keep it simple.<span class="l2">We build software that works.</span></h1>
+    <div>
+      <p class="lead">Systems built around the way your business already runs, for hospitals, factories, shops and SACCOs. Built in {OFFICE}.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="contact.html">Start a project</a>
+        <a class="btn btn-ghost btn-lg" href="#products">See our products</a>
+      </div>
+    </div>
   </div>
   {hero_stage()}
   {facts_strip()}
@@ -626,8 +601,6 @@ home_body = f'''<section class="hero wrap">
   {sec_head('How we work', 'Five steps to a running system.')}
   {process_html()}
 </section>
-
-{cases_band([next(p for p in PRODUCTS if p['key']==k) for k in SHOWCASE], 'What changes when the software fits.', 'Three short stories: the problem, what we set up, and what changed.', more=('All case studies','products.html#cases'))}
 
 <section class="sec wrap">
   {sec_head('Industries', 'Who we build for.')}
@@ -721,13 +694,13 @@ products_body = f'''<section class="phead wrap">
 {chr(10).join(product_card(i,p,full=True) for i,p in enumerate(x for x in PRODUCTS if has_visual(x)))}
   </div>
 </section>
+{health_case()}
 <section class="sec wrap">
   {sec_head('More from Ternah', 'More systems we have built.')}
   <div class="grid g3">
 {chr(10).join(product_card_text(i,p) for i,p in enumerate(x for x in PRODUCTS if not has_visual(x)))}
   </div>
 </section>
-{cases_band(PRODUCTS, 'One short story for every product.', 'The problem a business brought us, what we set up, and what changed.')}
 {cta_band("Need something none of these do?", "Bring us the problem. We'll build the simplest software that solves it.")}'''
 
 BUY_VS_BUILD_SLUG = 'buy-vs-build'
@@ -1344,27 +1317,47 @@ def insight_card(i, ins):
     slug = ARTICLE_SLUGS.get(t)
     attrs = f' data-open="{slug}" tabindex="0" role="button" aria-haspopup="dialog"' if slug else ''
     read_link = f'<div class="art-read">Read article {READ_SVG}</div>' if slug else ''
+    thumb = f'<div class="thumb"><img src="{article_cover(slug)}" alt="" width="1200" height="675" loading="lazy"></div>' if slug else ''
     return f'''    <article class="art{" clickable" if slug else ""} reveal" data-d="{i%3+1}"{attrs}>
-      <div class="body"><div class="cat">{cat}</div><h3>{t}</h3><p>{d}</p><div class="meta">{meta}</div>{read_link}</div>
+      {thumb}<div class="body"><div class="cat">{cat}</div><h3>{t}</h3><p>{d}</p><div class="meta">{meta}</div>{read_link}</div>
     </article>'''
+
+def featured_insight(ins):
+    cat,t,d,meta = ins
+    slug = ARTICLE_SLUGS[t]
+    return f'''<article class="art-feature clickable reveal" data-open="{slug}" tabindex="0" role="button" aria-haspopup="dialog">
+    <img src="{article_cover(slug)}" alt="" width="1200" height="675">
+    <div class="ov"><span class="cat">Featured · {cat}</span><h2>{t}</h2><p>{d}</p><span class="meta">{meta} · Read article {ARROW}</span></div>
+  </article>'''
+
+def with_cover(modal, slug):
+    """Article modals open with their cover image."""
+    return modal.replace('</button>\n    <div class="modal-eyebrow">',
+        f'</button>\n    <img class="modal-cover" src="{article_cover(slug)}" alt="" width="1200" height="675" loading="lazy">\n    <div class="modal-eyebrow">', 1)
+
+FEATURED = next(x for x in INSIGHTS if x[1] in ARTICLE_SLUGS)
 
 insights_body = f'''<section class="phead wrap">
   <span class="eyebrow">Insights</span>
   <h1>Ideas worth building on.</h1>
   <p class="lead">Practical guides on software, data and digital transformation, written by the Ternah team.</p>
 </section>
+<section class="sec wrap insights-top">
+  {featured_insight(FEATURED)}
+</section>
 <section class="sec wrap">
+  <h2 class="h2 recent">Recent articles</h2>
   <div class="grid g3">
-{chr(10).join(insight_card(i,ins) for i,ins in enumerate(INSIGHTS))}
+{chr(10).join(insight_card(i,ins) for i,ins in enumerate(x for x in INSIGHTS if x is not FEATURED))}
   </div>
 </section>
 {cta_band("Let's turn insight into action.", "Reading about transformation is one thing. Let's build yours.", primary=('Talk to us','contact.html'))}
-{BUY_VS_BUILD_MODAL}
-{OFFLINE_FIRST_MODAL}
-{MANUAL_INTEL_MODAL}
-{DASHBOARDS_MODAL}
-{AUTOMATION_ROI_MODAL}
-{SCALE_MODAL}'''
+{with_cover(BUY_VS_BUILD_MODAL, 'buy-vs-build')}
+{with_cover(OFFLINE_FIRST_MODAL, 'offline-first')}
+{with_cover(MANUAL_INTEL_MODAL, 'manual-to-intelligent')}
+{with_cover(DASHBOARDS_MODAL, 'dashboards-to-decisions')}
+{with_cover(AUTOMATION_ROI_MODAL, 'automation-roi')}
+{with_cover(SCALE_MODAL, 'scale-from-day-one')}'''
 
 contact_body = f'''<section class="phead wrap">
   <span class="eyebrow">Contact</span>

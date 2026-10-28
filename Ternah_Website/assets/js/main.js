@@ -202,7 +202,7 @@ if(burger && navlinks){
   }
   function schedule(){
     clearTimeout(timer);
-    if(auto && !paused) timer = setTimeout(() => select(current + 1), 6000);
+    if(auto && !paused) timer = setTimeout(() => select(current + 1), 9000);  // slides carry a brief, so give time to read it
   }
   function stop(){ auto = false; clearTimeout(timer); }
 

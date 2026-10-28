@@ -11,7 +11,8 @@ assets/css/styles.css       website styles (uses the tokens; never redefine them
 assets/js/main.js           menu, reveals, contact form, article modals, filters
 assets/img/                 photos and product screenshots (see below)
 tools/make_images.py        regenerates favicon-32.png, apple-touch-icon.png, og-image.png
-tools/make_illustrations.py draws the blue case-study illustrations in assets/img/art/<product>.svg
+tools/make_illustrations.py draws the blue product illustrations in assets/img/art/<product>.svg
+tools/make_scenes.py        draws the hero scenes (hero-<product>.svg) and article covers (article-<slug>.svg)
 ```
 
 ## Settings (top of build_pages.py)
@@ -20,9 +21,11 @@ tools/make_illustrations.py draws the blue case-study illustrations in assets/im
 email app), `ANALYTICS_DOMAIN` (Plausible; empty = off).
 
 ## Photos and screenshots
-Drop files at these paths and rebuild; placeholders are replaced automatically.
-- `assets/img/team-kampala.webp` — real team photo, landscape, at least 1600 x 1000.
-  Update `TEAM_PHOTO_ALT` to name the people in it.
+Drop files at these paths and rebuild; the drawings are replaced automatically.
+- `assets/img/hero/<product-key>.webp` — hero photo, 16:9 (e.g. 1600 x 900), for
+  ternah-health and ternah-factories. Keep the people on the left half: the product
+  screen covers the right. Update the slide's `alt` in `HERO_SLIDES` to match the photo.
+- `assets/img/articles/<slug>.webp` — article cover, 16:9 (e.g. 1200 x 675).
 - `assets/img/screens/<product-key>.webp` — 3:2 product screenshot (e.g. 1440 x 960).
   Keys: ternah-health, ternah-factories, mykashop, sacco, property, pharmacy,
   hospitality, queueflow. Until a file exists, Ternah Health and Ternah for
@@ -44,6 +47,6 @@ python -m http.server 8000
 Build command `python build_pages.py`, publish directory `./`.
 
 ## Case studies
-Each product has a short case study in `CASES` in `build_pages.py` (setting, problem, what we set up, what changed).
-They describe the type of business, not a named client. Put a client's name in `setting` only once they have agreed.
-A new product needs a `CASES` entry and a motif in `tools/make_illustrations.py`.
+Only Ternah Health has a case study for now (`CASES` in `build_pages.py`), shown under the
+product grid on the Products page. It describes the type of hospital, not a named client.
+Put a client's name in `setting` only once they have agreed.
