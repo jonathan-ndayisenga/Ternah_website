@@ -295,10 +295,14 @@ PRODUCTS = [
       brief='A point-of-sale and stock system for shops, supermarkets, hardware stores and restaurants. It records every sale, keeps stock counts right, tracks debtors and expenses, and shows the owner how the business did each day.',
       features=['Point of sale and stock','Debtors and expenses','Daily business performance']),
  dict(key='pearl-educate', name='Pearl Educate', sector='Education · launching', link=PEARL_URL,
-      brief='A learning app for children. Teachers we have checked make ten-minute lessons with practice quizzes, questions come back over the following weeks so children remember, and parents pay by mobile money. The first courses are being reviewed now.',
-      features=['Short lessons with practice quizzes, hints and no scores',
-                'Questions come back after 1, 3, 7, 14 and 30 days',
-                'Certificates anyone can check online']),
+      brief="A learning app for children, built on the learning science principles of Carnegie Mellon University's "
+            "Learning Sciences for Innovators programme. Every ten-minute lesson is designed for memory formation: "
+            "children practise recalling answers with no score, get a hint when they are stuck, and each question "
+            "comes back after 1, 3, 7, 14 and 30 days so what they learn stays with them.",
+      source=('The learning science behind it', 'https://cmulearn.org/'),
+      features=['Built on CMU learning science principles for memory formation',
+                'Recall practice with hints and no scores, spaced over 30 days',
+                'Lessons from teachers we have checked; parents pay by mobile money']),
  dict(key='sacco', name='SACCO platform', sector='SACCOs',
       brief='A core system for SACCOs that replaces the ledgers. It opens member accounts and fixed deposits, handles teller deposits and withdrawals, and takes each loan from assessment to disbursement with printable slips.',
       features=['Member onboarding and accounts, including fixed deposits',
@@ -396,6 +400,7 @@ def product_card(i, p, full=False):
         <div class="kicker">{escape(p["sector"])}</div>
         <h3>{escape(p["name"])}</h3>
         <p class="for">{escape(p["brief"])}</p>
+        {f'<a class="source-link" href="{p["source"][1]}" target="_blank" rel="noopener noreferrer">{p["source"][0]} {EXT}</a>' if p.get("source") else ''}
         {feats}
         <div class="act"{"" if full else " style=\"margin-top:24px\""}>{act}</div>
         {f'<a class="link-arrow case-link" href="#case-{p["key"]}">Read the case study {ARROW}</a>' if full and p["key"] in CASES else ''}

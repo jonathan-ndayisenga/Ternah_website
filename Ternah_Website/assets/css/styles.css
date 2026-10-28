@@ -627,3 +627,6 @@ header{background:rgba(255,255,255,.88)}
   .prevnext{grid-template-columns:1fr}
   .prevnext .art:last-child .body{text-align:left}
 }
+.source-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:15px;font-weight:500;color:var(--blue)}
+.source-link:hover{text-decoration:underline;text-underline-offset:3px}
+.source-link svg{width:14px;height:14px;stroke:currentColor}
