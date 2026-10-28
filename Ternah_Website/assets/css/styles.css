@@ -85,14 +85,16 @@ header.scrolled{border-color:var(--border)}
 .hero .lead{font-size:20px;margin:28px auto 0;max-width:600px}
 .hero-cta{display:flex;justify-content:center;gap:16px;margin-top:40px}
 
-.stage{position:relative;max-width:var(--maxw);margin:64px auto 0;height:560px}
+.stage{position:relative;max-width:var(--maxw);margin:64px auto 0;height:600px}
 .stage .photo{position:absolute;left:50%;top:0;transform:translateX(-50%);width:640px;height:420px;border-radius:var(--r-photo);overflow:hidden;background:#E6E2D8}
-.stage .photo img{width:100%;height:100%;object-fit:cover}
+.stage .photo{box-shadow:0 0 0 1px var(--border)}
+.stage .photo img{width:100%;height:100%;object-fit:cover;object-position:left top}
+.photo-tag{position:absolute;right:16px;top:16px;background:var(--surface);color:var(--ink);font-size:14px;font-weight:500;border-radius:var(--r-pill);padding:6px 14px;box-shadow:0 2px 8px rgba(21,32,46,.12)}
 .photo-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--muted);font-size:19px}
 .photo-ph svg{width:44px;height:44px;stroke:currentColor}
 .stage .frame{position:absolute;width:440px}
-.stage .f-left{left:0;top:96px}
-.stage .f-right{right:0;top:68px}
+.stage .f-left{left:0;top:236px}
+.stage .f-right{right:0;top:196px}
 
 /* ---------- screenshot frame + dashboard replica ---------- */
 .frame{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:8px;box-shadow:var(--shadow-frame)}
@@ -379,22 +381,4 @@ main > :last-child:not(.cta-band){margin-bottom:var(--sec-gap)}
   .modal-byline{flex-wrap:wrap}.modal-byline .read-time{margin-left:0}
   .article-body table{font-size:14px}.article-body th,.article-body td{padding:9px 10px}
   .fab-wa{right:16px;bottom:16px}
-}
-
-/* hero without a team photo: products lead */
-.stage.stage-products{height:auto;margin:56px auto 0;padding-bottom:96px}
-.stage.stage-products .frame{position:relative}
-.stage.stage-products .f-main{width:820px;margin:0 40px 0 auto}
-.stage.stage-products .f-main .cap{text-align:right}
-.stage.stage-products .f-over{position:absolute;left:0;bottom:0;width:420px}
-@media (max-width:1100px){
-  .stage.stage-products{margin-bottom:0}
-  .stage.stage-products .f-main{width:78%;margin-right:0}
-  .stage.stage-products .f-over{width:44%;top:auto;bottom:0}
-}
-@media (max-width:600px){
-  .stage.stage-products{margin-top:40px;padding-bottom:0}
-  .stage.stage-products .f-main{width:100%}
-  .stage.stage-products .f-over{display:none}
-  .stage.stage-products .frame .cap{display:block;text-align:left}
 }
