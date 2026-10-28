@@ -55,13 +55,16 @@ if(burger && navlinks){
   const product = new URLSearchParams(location.search).get('product');
   if(product){
     form.product.value = product;
-    const label = product.replace(/-/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+    form.need.value = 'demo';
+    const names = JSON.parse(form.dataset.products || '{}');
+    const label = names[product] || product.replace(/-/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
     if(!form.message.value) form.message.value = `I'd like a demo of ${label}.`;
   }
 
   const rules = {
     name:    v => v ? '' : 'Please enter your name.',
     email:   v => !v ? 'Please enter your email.' : (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? '' : 'That email address looks incomplete.'),
+    need:    v => v ? '' : 'Please choose what you need.',
     message: v => v ? '' : 'Please tell us a little about what you need.',
   };
   function check(name){
@@ -76,7 +79,7 @@ if(burger && navlinks){
   Object.keys(rules).forEach(n=>{
     const el = form.elements[n];
     el.addEventListener('blur', ()=> { if(el.value.trim()) check(n); });
-    el.addEventListener('input', ()=> { if(el.closest('.field').classList.contains('invalid')) check(n); });
+    el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', ()=> { if(el.closest('.field').classList.contains('invalid')) check(n); });
   });
 
   function show(text, kind){ out.className = kind; out.textContent = text; }
@@ -87,7 +90,7 @@ if(burger && navlinks){
     if(bad.length){ form.elements[bad[0]].focus(); show('Please fix the highlighted fields.', 'bad'); return; }
     if(form.website.value){ show('Thanks — your message has been sent.', 'ok'); form.reset(); return; } // bot
 
-    const v = n => form.elements[n].value.trim();
+    const v = n => (form.elements[n]?.value || '').trim(); // the home page form has no phone or organisation
     const endpoint = form.getAttribute('action');
     if(endpoint){
       btn.disabled = true;
@@ -106,6 +109,7 @@ if(burger && navlinks){
     const subject = encodeURIComponent(`New project enquiry from ${v('name')}`);
     const body = encodeURIComponent(
       `Name: ${v('name')}\nEmail: ${v('email')}\nPhone: ${v('phone') || '-'}\nOrganisation: ${v('organisation') || '-'}` +
+      `\nNeeds: ${form.need.selectedOptions[0].text}` +
       `${form.product.value ? `\nProduct: ${form.product.value}` : ''}\n\n${v('message')}`);
     show('Your email app should open with the message ready to send. If it does not, email us directly at ' + form.dataset.email + '.', 'ok');
     window.location.href = `mailto:${form.dataset.email}?subject=${subject}&body=${body}`;
@@ -127,6 +131,7 @@ if(burger && navlinks){
     modal.classList.remove('open');
     document.body.style.overflow = '';
     lastTrigger?.focus();
+    if(location.hash) history.replaceState(null, '', location.pathname + location.search);
   }
   document.querySelectorAll('[data-open]').forEach(trigger=>{
     trigger.addEventListener('click', ()=> openModal(trigger));
@@ -143,6 +148,9 @@ if(burger && navlinks){
   document.addEventListener('keydown', e=>{
     if(e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(closeModal);
   });
+  // Home page teasers link to insights.html#<slug>: open that article on arrival
+  const fromHash = location.hash.length > 1 && document.querySelector(`[data-open="${CSS.escape(location.hash.slice(1))}"]`);
+  if(fromHash) openModal(fromHash);
 })();
 
 /* ---- solutions filter pills ---- */

@@ -144,6 +144,7 @@ header.scrolled{border-color:var(--border)}
 .card p{color:var(--muted);font-size:17px}
 .card .ico{width:44px;height:44px;border-radius:12px;background:var(--icon-bg);display:flex;align-items:center;justify-content:center;margin-bottom:24px}
 .card .ico svg{width:22px;height:22px;stroke:var(--ink)}
+.cta-form .card:hover{transform:none}
 .card ul{list-style:none;margin-top:18px}
 .card ul li{font-size:15px;color:var(--muted);padding:9px 0;border-top:1px solid var(--border)}
 .card .kicker{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
@@ -403,3 +404,48 @@ main > :last-child:not(.cta-band){margin-bottom:var(--sec-gap)}
   .showcase .frame .cap{display:flex}
   .showcase .cap-who{display:none}
 }
+
+/* ---- facts strip under the hero ---- */
+.facts{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);margin:56px auto 0;max-width:1000px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);text-align:left}
+.facts li{padding:24px 28px;display:flex;flex-direction:column;gap:6px}
+.facts li + li{border-left:1px solid var(--border)}
+.facts strong{font-size:32px;font-weight:600;letter-spacing:-.02em;line-height:1.1;color:var(--ink)}
+.facts span{font-size:15px;color:var(--muted);line-height:1.4}
+
+/* ---- select fields + paired fields ---- */
+.field select{width:100%;height:52px;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6472' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 14px center/18px;border:1px solid var(--border);border-radius:var(--r-input);padding:0 44px 0 16px;font-family:inherit;font-size:16px;color:var(--ink);appearance:none;-webkit-appearance:none;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.field select:focus{outline:none;border-color:var(--border-hover);box-shadow:0 0 0 3px rgba(21,32,46,.08)}
+.field.invalid select{border-color:var(--warn)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+
+/* ---- linked article teasers ---- */
+a.art{display:block;color:inherit;text-decoration:none}
+a.art .art-read svg{stroke:currentColor}
+
+/* ---- closing band with the enquiry form inside ---- */
+.cta-form{text-align:left}
+.cta-form .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:center}
+.cta-form p{margin:16px 0 0}
+.cta-alt{list-style:none;margin-top:36px;display:flex;flex-direction:column;gap:14px}
+.cta-alt a{display:inline-flex;align-items:center;gap:12px;color:#fff;font-size:17px;font-weight:500;text-decoration:none}
+.cta-alt a:hover{text-decoration:underline;text-underline-offset:4px}
+.cta-alt svg{width:22px;height:22px;flex:none}
+.cta-alt a svg[fill=none]{stroke:currentColor}
+.cta-alt a svg:not([fill=none]){fill:currentColor}
+.cta-form .form-card{color:var(--ink)}
+.cta-form .form-card .btn-primary{background:var(--nav);color:#fff}
+.cta-form .form-card .btn-primary:hover{background:var(--nav-active)}
+
+@media (max-width:900px){
+  .facts{grid-template-columns:1fr 1fr}
+  .facts li:nth-child(3){border-left:0}
+  .facts li:nth-child(n+3){border-top:1px solid var(--border)}
+  .cta-form .wrap{grid-template-columns:1fr;gap:40px}
+}
+@media (max-width:600px){
+  .facts{margin-top:40px}
+  .facts li{padding:18px 20px}
+  .facts strong{font-size:26px}
+  .pair{grid-template-columns:1fr}
+}
+.cta-form .form-card .form-note{font-size:14px;margin:14px 0 0;max-width:none;color:var(--muted)}

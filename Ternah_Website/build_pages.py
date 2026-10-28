@@ -7,7 +7,7 @@ Real photos and screenshots are picked up automatically when they exist
 (see IMAGE SLOTS below); until then a labelled placeholder is shown.
 """
 
-import os, pathlib, datetime
+import json, os, pathlib, datetime
 from html import escape
 OUT = str(pathlib.Path(__file__).parent)  # writes next to this script
 
@@ -352,6 +352,15 @@ INSIGHTS = [
  ('Technology Trends','Building for scale from day one','Architecture choices that save you a painful rebuild as your user base grows.','9 min read'),
 ]
 
+ARTICLE_SLUGS = {
+    'Choosing between off-the-shelf and custom software': 'buy-vs-build',
+    'Why offline-first matters in African markets':       'offline-first',
+    'From manual to intelligent: a practical roadmap':   'manual-to-intelligent',
+    'Turning dashboards into decisions':                  'dashboards-to-decisions',
+    'Automation that pays for itself':                    'automation-roi',
+    'Building for scale from day one':                    'scale-from-day-one',
+}
+
 # ================= COMPONENTS =================
 def sec_head(eyebrow, h2, lead=None, center=False):
     lp = f'<p class="lead">{lead}</p>' if lead else ''
@@ -445,6 +454,73 @@ def hero_stage():
     <div class="tabs" role="tablist" aria-label="Ternah products">{tabs}</div>{panels}
   </div>'''
 
+# "What do you need?" options; ?product=<key> links preselect 'demo'
+NEEDS = [('demo','A demo of one of our products'),('custom','Custom software for my business'),
+         ('website','A website'),('support','Help with a system we already use'),('other','Something else')]
+
+def field(fid, label, kind='input', type_='text', required=True, placeholder='', auto='', options=None):
+    req = '<span class="req" aria-hidden="true">*</span>' if required else ' <span class="opt">(optional)</span>'
+    r = ' required aria-required="true"' if required else ''
+    ac = f' autocomplete="{auto}"' if auto else ''
+    if kind == 'select':
+        opts = '<option value="">Choose one</option>' + "".join(f'<option value="{v}">{t}</option>' for v,t in options)
+        ctl = f'<select id="{fid}" name="{fid}"{r} aria-describedby="{fid}_err">{opts}</select>'
+    elif kind == 'textarea':
+        ctl = f'<textarea id="{fid}" name="{fid}"{r} placeholder="{placeholder}" aria-describedby="{fid}_err"></textarea>'
+    else:
+        ctl = f'<input id="{fid}" name="{fid}" type="{type_}"{r}{ac} placeholder="{placeholder}" aria-describedby="{fid}_err">'
+    return f'''      <div class="field"><label for="{fid}">{label}{req}</label>{ctl}<div class="err" id="{fid}_err"></div></div>'''
+
+def enquiry_form(full=True):
+    """The one enquiry form: full on Contact, short (no phone or organisation) in the home page band."""
+    extra = (field('phone','Phone or WhatsApp',type_='tel',required=False,auto='tel',placeholder='+256 …') + '\n' +
+             field('organisation','Organisation',required=False,auto='organization',placeholder='Hospital, factory, shop or SACCO') + '\n') if full else ''
+    pair = 'pair' if not full else ''
+    return f'''    <form class="card form-card" id="contactForm" action="{FORM_ENDPOINT}" method="POST" novalidate data-email="{EMAIL}" data-products='{escape(json.dumps({p["key"]: p["name"] for p in PRODUCTS}), quote=True)}'>
+      <div class="{pair}">
+{field('name','Your name',auto='name',placeholder='Full name')}
+{field('email','Email',type_='email',auto='email',placeholder='you@company.com')}
+      </div>
+{extra}{field('need','What do you need?',kind='select',options=NEEDS)}
+{field('message','How can we help?',kind='textarea',placeholder="Tell us what you're trying to build or solve")}
+      <input type="hidden" name="product" id="product">
+      <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+      <button class="btn btn-primary btn-lg" type="submit" id="sendBtn">Send message {ARROW}</button>
+      <p class="form-note">Fields marked * are required. We reply within one working day.</p>
+      <div id="formMsg" role="status" aria-live="polite"></div>
+    </form>'''
+
+def facts_strip():
+    """Plain, checkable facts (counted from the data above), in place of client logos we can't name yet."""
+    live = sum(1 for p in PRODUCTS if p.get('link'))
+    facts = [(str(len(PRODUCTS)), 'products, each built for one kind of business'),
+             (str(live), 'you can open and try today'),
+             (str(len(INDUSTRIES)), 'industries we build for'),
+             ('Kampala', 'where we design, build and support')]
+    return '<ul class="facts">' + "".join(f'<li><strong>{n}</strong><span>{t}</span></li>' for n,t in facts) + '</ul>'
+
+def insight_teaser(i, ins):
+    cat,t,d,meta = ins
+    return f'''    <a class="art reveal" data-d="{i%3+1}" href="insights.html#{ARTICLE_SLUGS[t]}">
+      <div class="body"><div class="cat">{cat}</div><h3>{t}</h3><p>{d}</p><div class="meta">{meta}</div><div class="art-read">Read article {ARROW}</div></div>
+    </a>'''
+
+def cta_form_band(h2, p):
+    """Closing band with the enquiry form inside it, so visitors don't need another page to get in touch."""
+    return f'''<section class="cta-band cta-form" id="talk">
+  <div class="wrap">
+    <div class="cta-copy">
+      <h2>{h2}</h2><p>{p}</p>
+      <ul class="cta-alt">
+        <li><a href="{WHATSAPP}" target="_blank" rel="noopener noreferrer">{WA_SVG} WhatsApp us</a></li>
+        <li><a href="tel:{PHONE_TEL}">{ICONS['phone']} {PHONE}</a></li>
+        <li><a href="mailto:{EMAIL}">{ICONS['mail']} {EMAIL}</a></li>
+      </ul>
+    </div>
+{enquiry_form(full=False)}
+  </div>
+</section>'''
+
 # ================= PAGE BODIES =================
 home_body = f'''<section class="hero wrap">
   <span class="origin">Built in {OFFICE}</span>
@@ -455,6 +531,7 @@ home_body = f'''<section class="hero wrap">
     <a class="btn btn-ghost btn-lg" href="#products">See our products</a>
   </div>
   {hero_stage()}
+  {facts_strip()}
 </section>
 
 <section class="sec wrap" id="products">
@@ -483,7 +560,15 @@ home_body = f'''<section class="hero wrap">
   <div class="chips">{"".join(f'<a class="chip" href="industries.html">{t}</a>' for _,t,_ in INDUSTRIES)}</div>
 </section>
 
-{cta_band("Let's build something that fits.", "Tell us how your business runs. We'll turn it into software that keeps it simple.")}'''
+<section class="sec wrap">
+  {sec_head('Insights', 'Practical reading before you build.', 'Short guides from the Ternah team on choosing, building and running business software.')}
+  <div class="grid g3">
+{chr(10).join(insight_teaser(i,ins) for i,ins in enumerate([x for x in INSIGHTS if x[1] in ARTICLE_SLUGS][:3]))}
+  </div>
+  <div class="center mt-cta"><a class="link-arrow" href="insights.html">All articles {ARROW}</a></div>
+</section>
+
+{cta_form_band("Let's build something that fits.", "Tell us how your business runs. We'll reply within one working day with how we'd keep it simple.")}'''
 
 about_body = f'''<section class="phead wrap">
   <span class="eyebrow">About Ternah</span>
@@ -571,14 +656,6 @@ products_body = f'''<section class="phead wrap">
 {cta_band("Need something none of these do?", "Bring us the problem. We'll build the simplest software that solves it.")}'''
 
 BUY_VS_BUILD_SLUG = 'buy-vs-build'
-ARTICLE_SLUGS = {
-    'Choosing between off-the-shelf and custom software': 'buy-vs-build',
-    'Why offline-first matters in African markets':       'offline-first',
-    'From manual to intelligent: a practical roadmap':   'manual-to-intelligent',
-    'Turning dashboards into decisions':                  'dashboards-to-decisions',
-    'Automation that pays for itself':                    'automation-roi',
-    'Building for scale from day one':                    'scale-from-day-one',
-}
 READ_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>'
 
 def insight_card(i, ins):
@@ -1214,14 +1291,6 @@ insights_body = f'''<section class="phead wrap">
 {AUTOMATION_ROI_MODAL}
 {SCALE_MODAL}'''
 
-def field(fid, label, kind='input', type_='text', required=True, placeholder='', auto=''):
-    req = '<span class="req" aria-hidden="true">*</span>' if required else ' <span class="opt">(optional)</span>'
-    r = ' required aria-required="true"' if required else ''
-    ac = f' autocomplete="{auto}"' if auto else ''
-    ctl = (f'<textarea id="{fid}" name="{fid}"{r} placeholder="{placeholder}" aria-describedby="{fid}_err"></textarea>' if kind=='textarea'
-           else f'<input id="{fid}" name="{fid}" type="{type_}"{r}{ac} placeholder="{placeholder}" aria-describedby="{fid}_err">')
-    return f'''      <div class="field"><label for="{fid}">{label}{req}</label>{ctl}<div class="err" id="{fid}_err"></div></div>'''
-
 contact_body = f'''<section class="phead wrap">
   <span class="eyebrow">Contact</span>
   <h1>Let's keep it simple.</h1>
@@ -1229,18 +1298,7 @@ contact_body = f'''<section class="phead wrap">
 </section>
 <section class="sec wrap">
   <div class="contact-wrap">
-    <form class="card form-card" id="contactForm" action="{FORM_ENDPOINT}" method="POST" novalidate data-email="{EMAIL}">
-{field('name','Your name',auto='name',placeholder='Full name')}
-{field('email','Email',type_='email',auto='email',placeholder='you@company.com')}
-{field('phone','Phone or WhatsApp',type_='tel',required=False,auto='tel',placeholder='+256 …')}
-{field('organisation','Organisation',required=False,auto='organization',placeholder='Hospital, factory, shop or SACCO')}
-{field('message','How can we help?',kind='textarea',placeholder="Tell us what you're trying to build or solve")}
-      <input type="hidden" name="product" id="product">
-      <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-      <button class="btn btn-primary btn-lg" type="submit" id="sendBtn">Send message {ARROW}</button>
-      <p class="form-note">Fields marked * are required.</p>
-      <div id="formMsg" role="status" aria-live="polite"></div>
-    </form>
+{enquiry_form()}
     <div class="contact-info">
       <div class="ci"><span class="ico">{ICONS['mail']}</span><div><div class="k">Email</div><a class="v" href="mailto:{EMAIL}">{EMAIL}</a></div></div>
       <div class="ci"><span class="ico">{ICONS['chat']}</span><div><div class="k">WhatsApp</div><a class="v" href="{WHATSAPP}" target="_blank" rel="noopener noreferrer">Chat with us</a></div></div>

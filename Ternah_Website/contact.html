@@ -56,16 +56,19 @@
 </section>
 <section class="sec wrap">
   <div class="contact-wrap">
-    <form class="card form-card" id="contactForm" action="" method="POST" novalidate data-email="ternah22@gmail.com">
+    <form class="card form-card" id="contactForm" action="" method="POST" novalidate data-email="ternah22@gmail.com" data-products='{&quot;ternah-health&quot;: &quot;Ternah Health&quot;, &quot;pharmacy&quot;: &quot;Ternah Pharmacy&quot;, &quot;ternah-factories&quot;: &quot;Ternah for Factories&quot;, &quot;mykashop&quot;: &quot;Mykashop&quot;, &quot;pearl-educate&quot;: &quot;Pearl Educate&quot;, &quot;sacco&quot;: &quot;SACCO platform&quot;, &quot;property&quot;: &quot;Property management&quot;, &quot;hospitality&quot;: &quot;Hospitality suite&quot;, &quot;queueflow&quot;: &quot;QueueFlow&quot;}'>
+      <div class="">
       <div class="field"><label for="name">Your name<span class="req" aria-hidden="true">*</span></label><input id="name" name="name" type="text" required aria-required="true" autocomplete="name" placeholder="Full name" aria-describedby="name_err"><div class="err" id="name_err"></div></div>
       <div class="field"><label for="email">Email<span class="req" aria-hidden="true">*</span></label><input id="email" name="email" type="email" required aria-required="true" autocomplete="email" placeholder="you@company.com" aria-describedby="email_err"><div class="err" id="email_err"></div></div>
+      </div>
       <div class="field"><label for="phone">Phone or WhatsApp <span class="opt">(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+256 …" aria-describedby="phone_err"><div class="err" id="phone_err"></div></div>
       <div class="field"><label for="organisation">Organisation <span class="opt">(optional)</span></label><input id="organisation" name="organisation" type="text" autocomplete="organization" placeholder="Hospital, factory, shop or SACCO" aria-describedby="organisation_err"><div class="err" id="organisation_err"></div></div>
+      <div class="field"><label for="need">What do you need?<span class="req" aria-hidden="true">*</span></label><select id="need" name="need" required aria-required="true" aria-describedby="need_err"><option value="">Choose one</option><option value="demo">A demo of one of our products</option><option value="custom">Custom software for my business</option><option value="website">A website</option><option value="support">Help with a system we already use</option><option value="other">Something else</option></select><div class="err" id="need_err"></div></div>
       <div class="field"><label for="message">How can we help?<span class="req" aria-hidden="true">*</span></label><textarea id="message" name="message" required aria-required="true" placeholder="Tell us what you're trying to build or solve" aria-describedby="message_err"></textarea><div class="err" id="message_err"></div></div>
       <input type="hidden" name="product" id="product">
       <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
       <button class="btn btn-primary btn-lg" type="submit" id="sendBtn">Send message <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
-      <p class="form-note">Fields marked * are required.</p>
+      <p class="form-note">Fields marked * are required. We reply within one working day.</p>
       <div id="formMsg" role="status" aria-live="polite"></div>
     </form>
     <div class="contact-info">
