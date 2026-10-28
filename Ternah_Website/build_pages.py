@@ -13,7 +13,7 @@ OUT = str(pathlib.Path(__file__).parent)  # writes next to this script
 
 # ================= SITE SETTINGS — change these in one place =================
 COMPANY      = 'Ternah Software Company Ltd'
-SITE_URL     = 'https://ternahwebsite.onrender.com'   # switch to the Ternah domain once it is live
+SITE_URL     = 'https://ternah-website.onrender.com'   # switch to the Ternah domain once it is live
 EMAIL        = 'ternah22@gmail.com'                    # switch to hello@<domain> once domain email exists
 PHONE        = '+256 787 770007'
 PHONE_TEL    = '+256787770007'
@@ -268,6 +268,11 @@ PRODUCTS = [
       who='For hospitals and clinics that want every department, from reception to finance, on one screen.',
       features=['Patient queue through reception, doctor, nursing, lab and sonography',
                 'Pharmacy and stock with reorder alerts','Billing and daily collections']),
+ dict(key='pharmacy', name='Ternah Pharmacy', sector='Pharmacies', link=PHARMACY_URL,
+      who='For pharmacies with one branch or many: dispensing, payments, stock and accounts in one place, even when the internet drops.',
+      features=['Prescription to receipt: cash, mobile money, card, insurance or credit',
+                'Batch stock with low-stock and expiry alerts',
+                'Books that keep themselves, with branch-by-branch comparison']),
  dict(key='ternah-factories', name='Ternah for Factories', sector='Manufacturing',
       who='For manufacturers who need production, branch stock and sales in one place.',
       features=['Production batches and formulas, with material shortfalls flagged',
@@ -275,11 +280,6 @@ PRODUCTS = [
  dict(key='mykashop', name='Mykashop', sector='Shops & retail', link='https://mykashop.online/',
       who='For shops, supermarkets, hardware stores and restaurants that need real control of stock and sales.',
       features=['Point of sale and stock','Debtors and expenses','Daily business performance']),
- dict(key='pharmacy', name='Ternah Pharmacy', sector='Pharmacies', link=PHARMACY_URL,
-      who='For pharmacies with one branch or many: dispensing, payments, stock and accounts in one place, even when the internet drops.',
-      features=['Prescription to receipt: cash, mobile money, card, insurance or credit',
-                'Batch stock with low-stock and expiry alerts',
-                'Books that keep themselves, with branch-by-branch comparison']),
  dict(key='pearl-educate', name='Pearl Educate', sector='Education · launching', link=PEARL_URL,
       who='Ten-minute courses for children, made by teachers we have checked. Parents pay by mobile money. The first courses are being reviewed now.',
       features=['Short lessons with practice quizzes, hints and no scores',

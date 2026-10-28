@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ternahwebsite.onrender.com/sitemap.xml
+Sitemap: https://ternah-website.onrender.com/sitemap.xml
