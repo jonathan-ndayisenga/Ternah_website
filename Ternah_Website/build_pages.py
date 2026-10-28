@@ -192,10 +192,10 @@ def photo_or_placeholder(path, alt, label, w, h, lazy=True):
 # ---- product dashboards, drawn in HTML until real screenshots exist ----
 # Each tile: (title, number, unit, warn_number, warn_unit, pills, span, flags)
 HEALTH_DASH = dict(
-  org='[Hospital name]', org_sub='Ternah Health', user=('AD','[First name]','Hospital admin'),
+  org='Ternah Demo Hospital', org_sub='Ternah Health', user=('SN','Sarah Nakato','Hospital admin'),
   nav=['Home','Reception','Doctor','Nursing','Laboratory','Sonography','Inventory','Finance','Hospital admin'],
   search='Search patient by name, phone or patient number',
-  greet='Good morning, [First name]', sub='[Hospital name] · here is where every department stands right now.',
+  greet='Good morning, Sarah', sub='Ternah Demo Hospital · here is where every department stands right now.',
   tiles=[
     ('Reception','6','waiting at the desk',None,None,[],2,''),
     ('Doctor','7','patients waiting','42 min','longest wait',['Open queue',"Today's consultations"],2,'raised'),
@@ -207,10 +207,10 @@ HEALTH_DASH = dict(
     ('Hospital admin',None,'Nothing needs your attention',None,None,[],2,''),
   ])
 FACTORY_DASH = dict(
-  org='[Factory name]', org_sub='Ternah for Factories', user=('JN','[First name]','Manager'),
+  org='Ternah Demo Factory', org_sub='Ternah for Factories', user=('DO','Daniel Okello','Manager'),
   nav=['Home','Production','Branch & stock','Cashier','Finance','Staff'],
   search='Search products, batches, customers or receipts',
-  greet='Good afternoon, [First name]', sub='[Factory name] · here is where the factory stands right now.',
+  greet='Good afternoon, Daniel', sub='Ternah Demo Factory · here is where the factory stands right now.',
   tiles=[
     ('Production','2','batches in progress','1','formula short of materials',['Start batch','Formulas','Distribution'],2,'raised'),
     ('Branch & stock','3','stock movements awaiting approval',None,None,[],2,''),
@@ -243,6 +243,9 @@ def dash_html(d):
 
 DASHES = {'ternah-health': HEALTH_DASH, 'ternah-factories': FACTORY_DASH}
 
+def has_visual(p):
+    return exists(f'assets/img/screens/{p["key"]}.webp') or p['key'] in DASHES
+
 def screenshot(p, lazy=True):
     """Real screenshot if assets/img/screens/<key>.webp exists, else the HTML dashboard, else a placeholder."""
     path = f'assets/img/screens/{p["key"]}.webp'
@@ -261,6 +264,7 @@ def screenshot(p, lazy=True):
 # Live product sites. Switch to the real domains once they exist (keep https).
 PHARMACY_URL = 'https://ternah-pharmacy.onrender.com/pharmacy/'
 PEARL_URL    = 'http://147.182.138.32/'
+MYKASHOP_URL = None  # https://mykashop.online/ was not responding on 28 Oct 2026; restore once it is back up
 
 PRODUCTS = [
  dict(key='ternah-health', name='Ternah Health', sector='Hospitals & clinics',
@@ -276,7 +280,7 @@ PRODUCTS = [
       who='For manufacturers who need production, branch stock and sales in one place.',
       features=['Production batches and formulas, with material shortfalls flagged',
                 'Stock movements between branches, with approvals','Cashier, debtors and staff']),
- dict(key='mykashop', name='Mykashop', sector='Shops & retail', link='https://mykashop.online/',
+ dict(key='mykashop', name='Mykashop', sector='Shops & retail', link=MYKASHOP_URL,
       who='For shops, supermarkets, hardware stores and restaurants that need real control of stock and sales.',
       features=['Point of sale and stock','Debtors and expenses','Daily business performance']),
  dict(key='pearl-educate', name='Pearl Educate', sector='Education · launching', link=PEARL_URL,
@@ -363,6 +367,19 @@ def product_card(i, p, full=False):
       </div>
     </article>'''
 
+def product_card_text(i, p):
+    if p.get('link'):
+        act = f'<a class="link-arrow" href="{p["link"]}" target="_blank" rel="noopener noreferrer">Visit {escape(p["name"])} {EXT}</a>'
+    else:
+        act = f'<a class="link-arrow" href="contact.html?product={p["key"]}">Book a demo {ARROW}</a>'
+    return f'''    <article class="card reveal" id="{p["key"]}" data-d="{i%3+1}">
+      <div class="kicker">{escape(p["sector"])}</div>
+      <h3>{escape(p["name"])}</h3>
+      <p>{escape(p["who"])}</p>
+      <ul>{"".join(f"<li>{escape(f)}</li>" for f in p["features"])}</ul>
+      <div style="margin-top:20px">{act}</div>
+    </article>'''
+
 def process_html():
     return '<ol class="process">' + "".join(f'''
     <li class="step reveal" data-d="{i%4+1}"><span class="dot">{i+1}</span><h3>{t}</h3><p>{d}</p></li>'''
@@ -389,6 +406,21 @@ def frame(p, cls):
     return f'<figure class="frame {cls}">{screenshot(p, lazy=False)}<figcaption class="cap">{escape(p["name"])}</figcaption></figure>'
 
 
+
+def hero_stage():
+    """Team photo with two product screens over its edges once the photo exists;
+    until then the products lead: Ternah Pharmacy large, Ternah Health over its corner."""
+    if exists(TEAM_PHOTO):
+        return f'''<div class="stage">
+    <div class="photo">{photo_or_placeholder(TEAM_PHOTO, TEAM_PHOTO_ALT, 'Team photo, Kampala office', 1600, 1050, lazy=False)}</div>
+    {frame(PRODUCTS[0], 'f-left')}
+    {frame(PRODUCTS[1], 'f-right')}
+  </div>'''
+    return f'''<div class="stage stage-products">
+    {frame(PRODUCTS[1], 'f-main')}
+    {frame(PRODUCTS[0], 'f-over')}
+  </div>'''
+
 # ================= PAGE BODIES =================
 home_body = f'''<section class="hero wrap">
   <span class="origin">Built in {OFFICE}</span>
@@ -398,11 +430,7 @@ home_body = f'''<section class="hero wrap">
     <a class="btn btn-primary btn-lg" href="contact.html">Start a project</a>
     <a class="btn btn-ghost btn-lg" href="#products">See our products</a>
   </div>
-  <div class="stage">
-    <div class="photo">{photo_or_placeholder(TEAM_PHOTO, TEAM_PHOTO_ALT, 'Team photo, Kampala office', 1600, 1050, lazy=False)}</div>
-    {frame(PRODUCTS[0], 'f-left')}
-    {frame(PRODUCTS[1], 'f-right')}
-  </div>
+  {hero_stage()}
 </section>
 
 <section class="sec wrap" id="products">
@@ -507,7 +535,13 @@ products_body = f'''<section class="phead wrap">
 </section>
 <section class="sec wrap">
   <div class="grid g3">
-{chr(10).join(product_card(i,p,full=True) for i,p in enumerate(PRODUCTS))}
+{chr(10).join(product_card(i,p,full=True) for i,p in enumerate(x for x in PRODUCTS if has_visual(x)))}
+  </div>
+</section>
+<section class="sec wrap">
+  {sec_head('More from Ternah', 'More systems we have built.')}
+  <div class="grid g3">
+{chr(10).join(product_card_text(i,p) for i,p in enumerate(x for x in PRODUCTS if not has_visual(x)))}
   </div>
 </section>
 {cta_band("Need something none of these do?", "Bring us the problem. We'll build the simplest software that solves it.")}'''

@@ -380,3 +380,21 @@ main > :last-child:not(.cta-band){margin-bottom:var(--sec-gap)}
   .article-body table{font-size:14px}.article-body th,.article-body td{padding:9px 10px}
   .fab-wa{right:16px;bottom:16px}
 }
+
+/* hero without a team photo: products lead */
+.stage.stage-products{height:auto;margin:56px auto 0;padding-bottom:96px}
+.stage.stage-products .frame{position:relative}
+.stage.stage-products .f-main{width:820px;margin:0 40px 0 auto}
+.stage.stage-products .f-main .cap{text-align:right}
+.stage.stage-products .f-over{position:absolute;left:0;bottom:0;width:420px}
+@media (max-width:1100px){
+  .stage.stage-products{margin-bottom:0}
+  .stage.stage-products .f-main{width:78%;margin-right:0}
+  .stage.stage-products .f-over{width:44%;top:auto;bottom:0}
+}
+@media (max-width:600px){
+  .stage.stage-products{margin-top:40px;padding-bottom:0}
+  .stage.stage-products .f-main{width:100%}
+  .stage.stage-products .f-over{display:none}
+  .stage.stage-products .frame .cap{display:block;text-align:left}
+}
