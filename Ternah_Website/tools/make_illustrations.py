@@ -102,6 +102,26 @@ MOTIFS = {
             f'<rect x="{196+c*160}" y="{190+r*62}" width="30" height="8" rx="4" fill="#2563EB"/>'
             for c,n in enumerate([3,2,1]) for r in range(n))}</g>
 <path d="M300 300c20 0 30-20 50-20" {T} stroke-dasharray="2 12"/>''',
+ # industries without a product of their own
+ 'logistics': f'''
+<path d="M170 210h230v150H170z" fill="#fff"/><path d="M400 250h80l50 55v55H400z" fill="#fff" fill-opacity=".85"/>
+<path d="M420 265h50l30 35h-80z" fill="#93C5FD"/>
+<circle cx="230" cy="368" r="30" fill="#1E3A8A" stroke="#fff" stroke-width="8"/><circle cx="470" cy="368" r="30" fill="#1E3A8A" stroke="#fff" stroke-width="8"/>
+<path d="M560 330c40-60 60-110 110-130" {T} stroke-dasharray="4 16"/>
+<g transform="translate(640 150)"><path d="M0 0c-26 0-44 20-44 44 0 32 44 76 44 76s44-44 44-76C44 20 26 0 0 0z" fill="#fff"/><circle cy="44" r="16" fill="#2563EB"/></g>
+{chip(170, 120, 170, 60, .65)}''',
+ 'ngos': f'''
+<g transform="translate(300 250)" {T}><circle r="120"/><ellipse rx="50" ry="120"/><path d="M-120 0h240M-104 -60h208M-104 60h208"/></g>
+<g transform="translate(470 120)"><rect width="150" height="190" rx="12" fill="#fff"/><rect x="45" y="-10" width="60" height="22" rx="6" fill="#93C5FD"/>
+<path d="M28 60l12 12 22-24M28 110l12 12 22-24M28 160l12 12 22-24" fill="none" stroke="#22C55E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M80 66h44M80 116h44M80 166h34" stroke="#94A3B8" stroke-width="8" stroke-linecap="round"/></g>
+{chip(520, 340, 160, 70, .8)}''',
+ 'government': f'''
+<path d="M190 200L350 130L510 200Z" fill="#fff"/><rect x="200" y="200" width="300" height="20" fill="#fff"/>
+<g fill="#fff" fill-opacity=".85">{''.join(f'<rect x="{220+i*62}" y="232" width="34" height="120" rx="4"/>' for i in range(5))}</g>
+<rect x="180" y="352" width="340" height="28" rx="6" fill="#fff"/>
+<g transform="translate(600 170)"><circle cx="40" cy="40" r="40" fill="#22C55E"/><path d="M22 40l12 12 26-26" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></g>
+{chip(540, 310, 160, 80, .5)}''',
 }
 
 def main():

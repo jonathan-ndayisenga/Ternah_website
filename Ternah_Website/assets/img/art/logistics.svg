@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img"><defs>
+  <linearGradient id="bg-logistics" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0B1F4D"/><stop offset=".55" stop-color="#1D4ED8"/><stop offset="1" stop-color="#3B82F6"/>
+  </linearGradient>
+  <radialGradient id="glow-logistics" cx=".78" cy=".18" r=".55">
+    <stop offset="0" stop-color="#93C5FD" stop-opacity=".55"/><stop offset="1" stop-color="#93C5FD" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="sheen-logistics" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+  <pattern id="dots-logistics" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#fff" fill-opacity=".12"/></pattern>
+</defs>
+<rect width="800" height="500" fill="url(#bg-logistics)"/>
+<rect width="800" height="500" fill="url(#dots-logistics)"/>
+<rect width="800" height="500" fill="url(#glow-logistics)"/>
+<circle cx="80" cy="470" r="160" fill="#60A5FA" fill-opacity=".18"/>
+<rect x="120" y="70" width="560" height="360" rx="28" fill="#fff" fill-opacity=".10" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+<rect x="121" y="71" width="558" height="150" rx="27" fill="url(#sheen-logistics)"/>
+<path d="M170 210h230v150H170z" fill="#fff"/><path d="M400 250h80l50 55v55H400z" fill="#fff" fill-opacity=".85"/>
+<path d="M420 265h50l30 35h-80z" fill="#93C5FD"/>
+<circle cx="230" cy="368" r="30" fill="#1E3A8A" stroke="#fff" stroke-width="8"/><circle cx="470" cy="368" r="30" fill="#1E3A8A" stroke="#fff" stroke-width="8"/>
+<path d="M560 330c40-60 60-110 110-130" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 16"/>
+<g transform="translate(640 150)"><path d="M0 0c-26 0-44 20-44 44 0 32 44 76 44 76s44-44 44-76C44 20 26 0 0 0z" fill="#fff"/><circle cy="44" r="16" fill="#2563EB"/></g>
+<g><rect x="170" y="120" width="170" height="64" rx="16" fill="#fff" fill-opacity=".92"/><rect x="186" y="136" width="60" height="8" rx="4" fill="#94A3B8"/><rect x="186" y="156" width="138" height="10" rx="5" fill="#DBEAFE"/><rect x="186" y="156" width="90" height="10" rx="5" fill="#2563EB"/></g></svg>

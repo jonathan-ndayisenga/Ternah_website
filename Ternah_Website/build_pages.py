@@ -273,39 +273,39 @@ MYKASHOP_URL = None  # https://mykashop.online/ was not responding on 28 Oct 202
 
 PRODUCTS = [
  dict(key='ternah-health', name='Ternah Health', sector='Hospitals & clinics', link=HEALTH_URL,
-      who='For hospitals and clinics that want reception, doctor, lab, nursing, pharmacy, home care and finance on one patient record.',
+      brief='A hospital management system that puts every department on one patient record. Reception registers the patient, doctors work from live queues and order tests, the lab sends results straight back, and pharmacy, nursing, home care and finance work from the same file.',
       features=['Live queues for reception, doctor, nurse, lab and scans',
                 'Lab results that reach the doctor the moment they are ready',
                 'Subscribe only to the modules you run, set up the same day']),
  dict(key='pharmacy', name='Ternah Pharmacy', sector='Pharmacies', link=PHARMACY_URL,
-      who='For pharmacies with one branch or many: dispensing, payments, stock and accounts in one place, even when the internet drops.',
+      brief='Software that runs a pharmacy from prescription to receipt. It dispenses, takes cash, mobile money, card, insurance or credit, tracks every batch with low-stock and expiry alerts, and keeps the books for one branch or many, even when the internet drops.',
       features=['Prescription to receipt: cash, mobile money, card, insurance or credit',
                 'Batch stock with low-stock and expiry alerts',
                 'Books that keep themselves, with branch-by-branch comparison']),
  dict(key='ternah-factories', name='Ternah for Factories', sector='Manufacturing',
-      who='For manufacturers who need production, branch stock and sales in one place.',
+      brief='Software that runs a factory and its branches together. It plans production batches from formulas, flags missing materials before a batch starts, moves stock between branches with approvals, and handles the cashier, debtors and staff.',
       features=['Production batches and formulas, with material shortfalls flagged',
                 'Stock movements between branches, with approvals','Cashier, debtors and staff']),
  dict(key='mykashop', name='Mykashop', sector='Shops & retail', link=MYKASHOP_URL,
-      who='For shops, supermarkets, hardware stores and restaurants that need real control of stock and sales.',
+      brief='A point-of-sale and stock system for shops, supermarkets, hardware stores and restaurants. It records every sale, keeps stock counts right, tracks debtors and expenses, and shows the owner how the business did each day.',
       features=['Point of sale and stock','Debtors and expenses','Daily business performance']),
  dict(key='pearl-educate', name='Pearl Educate', sector='Education · launching', link=PEARL_URL,
-      who='Ten-minute courses for children, made by teachers we have checked. Parents pay by mobile money. The first courses are being reviewed now.',
+      brief='A learning app for children. Teachers we have checked make ten-minute lessons with practice quizzes, questions come back over the following weeks so children remember, and parents pay by mobile money. The first courses are being reviewed now.',
       features=['Short lessons with practice quizzes, hints and no scores',
                 'Questions come back after 1, 3, 7, 14 and 30 days',
                 'Certificates anyone can check online']),
  dict(key='sacco', name='SACCO platform', sector='SACCOs',
-      who='For SACCOs that want members, savings and loans in one system instead of ledgers.',
+      brief='A core system for SACCOs that replaces the ledgers. It opens member accounts and fixed deposits, handles teller deposits and withdrawals, and takes each loan from assessment to disbursement with printable slips.',
       features=['Member onboarding and accounts, including fixed deposits',
                 'Teller deposits and withdrawals','Loan assessment, disbursement and printable slips']),
  dict(key='property', name='Property management', sector='Real estate',
-      who='For property businesses managing tenants, suppliers and their books together.',
+      brief='Accounting software for property businesses. It keeps double-entry books with automatic accruals, tracks tenants and supplier ledgers, and produces VAT reports.',
       features=['Double-entry accounting with automated accruals','Supplier ledgers','VAT reporting']),
  dict(key='hospitality', name='Hospitality suite', sector='Hospitality',
-      who='For bars, restaurants, lodges and gyms run from one account.',
+      brief='One system for bars, restaurants, lodges and gyms. Each outlet gets its own module, from orders and rooms to gym queues, all under one licence and one account.',
       features=['Bar, restaurant and lodge modules','Gym and service queues','One licence across every module']),
  dict(key='queueflow', name='QueueFlow', sector='Service businesses',
-      who='For service businesses that move customers and jobs through stages.',
+      brief='A job and queue board for service businesses. Customers and jobs move through stages on Kanban-style boards across several branches, with live updates for every operator.',
       features=['Operator boards in Kanban style','Queues for several branches','Live updates for every operator']),
 ]
 
@@ -342,6 +342,11 @@ INDUSTRIES = [
  ('globe','NGOs','Field data collection, monitoring and donor reporting.'),
  ('gov','Government','Digital public services and monitoring platforms.'),
 ]
+# Illustration (assets/img/art/<name>.svg) and product for each industry, keyed by its icon name
+IND_ART = {'health':'ternah-health', 'factory':'ternah-factories', 'cart':'mykashop', 'bank':'sacco', 'pill':'pharmacy',
+           'bed':'hospitality', 'home':'property', 'edu':'pearl-educate', 'truck':'logistics', 'globe':'ngos', 'gov':'government'}
+IND_PRODUCT = {'health':'ternah-health', 'factory':'ternah-factories', 'cart':'mykashop', 'bank':'sacco', 'pill':'pharmacy',
+               'bed':'hospitality', 'home':'property', 'edu':'pearl-educate'}
 
 PROCESS_STEPS = [
  ('Discover','We learn how your business actually runs before proposing anything.'),
@@ -385,7 +390,7 @@ def product_card(i, p, full=False):
       <div class="body">
         <div class="kicker">{escape(p["sector"])}</div>
         <h3>{escape(p["name"])}</h3>
-        <p class="for">{escape(p["who"])}</p>
+        <p class="for">{escape(p["brief"])}</p>
         {feats}
         <div class="act"{"" if full else " style=\"margin-top:24px\""}>{act}</div>
         {f'<a class="link-arrow case-link" href="#case-{p["key"]}">Read the case study {ARROW}</a>' if full and p["key"] in CASES else ''}
@@ -401,7 +406,7 @@ def product_card_text(i, p):
       <img class="card-art" src="assets/img/art/{p["key"]}.svg" alt="" width="800" height="500" loading="lazy">
       <div class="kicker">{escape(p["sector"])}</div>
       <h3>{escape(p["name"])}</h3>
-      <p>{escape(p["who"])}</p>
+      <p>{escape(p["brief"])}</p>
       <ul>{"".join(f"<li>{escape(f)}</li>" for f in p["features"])}</ul>
       <div style="margin-top:20px">{act}</div>
     </article>'''
@@ -672,6 +677,19 @@ solutions_body = f'''<section class="phead wrap">
 </section>
 {cta_band("Not sure where to start?", "Tell us the problem. We'll help you find the simplest way to solve it.", primary=('Book a consultation','contact.html'))}'''
 
+def industry_card(i, ic, t, d):
+    key = IND_PRODUCT.get(ic)
+    if key:
+        p = next(x for x in PRODUCTS if x['key'] == key)
+        act = f'<a class="link-arrow" href="products.html#{key}">See {escape(p["name"])} {ARROW}</a>'
+    else:
+        act = f'<a class="link-arrow" href="contact.html">Talk to us about {escape(t.lower() if t != "NGOs" else t)} {ARROW}</a>'
+    return f'''    <article class="card prod-text reveal" data-d="{i%3+1}">
+      <img class="card-art" src="assets/img/art/{IND_ART[ic]}.svg" alt="" width="800" height="500" loading="lazy">
+      <h3>{t}</h3><p>{d}</p>
+      <div style="margin-top:20px">{act}</div>
+    </article>'''
+
 industries_body = f'''<section class="phead wrap">
   <span class="eyebrow">Industries</span>
   <h1>Built for the way your sector works.</h1>
@@ -679,7 +697,7 @@ industries_body = f'''<section class="phead wrap">
 </section>
 <section class="sec wrap">
   <div class="ind-grid">
-{chr(10).join(card(i,ic,t,d) for i,(ic,t,d) in enumerate(INDUSTRIES))}
+{chr(10).join(industry_card(i,ic,t,d) for i,(ic,t,d) in enumerate(INDUSTRIES))}
   </div>
 </section>
 {cta_band("Don't see your sector?", "If your organisation runs on processes, we can build software for it.", primary=('Start a conversation','contact.html'))}'''
