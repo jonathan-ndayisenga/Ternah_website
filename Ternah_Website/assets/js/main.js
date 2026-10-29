@@ -44,6 +44,25 @@ if(burger && navlinks){
   els.forEach(el=>io.observe(el));
 })();
 
+/* ---- facts strip: numbers count up the first time they come into view ---- */
+(function(){
+  const nums = [...document.querySelectorAll('.facts strong')].filter(el => /^\d+$/.test(el.textContent.trim()));
+  if(!nums.length || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const run = el => {
+    const end = +el.textContent, start = performance.now(), dur = 1100;
+    const step = now => {
+      const k = Math.min(1, (now - start) / dur);
+      el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3)));
+      if(k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if(en.isIntersecting){ run(en.target); io.unobserve(en.target); }
+  }), {threshold:.6});
+  nums.forEach(el => io.observe(el));
+})();
+
 /* ---- contact form: inline validation, honeypot, endpoint or email fallback ---- */
 (function(){
   const form = document.getElementById('contactForm');
@@ -172,9 +191,15 @@ if(burger && navlinks){
   }
   function schedule(){
     clearTimeout(timer);
-    if(auto && !paused) timer = setTimeout(() => select(current + 1), 9000);  // slides carry a brief, so give time to read it
+    const running = auto && !paused;
+    root.classList.toggle('auto', running);
+    if(running){
+      // restart the progress line under the active tab so it matches the timer
+      const t = tabs[current]; t.classList.remove('tick'); void t.offsetWidth; t.classList.add('tick');
+      timer = setTimeout(() => select(current + 1), 9000);  // slides carry a brief, so give time to read it
+    }
   }
-  function stop(){ auto = false; clearTimeout(timer); }
+  function stop(){ auto = false; clearTimeout(timer); root.classList.remove('auto'); }
 
   tabs.forEach((t, i) => t.addEventListener('click', () => { stop(); select(i); }));
   root.querySelector('[role=tablist]').addEventListener('keydown', e => {

@@ -337,7 +337,7 @@ SOLUTIONS = [
 ]
 SOL_FILTERS = ['software','erp','automation','data','cloud','support']
 
-# One list; the home-page chips and the Industries page both read from it.
+# One list; the Industries page and the home-page tile count both read from it.
 INDUSTRIES = [
  ('health','Healthcare','Hospitals and clinics: patient queues, labs, pharmacy and billing.'),
  ('factory','Manufacturing','Production batches, formulas, branch stock and distribution.'),
@@ -427,7 +427,7 @@ def process_html():
         for i,(t,d) in enumerate(PROCESS_STEPS)) + '\n  </ol>'
 
 def cta_band(h2, p, primary=('Start a project','contact.html')):
-    return f'''<section class="cta-band">
+    return f'''<section class="cta-band waves">
   <div class="wrap">
     <h2>{h2}</h2><p>{p}</p>
     <div class="row-cta">
@@ -546,7 +546,7 @@ def insight_teaser(i, ins):
 
 def cta_form_band(h2, p):
     """Closing band with the enquiry form inside it, so visitors don't need another page to get in touch."""
-    return f'''<section class="cta-band cta-form" id="talk">
+    return f'''<section class="cta-band cta-form waves" id="talk">
   <div class="wrap">
     <div class="cta-copy">
       <h2>{h2}</h2><p>{p}</p>
@@ -579,6 +579,16 @@ def health_case():
     </div>
   </div>
 </section>'''
+
+def explore_tiles():
+    """Three big tiles over drifting blue light waves, leading to the rest of the site."""
+    tiles = [('about.html', 'About us', 'Two directors, and the people who use our software helping to shape it.'),
+             ('industries.html', 'Industries', f'{len(INDUSTRIES)} sectors, from hospitals and factories to SACCOs and schools.'),
+             ('products.html', 'Our products', f'{len(PRODUCTS)} products, each built for one kind of business.')]
+    return '<section class="explore" aria-label="Explore Ternah">' + "".join(f'''
+  <a class="xtile waves" href="{href}" style="--drift-from:{-i * 530}px">
+    <div class="xtile-text"><h2>{t}</h2><p>{d}</p><span class="xtile-btn">Find out more {ARROW}</span></div>
+  </a>''' for i, (href, t, d) in enumerate(tiles)) + '\n</section>'
 
 # ================= PAGE BODIES =================
 home_body = f'''<section class="hero wrap">
@@ -617,10 +627,7 @@ home_body = f'''<section class="hero wrap">
   {process_html()}
 </section>
 
-<section class="sec wrap">
-  {sec_head('Industries', 'Who we build for.')}
-  <div class="chips">{"".join(f'<a class="chip" href="industries.html">{t}</a>' for _,t,_ in INDUSTRIES)}</div>
-</section>
+{explore_tiles()}
 
 <section class="sec wrap">
   {sec_head('Insights', 'Practical reading before you build.', 'Short guides from the Ternah team on choosing, building and running business software.')}

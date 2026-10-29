@@ -172,8 +172,32 @@ ARTICLES = {
 <g fill="#fff" fill-opacity=".6"><circle cx="960" cy="160" r="24"/><circle cx="990" cy="260" r="24"/><circle cx="1000" cy="380" r="24"/><circle cx="960" cy="490" r="24"/></g>''',
 }
 
+def waves():
+    """A bundle of flowing light lines on a transparent background, 1600 x 600.
+    Every line repeats exactly every 1600 units, so the image tiles left to right without a seam
+    and can drift sideways forever (see .waves in styles.css)."""
+    import math
+    W, H, N = 1600, 600, 34
+    paths = []
+    for i in range(N):
+        t = i / (N - 1)
+        base = 150 + t * 300
+        a1, a2 = 95 - 30 * t, 26 + 20 * t
+        ph1, ph2 = t * 1.1, 1.7 - t * 2.4
+        pts = []
+        for x in range(0, W + 1, 16):
+            y = base + a1 * math.sin(2 * math.pi * x / W + ph1) + a2 * math.sin(2 * math.pi * 2 * x / W + ph2)
+            pts.append(f'{x} {y:.1f}')
+        r, g, b = (int(29 + (34 - 29) * t), int(78 + (211 - 78) * t), int(216 + (238 - 216) * t))  # #1D4ED8 -> #22D3EE
+        bright = i % 7 == 3
+        paths.append(f'<path d="M{" L".join(pts)}" stroke="rgb({r},{g},{b})" stroke-opacity="{.95 if bright else .35 + .4 * math.sin(math.pi * t):.2f}" '
+                     f'stroke-width="{2.6 if bright else 1.4}"/>')
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" preserveAspectRatio="none">'
+            f'<g fill="none" stroke-linecap="round">{"".join(paths)}</g></svg>\n')
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / 'waves.svg').write_text(waves(), encoding='utf-8')
     (OUT / 'hero-ternah-health.svg').write_text(hero_health(), encoding='utf-8')
     (OUT / 'hero-ternah-factories.svg').write_text(hero_factories(), encoding='utf-8')
     for slug, motif in ARTICLES.items():

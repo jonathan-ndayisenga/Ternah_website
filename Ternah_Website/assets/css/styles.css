@@ -630,3 +630,45 @@ header{background:rgba(255,255,255,.88)}
 .source-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:15px;font-weight:500;color:var(--blue)}
 .source-link:hover{text-decoration:underline;text-underline-offset:3px}
 .source-link svg{width:14px;height:14px;stroke:currentColor}
+
+/* =========================================================
+   Motion: drifting light waves, explore tiles, a livelier hero
+   Every animation here is switched off under prefers-reduced-motion (bottom of block).
+   ========================================================= */
+.waves{position:relative;overflow:hidden;isolation:isolate}
+.waves::before{content:"";position:absolute;inset:-8% 0;z-index:-1;pointer-events:none;
+  background:url(../img/art/waves.svg) repeat-x;background-size:1600px 100%;background-position:var(--drift-from,0px) 50%;
+  opacity:.32;animation:drift 70s linear infinite}
+@keyframes drift{from{background-position-x:var(--drift-from,0px)}to{background-position-x:calc(var(--drift-from,0px) - 1600px)}}
+
+.explore{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:var(--sec-gap)}
+.xtile{min-height:520px;display:flex;align-items:flex-end;padding:44px 40px;background:#06122E;color:#fff}
+.xtile.waves::before{opacity:.95;background-size:1600px 115%;animation-duration:45s;transition:filter .4s}
+.xtile::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(6,18,46,0) 25%,rgba(6,18,46,.88) 78%)}
+.xtile:hover.waves::before{filter:brightness(1.35) saturate(1.2)}
+.xtile h2{color:#fff;font-size:40px;letter-spacing:-.02em;line-height:1.1}
+.xtile p{color:#DBEAFE;font-size:17px;margin-top:12px;max-width:380px}
+.xtile-btn{display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:12px 20px;border:1px solid rgba(255,255,255,.7);border-radius:var(--r-btn);font-weight:500;transition:background .25s,color .25s}
+.xtile-btn svg{width:16px;height:16px;stroke:currentColor}
+.xtile:hover .xtile-btn{background:#fff;color:var(--nav)}
+.xtile:focus-visible{outline-offset:-4px;outline-color:#fff}
+
+/* hero: slow zoom on the scene, the screen floats, the active tab shows time to the next slide */
+.scene-img{animation:kenburns 20s ease-in-out infinite alternate}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.07)}}
+.scene-screen{animation:floaty 6s ease-in-out infinite}
+@keyframes floaty{50%{transform:translateY(-8px)}}
+.showcase [role=tab]{position:relative;overflow:hidden}
+.showcase.auto [role=tab][aria-selected=true].tick::after{content:"";position:absolute;left:18px;right:18px;bottom:5px;height:2px;border-radius:2px;
+  background:rgba(255,255,255,.9);transform-origin:left;animation:tabfill 9s linear forwards}
+@keyframes tabfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+@media (max-width:900px){
+  .explore{grid-template-columns:1fr}
+  .xtile{min-height:340px;padding:32px 24px}
+  .xtile h2{font-size:32px}
+}
+@media (prefers-reduced-motion: reduce){
+  .waves::before,.scene-img,.scene-screen{animation:none}
+}
+.xtile p{min-height:3.2em}
