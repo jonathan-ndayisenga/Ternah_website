@@ -303,10 +303,16 @@ PRODUCTS = [
       features=['Built on CMU learning science principles for memory formation',
                 'Recall practice with hints and no scores, spaced over 30 days',
                 'Lessons from teachers we have checked; parents pay by mobile money']),
- dict(key='sacco', name='SACCO platform', sector='SACCOs',
-      brief='A core system for SACCOs that replaces the ledgers. It opens member accounts and fixed deposits, handles teller deposits and withdrawals, and takes each loan from assessment to disbursement with printable slips.',
-      features=['Member onboarding and accounts, including fixed deposits',
-                'Teller deposits and withdrawals','Loan assessment, disbursement and printable slips']),
+ dict(key='sacco', name='SACCO platform', sector='SACCOs and microfinance',
+      brief='Core banking for SACCOs and microfinance institutions. It runs member accounts, savings, fixed deposits, '
+            'teller deposits and withdrawals, and every loan from application to repayment. CRB checks are built into '
+            'loan assessment, so officers see a borrower’s credit history before they approve. Members get an SMS for '
+            'every deposit, withdrawal and repayment due, and can check balances and statements by USSD from any phone, '
+            'with no smartphone or data needed.',
+      features=['Core banking: members, savings, fixed deposits and tellers',
+                'CRB checks built into loan assessment and approval',
+                'SMS alerts for every transaction and repayment due',
+                'USSD code for balances and statements on any phone']),
  dict(key='property', name='Property management', sector='Real estate',
       brief='Accounting software for property businesses. It keeps double-entry books with automatic accruals, tracks tenants and supplier ledgers, and produces VAT reports.',
       features=['Double-entry accounting with automated accruals','Supplier ledgers','VAT reporting']),
@@ -342,7 +348,7 @@ INDUSTRIES = [
  ('health','Healthcare','Hospitals and clinics: patient queues, labs, pharmacy and billing.'),
  ('factory','Manufacturing','Production batches, formulas, branch stock and distribution.'),
  ('cart','Retail','Shops and supermarkets: point of sale, stock and debtors.'),
- ('bank','SACCOs and finance','Members, savings, loans and teller operations.'),
+ ('bank','SACCOs and microfinance','Core banking with CRB checks, SMS alerts and USSD for members on any phone.'),
  ('pill','Pharmacy','Dispensing, prescriptions and drug stock with expiry dates.'),
  ('bed','Hospitality','Bars, restaurants, lodges and gyms.'),
  ('home','Real estate','Property accounts, tenants, suppliers and VAT.'),
