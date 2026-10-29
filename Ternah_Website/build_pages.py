@@ -303,7 +303,7 @@ PRODUCTS = [
       features=['Built on CMU learning science principles for memory formation',
                 'Recall practice with hints and no scores, spaced over 30 days',
                 'Lessons from teachers we have checked; parents pay by mobile money']),
- dict(key='sacco', name='SACCO platform', sector='SACCOs and microfinance',
+ dict(key='sacco', name='Ternah Core Banking', sector='SACCOs and microfinance',
       brief='Core banking for SACCOs and microfinance institutions. It runs member accounts, savings, fixed deposits, '
             'teller deposits and withdrawals, and every loan from application to repayment. CRB checks are built into '
             'loan assessment, so officers see a borrower’s credit history before they approve. Members get an SMS for '
@@ -1485,7 +1485,7 @@ PAGES = [
  ('about', f'About | {COMPANY}', 'How Ternah builds software with the people who use it, from our office in Kampala, Uganda.', about_body),
  ('solutions', f'Solutions | {COMPANY}', 'Custom software and websites, ERP and business systems, automation, data and analytics, cloud services, and support.', solutions_body),
  ('industries', f'Industries | {COMPANY}', 'Software for healthcare, manufacturing, retail, SACCOs, pharmacy, hospitality, real estate and more.', industries_body),
- ('products', f'Products | {COMPANY}', 'Ternah Health, Ternah for Factories, Mykashop, a SACCO platform and more: products built for one kind of business each.', products_body),
+ ('products', f'Products | {COMPANY}', 'Ternah Health, Ternah for Factories, Mykashop, Ternah Core Banking and more: products built for one kind of business each.', products_body),
  ('insights', f'Insights | {COMPANY}', 'Practical guides on software, data and digital transformation from the Ternah team.', insights_body),
  ('contact', f'Contact | {COMPANY}', f'Start a project with Ternah. Email {EMAIL}, WhatsApp or call {PHONE}. Office in {OFFICE}.', contact_body),
 ]
