@@ -672,3 +672,15 @@ header{background:rgba(255,255,255,.88)}
   .waves::before,.scene-img,.scene-screen{animation:none}
 }
 .xtile p{min-height:3.2em}
+
+/* hero: the same light waves, turned right down, in a ribbon that runs behind the buttons and into the showcase.
+   Replaces the old blue glow. Full width of the window; faded top and bottom so the headline stays on clean white. */
+.hero::before{left:50%;right:auto;width:100vw;margin-left:-50vw;top:150px;height:640px;transform:none;
+  background:url(../img/art/waves.svg) repeat-x;background-size:1600px 100%;
+  opacity:.2;animation:drift 120s linear infinite;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 30%,#000 62%,transparent 100%);
+          mask-image:linear-gradient(180deg,transparent 0%,#000 30%,#000 62%,transparent 100%)}
+@media (max-width:768px){
+  .hero::before{top:400px;height:440px;opacity:.16}
+}
+@media (prefers-reduced-motion: reduce){ .hero::before{animation:none} }
