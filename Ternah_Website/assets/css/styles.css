@@ -684,3 +684,14 @@ header{background:rgba(255,255,255,.88)}
   .hero::before{top:400px;height:440px;opacity:.16}
 }
 @media (prefers-reduced-motion: reduce){ .hero::before{animation:none} }
+
+/* hero colour: a pale blue wash (from under the header down to white by the facts), a blue second line,
+   stronger waves on the wash and a blue glow round the showcase */
+.hero::after{content:"";position:absolute;z-index:-2;left:50%;width:100vw;margin-left:-50vw;top:-80px;bottom:0;pointer-events:none;
+  background:linear-gradient(180deg,#E8F1FF 0%,#EFF5FF 35%,#F7FAFF 70%,#fff 92%)}
+body[data-page=index] header:not(.scrolled){background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+.hero h1 .l2{background:linear-gradient(180deg,#1E40AF 0%,#1D4ED8 45%,#2563EB 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero::before{opacity:.32}
+.hero .scene{box-shadow:0 0 0 1px rgba(29,78,216,.10),0 30px 80px -12px rgba(29,78,216,.38),0 2px 6px rgba(21,32,46,.06)}
+.hero .btn-ghost{background:#fff}
+@media (max-width:768px){ .hero::before{opacity:.24} .hero::after{top:-72px} }
