@@ -820,4 +820,4 @@ body[data-page=index] header:not(.scrolled){background:transparent;-webkit-backd
    Keep both pure grey-black: a solid header over the home hero until you scroll, and a dark page canvas
    so pulling the page down past the top shows dark, not white. */
 html{background:#161617}
-body[data-page=index] header:not(.scrolled){background:#161617}
+header:not(.scrolled){background:#161617}
