@@ -739,3 +739,38 @@ body[data-page=index] header:not(.scrolled){background:transparent;-webkit-backd
 @media (max-width:1024px){ .case-feature.flip > img{order:0} }
 .case-band .band-note a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 .cases .case-yellow::after{opacity:1}
+
+/* =========================================================
+   Dark header, after apple.com's global nav: #161617 at 80% with saturate(180%) blur(20px),
+   links at 80% white. On the home page the same colour fades down from the header into the hero.
+   ========================================================= */
+:root{--nav-dark:rgba(22,22,23,.8)}
+header{background:var(--nav-dark);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px)}
+header.scrolled{border-color:rgba(255,255,255,.08)}
+.brand .logo,.brand .wm{color:#fff}
+.navlinks a{color:rgba(255,255,255,.8)}
+.navlinks a:hover{color:#fff;background:rgba(255,255,255,.08)}
+.navlinks a.active{color:#fff;background:rgba(255,255,255,.12);box-shadow:none}
+.nav > .btn-primary{background:#fff;color:#161617;border-color:#fff}
+.nav > .btn-primary:hover{background:#E8E8ED;border-color:#E8E8ED}
+.burger{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
+.burger span{background:#fff}
+@media (max-width:1024px){
+  .navlinks.open{background:#161617;border-color:rgba(255,255,255,.08)}
+  .navlinks.open .nav-cta-m{background:#fff;color:#161617;border-color:#fff}
+}
+:focus-visible{outline-color:#3B82F6}
+
+/* home: the header is see-through until you scroll, and the hero's wash carries the header colour
+   (the top 80px) then fades it out, eased, into the pale blue */
+body[data-page=index] header:not(.scrolled){background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+.hero::after{background:
+  linear-gradient(180deg,var(--nav-dark) 0,var(--nav-dark) 80px,rgba(22,22,23,.6) 112px,rgba(22,22,23,.36) 150px,
+    rgba(22,22,23,.18) 195px,rgba(22,22,23,.07) 240px,rgba(22,22,23,0) 290px),
+  linear-gradient(180deg,#E8F1FF 0%,#EFF5FF 35%,#F7FAFF 70%,#fff 92%)}
+@media (max-width:768px){
+  .hero::after{background:
+    linear-gradient(180deg,var(--nav-dark) 0,var(--nav-dark) 72px,rgba(22,22,23,.55) 98px,rgba(22,22,23,.28) 130px,
+      rgba(22,22,23,.1) 170px,rgba(22,22,23,0) 215px),
+    linear-gradient(180deg,#E8F1FF 0%,#EFF5FF 35%,#F7FAFF 70%,#fff 92%)}
+}
