@@ -815,3 +815,9 @@ body[data-page=index] header:not(.scrolled){background:transparent;-webkit-backd
 .hero .facts strong{background:linear-gradient(120deg,#F5F5F7,#93C5FD);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero .facts span{color:#A1A1A6}
 .hero :focus-visible{outline-color:#93C5FD}
+
+/* Phones: Safari colours the status bar (round the Dynamic Island) from the page's top edge and background.
+   Keep both pure grey-black: a solid header over the home hero until you scroll, and a dark page canvas
+   so pulling the page down past the top shows dark, not white. */
+html{background:#161617}
+body[data-page=index] header:not(.scrolled){background:#161617}
