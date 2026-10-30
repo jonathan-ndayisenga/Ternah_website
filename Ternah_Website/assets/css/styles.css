@@ -708,3 +708,34 @@ body[data-page=index] header:not(.scrolled){background:transparent;-webkit-backd
   .showcase .tabs{display:grid;grid-template-columns:1fr 1fr;border-radius:20px}
   .showcase [role=tab]{border-radius:16px}
 }
+
+/* case studies: one band per product, each in its product's colours. Blue (Ternah Health) is the .band-blue default. */
+.cases .case-band{margin-top:0}
+.cases{margin-top:var(--sec-gap)}
+.case-feature.flip > img{order:2}
+.case-band img{object-position:22% 50%}
+
+/* Ternah for Factories: construction yellow, with a hazard stripe along the top */
+.case-yellow{background:linear-gradient(135deg,#FDE047 0%,#FACC15 45%,#F59E0B 100%);color:#1C1917}
+.case-yellow::before{background:radial-gradient(600px 360px at 85% 0%,rgba(255,255,255,.45),transparent 70%)}
+.case-yellow::after{height:14px;background:repeating-linear-gradient(-45deg,#1C1917 0 18px,#FACC15 18px 36px)}
+.case-yellow .eyebrow,.case-yellow .h2,.case-yellow .case-feature .h2,.case-yellow .case-feature .eyebrow,.case-yellow .case-feature dd,.case-yellow .band-note{color:#1C1917}
+.case-yellow .case-feature dt{color:#78350F}
+.case-yellow .case-feature img{box-shadow:0 24px 50px rgba(120,53,15,.35)}
+
+/* Ternah Pharmacy: the wine red of the pharmacy app */
+.case-wine{background:linear-gradient(135deg,#2A0E19 0%,#5B1F33 50%,#8B2E4C 100%)}
+.case-wine::before{background:radial-gradient(600px 360px at 85% 0%,rgba(251,207,232,.25),transparent 70%),radial-gradient(500px 300px at 0% 100%,rgba(244,114,182,.15),transparent 70%)}
+.case-wine .case-feature dt{color:#FBCFE8}
+.case-wine .case-feature img{object-position:0 0;box-shadow:0 24px 50px rgba(42,14,25,.5)}
+
+/* Pearl Educate: the ocean of Pearl Reef, with a pearl-yellow accent */
+.case-ocean{background:linear-gradient(135deg,#083344 0%,#0E7490 50%,#06B6D4 100%)}
+.case-ocean::before{background:radial-gradient(600px 360px at 85% 0%,rgba(165,243,252,.35),transparent 70%),radial-gradient(500px 300px at 0% 100%,rgba(250,204,21,.18),transparent 70%)}
+.case-ocean .case-feature dt{color:#FDE68A}
+.case-ocean .case-feature img{box-shadow:0 24px 50px rgba(8,51,68,.45)}
+
+.cases .case-band + .case-band::after{opacity:.6}
+@media (max-width:1024px){ .case-feature.flip > img{order:0} }
+.case-band .band-note a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.cases .case-yellow::after{opacity:1}

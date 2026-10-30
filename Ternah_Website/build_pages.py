@@ -342,13 +342,34 @@ PRODUCTS = [
 # The three products shown on the home page, in order
 HOME_PRODUCTS = [next(p for p in PRODUCTS if p['key'] == k) for k in ('ternah-health', 'pearl-educate', 'ternah-factories')]
 
-# Brief case studies (only Ternah Health for now). They describe the type of business, not a named
-# client; swap in a client's name only once they have agreed to it.
+# Brief case studies, one per product, shown on the Products page in this order. They describe the type of
+# business, not a named client; swap in a client's name only once they have agreed to it.
+# 'theme' picks the band colours in styles.css (.case-<theme>); 'img' is the picture beside the text.
 CASES = {
- 'ternah-health': dict(setting='A private hospital with outpatients, a lab and a pharmacy',
+ 'ternah-health': dict(theme='blue', who='hospital',
+    img=('assets/img/hero/ternah-health.webp', 'assets/img/art/hero-ternah-health.svg'),
+    setting='A private hospital with outpatients, a lab and a pharmacy',
     problem='Patients queued at every desk, and lab results travelled to doctors on paper.',
     built='Reception, doctor, lab and pharmacy on one patient record, with a live queue on each screen.',
     result='Results reach the doctor the moment the lab saves them, and reception can see who is waiting where.'),
+ 'ternah-factories': dict(theme='yellow', who='manufacturer',
+    img=('assets/img/hero/ternah-factories.webp', 'assets/img/art/hero-ternah-factories.svg'),
+    setting='A manufacturer with one factory and several branch shops',
+    problem='Batches stopped halfway when a material ran out, and stock sent to the branches was tracked in notebooks.',
+    built='Production batches from saved formulas, a check for missing materials before each batch starts, and stock transfers to branches that need approval.',
+    result='Batches start only when the materials are there, and the owner sees production, branch stock and sales in one place.'),
+ 'pharmacy': dict(theme='wine', who='pharmacy',
+    img=('assets/img/screens/pharmacy.webp', 'assets/img/screens/pharmacy.webp'),
+    setting='A pharmacy with more than one branch',
+    problem='Expired stock turned up on the shelves, and the books were pieced together from receipts at the end of the month.',
+    built='Dispensing and the till in one place, every batch tracked with low-stock and expiry alerts, and sales that keep recording when the internet drops.',
+    result='Expiring batches show up before they expire, and each branch’s sales and stock can be compared on any day.'),
+ 'pearl-educate': dict(theme='ocean', who=None,
+    img=('assets/img/hero/pearl-educate.webp', 'assets/img/art/hero-pearl-educate.svg'),
+    setting='Parents helping primary school children revise at home',
+    problem='Children crammed before tests and forgot most of it a few weeks later.',
+    built='Ten-minute lessons from teachers we have checked, recall practice with hints and no scores, and questions that come back after 1, 3, 7, 14 and 30 days.',
+    result='Children keep meeting what they learned until it sticks, and parents pay for courses by mobile money.'),
 }
 
 SOLUTIONS = [
@@ -598,13 +619,12 @@ def cta_form_band(h2, p):
   </div>
 </section>'''
 
-def health_case():
-    """One case study, shown under Ternah Health on the Products page."""
-    p = next(x for x in PRODUCTS if x['key'] == 'ternah-health'); c = CASES['ternah-health']
-    img = art('assets/img/hero/ternah-health.webp', 'assets/img/art/hero-ternah-health.svg')
-    return f'''<section class="band-blue" id="case-ternah-health">
-  <div class="wrap case-feature">
-    <img src="{img}" alt="" width="1600" height="900" loading="lazy">
+def case_study(key, flip=False):
+    """One case study band on the Products page, in its product's colours."""
+    p = next(x for x in PRODUCTS if x['key'] == key); c = CASES[key]
+    return f'''<section class="band-blue case-band case-{c["theme"]}" id="case-{key}">
+  <div class="wrap case-feature{" flip" if flip else ""}">
+    <img src="{art(*c["img"])}" alt="" width="1600" height="900" loading="lazy">
     <div>
       <span class="eyebrow">Case study · {escape(p["name"])}</span>
       <h2 class="h2">{escape(c["setting"])}</h2>
@@ -613,10 +633,15 @@ def health_case():
         <dt>What we set up</dt><dd>{escape(c["built"])}</dd>
         <dt>What changed</dt><dd>{escape(c["result"])}</dd>
       </dl>
-      <p class="band-note">We describe the type of hospital rather than naming it.</p>
+      <p class="band-note">{f"We describe the type of {c['who']} rather than naming it." if c["who"] else
+        f'Pearl Educate is live. <a href="{p["link"]}" target="_blank" rel="noopener noreferrer">Try a free lesson at pearl-educate.com</a>.'}</p>
     </div>
   </div>
 </section>'''
+
+def case_studies():
+    return '<div class="cases" aria-label="Case studies">' + "".join(
+        case_study(k, flip=i % 2 == 1) for i, k in enumerate(CASES)) + '</div>'
 
 def explore_tiles():
     """Three big tiles over drifting blue light waves, leading to the rest of the site."""
@@ -775,7 +800,7 @@ products_body = f'''<section class="phead wrap">
 {chr(10).join(product_card(i,p,full=True) for i,p in enumerate(x for x in PRODUCTS if has_visual(x)))}
   </div>
 </section>
-{health_case()}
+{case_studies()}
 <section class="sec wrap">
   {sec_head('More from Ternah', 'More systems we have built.')}
   <div class="grid g3">

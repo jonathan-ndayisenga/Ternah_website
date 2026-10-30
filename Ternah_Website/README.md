@@ -47,9 +47,10 @@ python -m http.server 8000
 Build command `python build_pages.py`, publish directory `./`.
 
 ## Case studies
-Only Ternah Health has a case study for now (`CASES` in `build_pages.py`), shown under the
-product grid on the Products page. It describes the type of hospital, not a named client.
-Put a client's name in `setting` only once they have agreed.
+Ternah Health, Ternah for Factories, Ternah Pharmacy and Pearl Educate each have a case study
+(`CASES` in `build_pages.py`), shown as coloured bands under the product grid on the Products page.
+Each band takes its product's colours from `theme` (`.case-blue`/`yellow`/`wine`/`ocean` in styles.css).
+They describe the type of business, not a named client. Put a client's name in `setting` only once they have agreed.
 
 ## Articles
 Each Insights article is its own page at `insights/<slug>.html`, built by `article_body()` in
