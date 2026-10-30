@@ -34,6 +34,8 @@ def person(x, y, s=1.0, skin='#7A4B2A', hair='#1C1917', hair_style='short', top=
         g += [f'<path d="M-70 -400H70L92 -232H-92Z" fill="{pants}"/>',
               f'<path d="M-62 -400L-50 -528M62 -400L50 -528" stroke="{pants}" stroke-width="18" stroke-linecap="round"/>']
         sleeve = inner
+    elif top == 'plain':
+        sleeve = inner
     else:  # scrubs
         g += ['<path d="M-22 -530L0 -478L22 -530" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="5"/>']
         sleeve = inner
@@ -53,6 +55,14 @@ def person(x, y, s=1.0, skin='#7A4B2A', hair='#1C1917', hair_style='short', top=
               '<rect x="22" y="-428" width="36" height="16" rx="4" fill="#64748B"/>',
               '<path d="M12 -386h56M12 -366h44M12 -346h56M12 -326h36" stroke="#94A3B8" stroke-width="6" stroke-linecap="round"/>',
               f'<circle cx="58" cy="-330" r="17" fill="{skin}"/>']
+    elif holds == 'phone':
+        g += [f'<path d="M-82 -482L-100 -262" {sk}/>', f'<circle cx="-100" cy="-250" r="18" fill="{skin}"/>',
+              f'<path d="M82 -482L104 -372L48 -380" {sk}/>',
+              '<rect x="4" y="-452" width="56" height="100" rx="10" fill="#1E293B"/>',
+              '<rect x="11" y="-442" width="42" height="40" rx="3" fill="#BBF7D0"/>',
+              '<path d="M16 -432h28M16 -422h20M16 -412h26" stroke="#166534" stroke-width="4" stroke-linecap="round"/>',
+              '<g fill="#64748B">' + ''.join(f'<circle cx="{18+c*14}" cy="{-392+r*12}" r="4"/>' for r in range(3) for c in range(3)) + '</g>',
+              f'<circle cx="44" cy="-376" r="17" fill="{skin}"/>']
     else:
         g += [f'<path d="M-82 -482L-100 -262" {sk}/>', f'<path d="M82 -482L100 -262" {sk}/>',
               f'<circle cx="-100" cy="-250" r="18" fill="{skin}"/><circle cx="100" cy="-250" r="18" fill="{skin}"/>']
@@ -115,6 +125,44 @@ def hero_factories():
     people = (person(545, 880, .9, skin='#4A2E1E', top='overall', inner='#93C5FD', pants='#1D4ED8', hat='#F8FAFC', holds='clipboard') +
               person(260, 885, 1.0, skin='#7A4B2A', top='vest', inner='#1E3A8A', pants='#1E293B', hat='#FACC15', holds='tablet'))
     return svg(1600, 900, bg + people)
+
+
+def hero_banking():
+    """A SACCO banking hall: a teller behind the counter, a member checking her balance on a basic phone."""
+    pillars = ''.join(f'<rect x="{x}" y="150" width="34" height="610" fill="#E2E8F0"/>' for x in (900, 1100, 1300, 1500))
+    bg = f'''<defs><linearGradient id="bw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1F6FF"/><stop offset="1" stop-color="#DCE7FA"/></linearGradient>
+<radialGradient id="bglow" cx=".7" cy=".3" r=".6"><stop offset="0" stop-color="#3B82F6" stop-opacity=".22"/><stop offset="1" stop-color="#3B82F6" stop-opacity="0"/></radialGradient></defs>
+<rect width="1600" height="900" fill="url(#bw)"/><rect width="1600" height="900" fill="url(#bglow)"/>
+<g fill-opacity=".7">{pillars}</g><path d="M0 150H1600" stroke="#C7D7F2" stroke-width="12"/>
+<g transform="translate(150 70)"><rect width="300" height="150" rx="14" fill="#1E3A8A"/>
+<path d="M150 26L230 64H70Z" fill="#fff"/><g fill="#fff">{''.join(f'<rect x="{86+i*36}" y="70" width="14" height="40"/>' for i in range(5))}</g><rect x="70" y="112" width="160" height="10" fill="#fff"/></g>
+<g transform="translate(540 90)"><rect width="150" height="110" rx="16" fill="#fff" stroke="#C7D7F2" stroke-width="3"/>
+<rect x="18" y="22" width="70" height="12" rx="6" fill="#2563EB"/><rect x="18" y="46" width="114" height="10" rx="5" fill="#93C5FD"/><rect x="18" y="66" width="90" height="10" rx="5" fill="#93C5FD"/>
+<circle cx="122" cy="28" r="10" fill="#22C55E"/></g>
+<rect x="0" y="760" width="1600" height="140" fill="#C3D3EE"/><rect x="0" y="760" width="1600" height="6" fill="#AFC3E6"/>'''
+    teller = person(250, 860, .95, skin='#5C3A21', hair='#111827', hair_style='short', top='plain', inner='#1D4ED8', pants='#1E293B', glasses=True)
+    counter = ('<rect x="40" y="520" width="440" height="250" rx="10" fill="#1E40AF"/><rect x="28" y="506" width="464" height="26" rx="8" fill="#1E3A8A"/>'
+               '<rect x="70" y="566" width="380" height="8" rx="4" fill="#3B82F6" fill-opacity=".6"/>'
+               '<g transform="translate(300 438)"><rect width="120" height="74" rx="8" fill="#0F172A"/><rect x="8" y="8" width="104" height="58" rx="4" fill="#DBEAFE"/>'
+               '<rect x="18" y="18" width="50" height="8" rx="4" fill="#2563EB"/><rect x="18" y="34" width="80" height="6" rx="3" fill="#93C5FD"/></g>')
+    member = person(560, 870, .92, skin='#7A4B2A', hair='#1C1917', hair_style='bun', top='plain', inner='#F59E0B', pants='#334155', holds='phone')
+    return svg(1600, 900, bg + teller + counter + member)
+
+def hero_education():
+    """A classroom: a teacher beside the board, a child learning on a tablet."""
+    bg = '''<defs><linearGradient id="ew" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1F6FF"/><stop offset="1" stop-color="#DCE7FA"/></linearGradient>
+<radialGradient id="eglow" cx=".7" cy=".3" r=".6"><stop offset="0" stop-color="#3B82F6" stop-opacity=".22"/><stop offset="1" stop-color="#3B82F6" stop-opacity="0"/></radialGradient></defs>
+<rect width="1600" height="900" fill="url(#ew)"/><rect width="1600" height="900" fill="url(#eglow)"/>
+<g transform="translate(60 90)"><rect width="560" height="290" rx="14" fill="#7C5A3A"/><rect x="14" y="14" width="532" height="262" rx="8" fill="#14532D"/>
+<g fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="7" stroke-linecap="round"><path d="M60 70h90M60 110h140M60 150h70"/>
+<path d="M300 80l40 40l40 -40"/><circle cx="440" cy="120" r="34"/><path d="M290 200q60 -50 120 0t120 0" stroke-opacity=".55"/></g>
+<g fill="#F8FAFC"><circle cx="110" cy="220" r="18"/><circle cx="160" cy="220" r="18" fill-opacity=".8"/><circle cx="210" cy="220" r="18" fill-opacity=".6"/></g>
+<rect x="160" y="276" width="240" height="14" rx="4" fill="#5B3F27"/></g>
+<rect x="0" y="760" width="1600" height="140" fill="#C3D3EE"/><rect x="0" y="760" width="1600" height="6" fill="#AFC3E6"/>
+<g transform="translate(330 760)"><rect x="-170" y="-150" width="340" height="22" rx="8" fill="#B45309"/><rect x="-150" y="-128" width="18" height="128" fill="#92400E"/><rect x="132" y="-128" width="18" height="128" fill="#92400E"/></g>'''
+    teacher = person(560, 870, .95, skin='#5C3A21', hair='#111827', hair_style='bun', top='plain', inner='#7C3AED', pants='#1E293B', holds='clipboard')
+    child = person(250, 840, .62, skin='#7A4B2A', hair='#1C1917', hair_style='short', top='plain', inner='#0EA5E9', pants='#1E3A8A', holds='tablet')
+    return svg(1600, 900, bg + teacher + child)
 
 # ---- article covers: shiny blue with one white motif ----
 def cover(key, motif):
@@ -200,9 +248,11 @@ def main():
     (OUT / 'waves.svg').write_text(waves(), encoding='utf-8')
     (OUT / 'hero-ternah-health.svg').write_text(hero_health(), encoding='utf-8')
     (OUT / 'hero-ternah-factories.svg').write_text(hero_factories(), encoding='utf-8')
+    (OUT / 'hero-sacco.svg').write_text(hero_banking(), encoding='utf-8')
+    (OUT / 'hero-pearl-educate.svg').write_text(hero_education(), encoding='utf-8')
     for slug, motif in ARTICLES.items():
         (OUT / f'article-{slug}.svg').write_text(cover(slug, motif), encoding='utf-8')
-    print('wrote', 2 + len(ARTICLES), 'files to', OUT)
+    print('wrote', 4 + len(ARTICLES), 'files to', OUT)
 
 if __name__ == '__main__':
     main()

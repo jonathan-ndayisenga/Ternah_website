@@ -695,3 +695,16 @@ body[data-page=index] header:not(.scrolled){background:transparent;-webkit-backd
 .hero .scene{box-shadow:0 0 0 1px rgba(29,78,216,.10),0 30px 80px -12px rgba(29,78,216,.38),0 2px 6px rgba(21,32,46,.06)}
 .hero .btn-ghost{background:#fff}
 @media (max-width:768px){ .hero::before{opacity:.24} .hero::after{top:-72px} }
+
+/* hero: the industries we build for, one row under the headline */
+.sectors{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 0;padding:0}
+.sectors a{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:var(--r-pill);background:rgba(255,255,255,.75);
+  border:1px solid #D6E2F5;color:var(--ink);font-size:14px;font-weight:500;transition:border-color .2s,color .2s,background .2s}
+.sectors a:hover{border-color:var(--blue);color:var(--blue);background:#fff}
+.sectors svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:900px){
+  .sectors{margin-top:20px;gap:6px}
+  .sectors a{padding:6px 11px;font-size:13px}
+  .showcase .tabs{display:grid;grid-template-columns:1fr 1fr;border-radius:20px}
+  .showcase [role=tab]{border-radius:16px}
+}

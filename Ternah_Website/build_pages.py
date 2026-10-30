@@ -223,6 +223,20 @@ FACTORY_DASH = dict(
     ('Staff',None,'Nothing needs your attention',None,None,[],1,''),
   ])
 
+BANK_DASH = dict(
+  org='Ternah Demo SACCO', org_sub='Ternah Core Banking', user=('GN','Grace Nambi','Branch manager'),
+  nav=['Home','Members','Savings','Loans','Tellers','Reports'],
+  search='Search members, accounts or loan numbers',
+  greet='Good morning, Grace', sub='Ternah Demo SACCO · here is where the branch stands right now.',
+  tiles=[
+    ('Loans','4','applications to assess','2','CRB reports back',['Assess','Disburse','Repayments'],2,'raised'),
+    ('Tellers','UGX 3.1M','deposited today',None,None,[],2,''),
+    ('Members','12','joined this month',None,None,[],1,''),
+    ('SMS & USSD','86','SMS alerts sent today',None,None,[],1,''),
+    ('Repayments','3','due this week',None,None,[],1,'warn'),
+    ('Reports',None,'Nothing needs your attention',None,None,[],1,''),
+  ])
+
 def dash_html(d):
     nav = "".join(f'<a class="{"on" if i==0 else ""}">{escape(x)}</a>' for i,x in enumerate(d['nav']))
     tiles = []
@@ -248,9 +262,10 @@ def dash_html(d):
 
 TILE_ICONS = {'Reception':'chat','Doctor':'health','Laboratory':'layers','Nursing':'support','Sonography':'chart',
               'Inventory':'cart','Finance':'bank','Hospital admin':'gov','Production':'factory',
-              'Branch & stock':'truck','Cashier':'cart','Staff':'support'}
+              'Branch & stock':'truck','Cashier':'cart','Staff':'support',
+              'Loans':'bank','Tellers':'cart','Members':'support','SMS & USSD':'phone','Repayments':'chart','Reports':'layers'}
 
-DASHES = {'ternah-health': HEALTH_DASH, 'ternah-factories': FACTORY_DASH}
+DASHES = {'ternah-health': HEALTH_DASH, 'ternah-factories': FACTORY_DASH, 'sacco': BANK_DASH}
 
 def has_visual(p):
     return exists(f'assets/img/screens/{p["key"]}.webp') or p['key'] in DASHES
@@ -456,20 +471,34 @@ def card(i, ic, t, d, items=None, attrs=''):
 
 # Hero slides, in tab order: a scene of the product at work, its live screen, and a brief.
 HERO_SLIDES = [
- dict(key='ternah-health', tab='Ternah Health',
-      alt='Illustration: a doctor with a tablet and a nurse with a clipboard in a hospital',
-      title='How Ternah Health works in a hospital',
-      brief='A patient is registered once at reception. The doctor sees them in a live queue and orders tests, '
-            'the lab result reaches the doctor the moment it is saved, and the pharmacy and finance desk work '
-            'from the same record. Every department sees one patient, not a pile of paper.',
-      more=('How it runs in a hospital', 'products.html#case-ternah-health')),
- dict(key='ternah-factories', tab='Ternah for Factories',
+ dict(key='ternah-factories', tab='Factories',
       alt='Illustration: two factory workers in hard hats with a tablet and a clipboard beside a production line',
       title='What Ternah for Factories changes for manufacturers',
       brief='Production batches follow their formulas, and missing materials are flagged before a batch starts '
             'instead of halfway through. Stock moves between the factory and its branches with approvals, and '
             'cashiers, debtors and staff sit in the same system, so the owner sees production and sales in one place.',
       more=('See the product', 'products.html#ternah-factories')),
+ dict(key='sacco', tab='Core Banking',
+      alt='Illustration: a teller behind a SACCO counter and a member checking her balance on a basic phone',
+      title='How Ternah Core Banking runs a SACCO',
+      brief='A member deposits at the teller and gets an SMS before leaving the counter. Loan officers see the '
+            'borrower’s CRB report inside the assessment, and members check balances and statements by USSD on any '
+            'phone, so the SACCO serves members who rarely come to the branch.',
+      more=('See the product', 'products.html#sacco')),
+ dict(key='ternah-health', tab='Health',
+      alt='Illustration: a doctor with a tablet and a nurse with a clipboard in a hospital',
+      title='How Ternah Health works in a hospital',
+      brief='A patient is registered once at reception. The doctor sees them in a live queue and orders tests, '
+            'the lab result reaches the doctor the moment it is saved, and the pharmacy and finance desk work '
+            'from the same record. Every department sees one patient, not a pile of paper.',
+      more=('How it runs in a hospital', 'products.html#case-ternah-health')),
+ dict(key='pearl-educate', tab='Pearl Educate',
+      alt='Illustration: a teacher beside a classroom board and a child learning on a tablet',
+      title='How Pearl Educate helps children remember what they learn',
+      brief='A child takes a ten-minute lesson, practises recalling the answers with no score and gets a hint when '
+            'stuck. Each question comes back after 1, 3, 7, 14 and 30 days, so the lesson stays. Lessons come from '
+            'teachers we have checked, and parents pay by mobile money.',
+      more=('See the product', 'products.html#pearl-educate')),
 ]
 
 def hero_stage():
@@ -599,12 +628,20 @@ def explore_tiles():
     <div class="xtile-text"><h2>{t}</h2><p>{d}</p><span class="xtile-btn">Find out more {ARROW}</span></div>
   </a>''' for i, (href, t, d) in enumerate(tiles)) + '\n</section>'
 
+def sector_row():
+    """The industries we serve, one line under the hero headline, each linking to its product."""
+    row = [('factory','Factories','ternah-factories'), ('bank','SACCOs & microfinance','sacco'), ('health','Hospitals','ternah-health'),
+           ('edu','Schools','pearl-educate'), ('cart','Shops','mykashop'), ('pill','Pharmacies','pharmacy')]
+    return '<ul class="sectors" aria-label="Industries we build for">' + "".join(
+        f'<li><a href="products.html#{k}">{ICONS[ic]}{t}</a></li>' for ic, t, k in row) + '</ul>'
+
 # ================= PAGE BODIES =================
 home_body = f'''<section class="hero wrap">
   <div class="hero-top">
-    <h1>Keep it simple.<span class="l2">We build software that works.</span></h1>
+    <div><h1>Keep it simple.<span class="l2">We build software that works.</span></h1>
+    {sector_row()}</div>
     <div>
-      <p class="lead">Systems built around the way your business already runs, for hospitals, factories, shops and SACCOs. Built in {OFFICE}.</p>
+      <p class="lead">Systems built around the way your business already runs, for factories, SACCOs and microfinance, hospitals, schools and shops. Built in {OFFICE}.</p>
       <div class="hero-cta">
         <a class="btn btn-primary btn-lg" href="contact.html">Start a project</a>
         <a class="btn btn-ghost btn-lg" href="#products">See our products</a>
@@ -1484,7 +1521,7 @@ def article_body(i):
 
 # ================= WRITE FILES =================
 PAGES = [
- ('index', f'{COMPANY} | Keep it simple.', 'Software built around the way your business already runs, for hospitals, factories, shops and SACCOs. Built in Kampala, Uganda.', home_body),
+ ('index', f'{COMPANY} | Keep it simple.', 'Software built around the way your business already runs, for factories, SACCOs and microfinance, hospitals, schools and shops. Built in Kampala, Uganda.', home_body),
  ('about', f'About | {COMPANY}', 'How Ternah builds software with the people who use it, from our office in Kampala, Uganda.', about_body),
  ('solutions', f'Solutions | {COMPANY}', 'Custom software and websites, ERP and business systems, automation, data and analytics, cloud services, and support.', solutions_body),
  ('industries', f'Industries | {COMPANY}', 'Software for healthcare, manufacturing, retail, SACCOs, pharmacy, hospitality, real estate and more.', industries_body),
