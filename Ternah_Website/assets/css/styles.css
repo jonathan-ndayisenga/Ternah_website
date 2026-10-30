@@ -774,3 +774,44 @@ body[data-page=index] header:not(.scrolled){background:transparent;-webkit-backd
       rgba(22,22,23,.1) 170px,rgba(22,22,23,0) 215px),
     linear-gradient(180deg,#E8F1FF 0%,#EFF5FF 35%,#F7FAFF 70%,#fff 92%)}
 }
+
+/* =========================================================
+   Dark home hero: the same grey-black as the header (#161617), with white and light-blue words.
+   The header is see-through over it, then turns to its 80% grey-black glass as you scroll.
+   ========================================================= */
+.hero{padding-bottom:88px}
+.hero::after{background:radial-gradient(900px 500px at 80% 35%,rgba(37,99,235,.16),transparent 70%),#161617}
+@media (max-width:768px){ .hero{padding-bottom:56px} .hero::after{background:radial-gradient(500px 400px at 80% 40%,rgba(37,99,235,.16),transparent 70%),#161617} }
+.hero h1{color:#F5F5F7}
+.hero h1 .l2{background:linear-gradient(180deg,#60A5FA 0%,#93C5FD 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{color:#A1A1A6}
+.hero::before{opacity:.45}
+@media (max-width:768px){ .hero::before{opacity:.35} }
+
+.hero .sectors a{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);color:#F5F5F7}
+.hero .sectors a:hover{background:rgba(255,255,255,.12);border-color:#60A5FA;color:#fff}
+.hero .sectors svg{stroke:#60A5FA}
+
+.hero .btn-primary{background:#F5F5F7;color:#161617}
+.hero .btn-primary:hover{background:#fff}
+.hero .btn-ghost{background:transparent;color:#F5F5F7;border-color:rgba(255,255,255,.3)}
+.hero .btn-ghost:hover{border-color:rgba(255,255,255,.7)}
+
+.hero .showcase .tabs{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+.hero .showcase [role=tab]{color:#A1A1A6}
+.hero .showcase [role=tab]:hover{color:#fff}
+.hero .showcase [role=tab][aria-selected=true]{background:#F5F5F7;color:#161617}
+.hero .showcase.auto [role=tab][aria-selected=true].tick::after{background:#2563EB}
+.hero .scene{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 90px -10px rgba(37,99,235,.45)}
+
+.hero .brief .kicker{color:#60A5FA}
+.hero .brief h2{color:#F5F5F7}
+.hero .brief p{color:#A1A1A6}
+.hero .link-arrow{color:#F5F5F7;border-color:rgba(255,255,255,.35)}
+.hero .link-arrow:hover{color:#fff;border-color:#fff}
+
+.hero .facts{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12)}
+.hero .facts li + li,.hero .facts li:nth-child(n+3){border-color:rgba(255,255,255,.12)}
+.hero .facts strong{background:linear-gradient(120deg,#F5F5F7,#93C5FD);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .facts span{color:#A1A1A6}
+.hero :focus-visible{outline-color:#93C5FD}
