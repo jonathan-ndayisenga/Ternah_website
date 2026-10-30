@@ -164,7 +164,7 @@ def page(slug, title, desc, body, path=None):
 
 <link rel="preload" href="assets/ternah-ui/fonts/HankenGrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/ternah-ui/tokens.css">
-<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="assets/css/styles.css?v={ver('assets/css/styles.css')}">
 {analytics}</head>
 <body data-page="{slug}">
 
@@ -178,7 +178,7 @@ def page(slug, title, desc, body, path=None):
 
 <a class="fab-wa" href="{WHATSAPP}" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">{WA_SVG}</a>
 
-<script src="assets/js/main.js"></script>
+<script src="assets/js/main.js?v={ver('assets/js/main.js')}"></script>
 </body>
 </html>'''
 
@@ -187,6 +187,11 @@ def page(slug, title, desc, body, path=None):
 #   assets/img/hero/<product-key>.webp     hero photo, 16:9, e.g. 1600 x 900 (people on the left half)
 #   assets/img/articles/<slug>.webp        article cover, 16:9, e.g. 1200 x 675
 #   assets/img/screens/<product-key>.webp  product screenshot, 3:2, e.g. 1440 x 960
+def ver(path):
+    """Short fingerprint of a file, added to its URL so browsers fetch it again whenever it changes."""
+    import hashlib
+    return hashlib.md5(open(path, 'rb').read()).hexdigest()[:8]
+
 def art(photo, drawing):
     return photo if exists(photo) else drawing
 
