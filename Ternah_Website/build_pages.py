@@ -273,7 +273,7 @@ def screenshot(p, lazy=True):
 # Live product sites. Switch to the real domains once they exist (keep https).
 HEALTH_URL   = 'https://shark-app-7ssb2.ondigitalocean.app/welcome/'
 PHARMACY_URL = 'https://ternah-pharmacy.onrender.com/pharmacy/'
-PEARL_URL    = 'http://147.182.138.32/'
+PEARL_URL    = 'https://pearl-educate.com/'
 MYKASHOP_URL = None  # https://mykashop.online/ was not responding on 28 Oct 2026; restore once it is back up
 
 PRODUCTS = [
@@ -294,7 +294,7 @@ PRODUCTS = [
  dict(key='mykashop', name='Mykashop', sector='Shops & retail', link=MYKASHOP_URL,
       brief='A point-of-sale and stock system for shops, supermarkets, hardware stores and restaurants. It records every sale, keeps stock counts right, tracks debtors and expenses, and shows the owner how the business did each day.',
       features=['Point of sale and stock','Debtors and expenses','Daily business performance']),
- dict(key='pearl-educate', name='Pearl Educate', sector='Education · launching', link=PEARL_URL,
+ dict(key='pearl-educate', name='Pearl Educate', sector='Education', link=PEARL_URL,
       brief="A learning app for children, built on the learning science principles of Carnegie Mellon University's "
             "Learning Sciences for Innovators programme. Every ten-minute lesson is designed for memory formation: "
             "children practise recalling answers with no score, get a hint when they are stuck, and each question "
