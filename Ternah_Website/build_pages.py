@@ -324,6 +324,9 @@ PRODUCTS = [
       features=['Operator boards in Kanban style','Queues for several branches','Live updates for every operator']),
 ]
 
+# The three products shown on the home page, in order
+HOME_PRODUCTS = [next(p for p in PRODUCTS if p['key'] == k) for k in ('ternah-health', 'pearl-educate', 'ternah-factories')]
+
 # Brief case studies (only Ternah Health for now). They describe the type of business, not a named
 # client; swap in a client's name only once they have agreed to it.
 CASES = {
@@ -615,7 +618,7 @@ home_body = f'''<section class="hero wrap">
 <section class="sec wrap" id="products">
   {sec_head('Products', 'Software already at work.', 'Products we build and run, each designed around one kind of business.')}
   <div class="grid g3">
-{chr(10).join(product_card(i,p) for i,p in enumerate(PRODUCTS[:3]))}
+{chr(10).join(product_card(i,p) for i,p in enumerate(HOME_PRODUCTS))}
   </div>
   <div class="center mt-cta"><a class="link-arrow" href="products.html">See all {len(PRODUCTS)} products {ARROW}</a></div>
 </section>
