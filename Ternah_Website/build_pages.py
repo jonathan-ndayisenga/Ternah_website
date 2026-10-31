@@ -20,6 +20,7 @@ PHONE_TEL    = '+256787770007'
 WHATSAPP     = 'https://wa.me/256787770007'
 OFFICE       = 'Kampala, Uganda'
 ADDRESS      = 'Kanjokya House, top floor, Kampala, Uganda'   # the full office address, shown where people look for us
+OFFICE_GEO   = (0.3419467, 32.5942547)   # Kanjokya House, Kanjokya Street, Kisementi (from OpenStreetMap)
 COMPANY_REG  = ''   # e.g. 'Reg. no. 80020001234567'; shown in the footer when set
 FORM_ENDPOINT = ''  # e.g. 'https://formspree.io/f/xxxx'; empty = form opens the visitor's email app
 ANALYTICS_DOMAIN = ''  # e.g. 'ternah.co.ug' to load Plausible; empty = no analytics
@@ -1473,10 +1474,20 @@ contact_body = f'''<section class="phead wrap">
       <div class="ci"><span class="ico">{ICONS['mail']}</span><div><div class="k">Email</div><a class="v" href="mailto:{EMAIL}">{EMAIL}</a></div></div>
       <div class="ci"><span class="ico">{ICONS['chat']}</span><div><div class="k">WhatsApp</div><a class="v" href="{WHATSAPP}" target="_blank" rel="noopener noreferrer">Chat with us</a></div></div>
       <div class="ci"><span class="ico">{ICONS['phone']}</span><div><div class="k">Phone</div><a class="v" href="tel:{PHONE_TEL}">{PHONE}</a></div></div>
-      <div class="ci"><span class="ico">{ICONS['pin']}</span><div><div class="k">Office</div><div class="v">{ADDRESS}</div></div></div>
+      <div class="ci"><span class="ico">{ICONS['pin']}</span><div><div class="k">Office</div><div class="v">{ADDRESS}</div>
+        <a class="dir-link" href="https://www.google.com/maps/dir/?api=1&amp;destination={OFFICE_GEO[0]},{OFFICE_GEO[1]}" target="_blank" rel="noopener noreferrer">Get directions</a></div></div>
+      <iframe class="office-map" title="Map showing our office at Kanjokya House, Kampala"
+        src="https://maps.google.com/maps?q={OFFICE_GEO[0]},{OFFICE_GEO[1]}&amp;z=17&amp;output=embed"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </div>
-</section>'''
+</section>
+<script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@type": "Organization", "name": COMPANY,
+  "url": SITE_URL, "email": EMAIL, "telephone": PHONE_TEL,
+  "location": {"@type": "Place", "name": "Kanjokya House",
+    "address": {"@type": "PostalAddress", "streetAddress": "Kanjokya House, top floor, Kanjokya Street",
+                "addressLocality": "Kampala", "addressCountry": "UG"},
+    "geo": {"@type": "GeoCoordinates", "latitude": OFFICE_GEO[0], "longitude": OFFICE_GEO[1]}}})}</script>'''
 
 
 # ================= ARTICLE PAGES =================

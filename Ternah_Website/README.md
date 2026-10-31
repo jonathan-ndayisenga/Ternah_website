@@ -16,7 +16,7 @@ tools/make_scenes.py        draws the hero scenes (hero-<product>.svg) and artic
 ```
 
 ## Settings (top of build_pages.py)
-`SITE_URL`, `EMAIL`, `PHONE`, `WHATSAPP`, `OFFICE`, `COMPANY_REG` (footer),
+`SITE_URL`, `EMAIL`, `PHONE`, `WHATSAPP`, `OFFICE`, `ADDRESS`, `OFFICE_GEO` (the contact-page map pin), `COMPANY_REG` (footer),
 `FORM_ENDPOINT` (Formspree / Netlify Forms URL; empty = form opens the visitor's
 email app), `ANALYTICS_DOMAIN` (Plausible; empty = off).
 

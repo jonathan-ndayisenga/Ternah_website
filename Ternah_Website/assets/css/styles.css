@@ -824,3 +824,8 @@ main{background:#fff}
 header:not(.scrolled),body[data-page=index] header:not(.scrolled){background:#161617}
 .hero::after{top:-81px}
 @media (max-width:768px){ .hero::after{top:-73px} }
+
+/* Contact: directions link and the office map under the contact details */
+.contact-info .dir-link{display:inline-block;margin-top:6px;font-size:15px;font-weight:500;color:var(--blue,#2563EB)}
+.contact-info .dir-link:hover{text-decoration:underline}
+.office-map{display:block;width:100%;height:280px;margin-top:8px;border:1px solid var(--border);border-radius:16px;background:var(--surface)}
