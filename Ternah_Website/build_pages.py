@@ -19,6 +19,7 @@ PHONE        = '+256 787 770007'
 PHONE_TEL    = '+256787770007'
 WHATSAPP     = 'https://wa.me/256787770007'
 OFFICE       = 'Kampala, Uganda'
+ADDRESS      = 'Kanjokya House, top floor, Kampala, Uganda'   # the full office address, shown where people look for us
 COMPANY_REG  = ''   # e.g. 'Reg. no. 80020001234567'; shown in the footer when set
 FORM_ENDPOINT = ''  # e.g. 'https://formspree.io/f/xxxx'; empty = form opens the visitor's email app
 ANALYTICS_DOMAIN = ''  # e.g. 'ternah.co.ug' to load Plausible; empty = no analytics
@@ -731,7 +732,7 @@ about_body = f'''<section class="phead wrap">
       <p>Every project starts with learning how the business runs. Then we build the simplest system that fits it, and we stay to support it after launch.</p>
       <div class="office">
         <span class="ico">{ICONS['pin']}</span>
-        <p><strong>Our office</strong><br>{OFFICE}</p>
+        <p><strong>Our office</strong><br>{ADDRESS}</p>
       </div>
     </div>
     <div class="brand-panel" aria-hidden="true">
@@ -1472,7 +1473,7 @@ contact_body = f'''<section class="phead wrap">
       <div class="ci"><span class="ico">{ICONS['mail']}</span><div><div class="k">Email</div><a class="v" href="mailto:{EMAIL}">{EMAIL}</a></div></div>
       <div class="ci"><span class="ico">{ICONS['chat']}</span><div><div class="k">WhatsApp</div><a class="v" href="{WHATSAPP}" target="_blank" rel="noopener noreferrer">Chat with us</a></div></div>
       <div class="ci"><span class="ico">{ICONS['phone']}</span><div><div class="k">Phone</div><a class="v" href="tel:{PHONE_TEL}">{PHONE}</a></div></div>
-      <div class="ci"><span class="ico">{ICONS['pin']}</span><div><div class="k">Office</div><div class="v">{OFFICE}</div></div></div>
+      <div class="ci"><span class="ico">{ICONS['pin']}</span><div><div class="k">Office</div><div class="v">{ADDRESS}</div></div></div>
     </div>
   </div>
 </section>'''
@@ -1557,7 +1558,7 @@ PAGES = [
  ('industries', f'Industries | {COMPANY}', 'Software for healthcare, manufacturing, retail, SACCOs, pharmacy, hospitality, real estate and more.', industries_body),
  ('products', f'Products | {COMPANY}', 'Ternah Health, Ternah for Factories, Mykashop, Ternah Core Banking and more: products built for one kind of business each.', products_body),
  ('insights', f'Insights | {COMPANY}', 'Practical guides on software, data and digital transformation from the Ternah team.', insights_body),
- ('contact', f'Contact | {COMPANY}', f'Start a project with Ternah. Email {EMAIL}, WhatsApp or call {PHONE}. Office in {OFFICE}.', contact_body),
+ ('contact', f'Contact | {COMPANY}', f'Start a project with Ternah. Email {EMAIL}, WhatsApp or call {PHONE}. Office at {ADDRESS}.', contact_body),
 ]
 
 for slug,title,desc,body in PAGES:
