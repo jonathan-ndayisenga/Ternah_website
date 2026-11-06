@@ -839,3 +839,30 @@ header:not(.scrolled),body[data-page=index] header:not(.scrolled){background:#16
 .lp-glance dd{color:#fff;font-size:17px;line-height:1.55;margin-top:6px}
 @media (max-width:900px){ .lp-glance{grid-template-columns:1fr 1fr} }
 @media (max-width:560px){ .lp-glance{grid-template-columns:1fr} .lp-hero .lp-shot{margin-top:36px} }
+.case-wine .lp-glance dt{color:#FBCFE8}
+.process.n3{grid-template-columns:repeat(3,1fr)}
+.process.n3::before{right:calc((100% - 48px)/3 - 24px)}
+.lp-compare{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.lp-compare h3{font-size:19px;margin-bottom:16px}
+.lp-compare ul{list-style:none;display:grid;gap:12px}
+.lp-compare li{position:relative;padding-left:30px;font-size:16px;line-height:1.5}
+.lp-compare li::before{position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.lp-x li{color:var(--muted)}
+.lp-x li::before{content:"✕";background:#FEF3C7;color:#B45309}
+.lp-compare .card.on{background:#161617;border-color:#161617;color:#F5F5F7}
+.lp-tick li::before{content:"✓";background:#2563EB;color:#fff}
+.lp-chips{list-style:none;display:flex;flex-wrap:wrap;gap:12px}
+.lp-chips li{padding:12px 20px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;font-weight:500}
+.lp-faq{max-width:820px;border-top:1px solid var(--border)}
+.lp-faq details{border-bottom:1px solid var(--border)}
+.lp-faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:20px 0;font-size:18px;font-weight:500}
+.lp-faq summary::-webkit-details-marker{display:none}
+.lp-faq summary::after{content:"+";font-size:22px;line-height:1;color:var(--muted)}
+.lp-faq details[open] summary::after{content:"−"}
+.lp-faq p{padding:0 0 20px;color:var(--muted);font-size:16px;line-height:1.6}
+@media (max-width:900px){ .lp-compare{grid-template-columns:1fr} .process.n3{grid-template-columns:1fr} .process.n3::before{display:none} }
+.lp-compare .card ul{margin-top:0}
+.lp-compare .card ul li{padding:0 0 0 32px;border:none;font-size:16px}
+.lp-compare .card.on h3{color:#F5F5F7}
+.lp-compare .card.on ul li{color:#E5E5EA}
+.lp-compare .card:hover{transform:none}

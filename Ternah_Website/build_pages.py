@@ -300,12 +300,12 @@ PEARL_URL    = 'https://pearl-educate.com/'
 MYKASHOP_URL = None  # https://mykashop.online/ was not responding on 28 Oct 2026; restore once it is back up
 
 PRODUCTS = [
- dict(key='ternah-health', name='Ternah Health', sector='Hospitals & clinics',
+ dict(key='ternah-health', name='Ternah Health', sector='Hospitals & clinics', page='ternah-health.html',
       brief='A hospital management system that puts every department on one patient record. Reception registers the patient, doctors work from live queues and order tests, the lab sends results straight back, and pharmacy, nursing, home care and finance work from the same file.',
       features=['Live queues for reception, doctor, nurse, lab and scans',
                 'Lab results that reach the doctor the moment they are ready',
                 'Subscribe only to the modules you run, set up the same day']),
- dict(key='pharmacy', name='Ternah Pharmacy', sector='Pharmacies',
+ dict(key='pharmacy', name='Ternah Pharmacy', sector='Pharmacies', page='ternah-pharmacy.html',
       brief='Software that runs a pharmacy from prescription to receipt. It dispenses, takes cash, mobile money, card, insurance or credit, tracks every batch with low-stock and expiry alerts, and keeps the books for one branch or many, even when the internet drops.',
       features=['Prescription to receipt: cash, mobile money, card, insurance or credit',
                 'Batch stock with low-stock and expiry alerts',
@@ -1644,10 +1644,161 @@ core_banking_body = f'''<section class="hero wrap lp-hero">
 
 {cta_band('See Ternah Core Banking with your SACCO in mind.', 'We will walk you through it with your own products, loan rules and branches.', primary=('Book a demo', 'contact.html?product=sacco'))}'''
 
+# ---- pieces shared by the landing pages ----
+def lp_hero(p, eyebrow, h1, l2, lead, facts):
+    return f'''<section class="hero wrap lp-hero">
+  <div class="hero-top">
+    <div><span class="eyebrow">{escape(p["name"])} · {eyebrow}</span>
+      <h1>{h1}<span class="l2">{l2}</span></h1></div>
+    <div>
+      <p class="lead">{lead}</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="contact.html?product={p["key"]}">Book a demo</a>
+        <a class="btn btn-ghost btn-lg" href="#features">See what it does</a>
+      </div>
+    </div>
+  </div>
+  <div class="frame lp-shot">{screenshot(p, lazy=False)}</div>
+  <ul class="facts">{"".join(f'<li><strong>{n}</strong><span>{t}</span></li>' for n, t in facts)}</ul>
+</section>'''
+
+def lp_cards(eyebrow, h2, lead, items, id=''):
+    return f'''<section class="sec wrap"{f' id="{id}"' if id else ''}>
+  {sec_head(eyebrow, h2, lead)}
+  <div class="grid g3">
+{chr(10).join(card(i, ic, t, d, *rest) for i, (ic, t, d, *rest) in enumerate(items))}
+  </div>
+</section>'''
+
+def lp_band(eyebrow, h2, lead, inner, theme=''):
+    return f'''<section class="band-blue{f" case-{theme}" if theme else ""}">
+  <div class="wrap">
+    {sec_head(eyebrow, h2, lead)}
+    {inner}
+  </div>
+</section>'''
+
+def lp_glance(items):
+    return '<dl class="lp-glance">' + "".join(f'<div><dt>{t}</dt><dd>{d}</dd></div>' for t, d in items) + '</dl>'
+
+def lp_steps(eyebrow, h2, lead, steps):
+    lis = "".join(f'''
+    <li class="step reveal" data-d="{i%4+1}"><span class="dot">{i+1}</span><h3>{t}</h3><p>{d}</p></li>''' for i, (t, d) in enumerate(steps))
+    return f'''<section class="sec wrap">
+  {sec_head(eyebrow, h2, lead)}
+  <ol class="process n{len(steps)}">{lis}
+  </ol>
+</section>'''
+
+def lp_compare(before, after):
+    return f'''<div class="lp-compare">
+    <div class="card"><h3>Before Ternah</h3><ul class="lp-x">{"".join(f"<li>{x}</li>" for x in before)}</ul></div>
+    <div class="card on"><h3>With Ternah</h3><ul class="lp-tick">{"".join(f"<li>{x}</li>" for x in after)}</ul></div>
+  </div>'''
+
+def lp_faq(eyebrow, h2, qa):
+    return f'''<section class="sec wrap">
+  {sec_head(eyebrow, h2)}
+  <div class="lp-faq">{"".join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in qa)}</div>
+</section>'''
+
+# ================= TERNAH HEALTH LANDING PAGE =================
+# Copied from the Ternah Health app's own welcome page; log-in links left out.
+TH = next(p for p in PRODUCTS if p['key'] == 'ternah-health')
+TH_MODULES = ['Reception', 'Doctor &amp; Consultation', 'Laboratory', 'Nursing Care', 'Pharmacy &amp; Inventory',
+              'Finance &amp; Billing', 'Home Care', 'Hospital Management']
+health_body = f'''{lp_hero(TH, 'Hospital management', 'Hospital management', 'that actually fits.',
+  'One system for Reception, Doctor, Lab, Nursing, Pharmacy, Home Care and Finance. Subscribe only to what your facility runs, and add modules as you grow.',
+  [(str(len(TH_MODULES)), 'modules available'), ('One', 'record for every department'), ('Live', 'queues and reports'), ('Same day', 'setup')])}
+
+<section class="sec wrap">
+  {sec_head('The problem we fix', 'Your departments have systems. Do they talk to each other?',
+    'Most facilities run reception, lab, pharmacy and billing on separate tools or on paper. Patient information gets lost in the handoffs.')}
+  {lp_compare(['Files re-registered at every department, every visit', 'Lab results walked across the compound on paper',
+               'Services given but never billed', 'Month-end reports put together by hand, days late'],
+              ['One patient record shared by every department', 'Results reach the doctor the moment they are ready',
+               'Every service captured, receipted and reconciled', 'Income and spending reports, always current'])}
+</section>
+
+{lp_cards('Why Ternah', 'Everything a hospital needs. Nothing it doesn’t.',
+  'Built around the way your staff already work, not a template they have to adapt to.', [
+  ('layers', 'Pay for what you run', 'Add Reception, Lab, Pharmacy, Finance or Home Care one at a time. No locked bundles.'),
+  ('support', 'Live patient queues', 'Reception, doctor, nurse, lab and scan queues update as patients move, with full visit history.'),
+  ('health', 'Lab results and reports', 'Structured results printed under your own hospital header, monthly lab reports, and what each technician did.'),
+  ('chart', 'Money you can trust', 'Receipts on 58mm, 80mm or A4 paper, balances, expenses, salaries and income reports.'),
+  ('home', 'Home care', 'Community nurses, client placements, billing by day, week or month, and service contracts.'),
+  ('gov', 'Right access for each role', 'Doctors, nurses, lab staff, reception and admins each see only what their job needs.'),
+  ], id='features')}
+
+{lp_band('Modules', 'Subscribe to what your hospital runs.', 'Mix and match to fit your facility, and add more as you grow.',
+  '<ul class="lp-chips">' + "".join(f'<li>{m}</li>' for m in TH_MODULES) + '</ul>')}
+
+{lp_steps('How it works', 'Get your hospital running in three steps.', None, [
+  ('Message us on WhatsApp', 'Tell us which departments you run and how many staff will use the system.'),
+  ('We set you up the same day', 'Your hospital, staff accounts, services and prices are configured with you, hands on.'),
+  ('Your team logs in', 'Staff work from a browser on the computers, tablets or phones you already have.')])}
+
+{lp_faq('FAQ', 'Questions hospitals ask us.', [
+  ('Do we have to pay for every module?', 'No. You subscribe only to the departments your facility runs, and you can add more later without changing how you work.'),
+  ('Do we need to install anything?', 'No. Ternah runs in a web browser, so your staff can use the computers, tablets and phones you already have.'),
+  ('Can it print on our receipt printer?', 'Yes. Receipts print on 58mm or 80mm thermal paper, or on A4, under your hospital’s name.'),
+  ('Is our data kept separate from other hospitals?', 'Yes. Each hospital’s patients, reports and money are kept separate, and every staff member sees only what their role allows.'),
+  ('How do we get help?', 'Message us on WhatsApp. We are based in Kampala and support facilities hands on.')])}
+
+{cta_band('Contact Ternah to get access.', 'Ternah accounts are set up by our team. Email or call us and we will have your facility set up and running the same day.', primary=('Book a demo', 'contact.html?product=ternah-health'))}'''
+
+# ================= TERNAH PHARMACY LANDING PAGE =================
+# Copied from the Ternah Pharmacy app's own landing page; sign-in and demo links left out.
+TP = next(p for p in PRODUCTS if p['key'] == 'pharmacy')
+pharmacy_body = f'''{lp_hero(TP, 'Pharmacy software for Uganda', 'Every branch, every shilling,', 'in one place.',
+  'From the prescription at the counter to the books at month end, Ternah Pharmacy runs dispensing, payments, stock and accounts for one branch or many.',
+  [('5 ways', 'to pay: cash, mobile money, card, insurance and credit'), ('Offline', 'keeps dispensing when the internet drops'),
+   ('5 roles', 'each with its own screens'), ('Days', 'to get dispensing, not months')])}
+
+{lp_cards('What it does', 'The whole pharmacy, not just the till.',
+  'Each part hands off to the next, so nothing gets typed twice and nothing goes missing between the counter and the books.', [
+  ('pill', 'From prescription to receipt', 'The dispenser builds the bill and sends it to the cashier, who takes cash, mobile money, card, insurance, a client account or a prepaid card, and prints an 80mm receipt.'),
+  ('layers', 'Stock that knows its expiry', 'Every delivery is a batch with its own cost and expiry date. Low stock and drugs about to expire are flagged before they cost you money.'),
+  ('gov', 'Refunds need a manager', 'A cashier can’t hand money back alone. They raise the refund or swap, the branch manager approves it, and stock and books update together.'),
+  ('chart', 'Books that keep themselves', 'Every sale, payment, delivery and expense posts to a proper ledger. Cashbook, trial balance, balance sheet and income statement are always up to date.'),
+  ('truck', 'Suppliers and what you owe', 'Take deliveries on credit, part-pay as you go, and see every supplier balance, and every client or insurer who owes you, at a glance.'),
+  ('cloud', 'Keeps selling offline', 'A branch can run on a local hub when the internet goes down. Dispensing and payments carry on, and everything syncs once it’s back.'),
+  ], id='features')}
+
+{lp_band('For owners', 'Know which branch is carrying the business.',
+  'Compare sales, expenses and profit margin across branches, month by month, and open the combined books for the whole business, or any one branch.',
+  lp_glance([('Branch by branch', 'Sales, expenses and profit margin for each branch, month by month.'),
+             ('Combined books', 'The books for the whole business, or for any one branch.'),
+             ('Tax as you trade', 'VAT and income tax worked out as you trade.'),
+             ('Your letterhead', 'Printable reports with your letterhead.')]), theme='wine')}
+
+{lp_cards('Who it’s for', 'Everyone sees what their job needs.',
+  'Five roles, each with its own screens. Nobody wades through menus that aren’t theirs, and nobody sees figures they shouldn’t.', [
+  ('chart', 'Owner', 'Every branch’s sales, profit, stock and team.'),
+  ('gov', 'Branch manager', 'Stock, suppliers, approvals and the branch’s books.'),
+  ('layers', 'Accountant', 'The full ledger and reports across all branches.'),
+  ('pill', 'Dispenser', 'Builds bills and dispenses and, if allowed, checks other branches’ stock.'),
+  ('cart', 'Cashier', 'Takes payment, prints receipts, handles insurance and credit.'),
+  ('phone', 'On the phone in your pocket', 'A manager can approve a refund from the floor, and an owner can check today’s sales from anywhere, with no separate app to install.'),
+  ])}
+
+{lp_steps('How it starts', 'Up and dispensing in days, not months.', None, [
+  ('See it working', 'We walk you through it as an owner, a manager or a cashier, with sample data and nothing to set up.'),
+  ('Bring your stock', 'Open your branches and upload the stock sheet you already keep. Opening balances carry your books over.'),
+  ('Add your team', 'Give each person their role. They see only their own screens from the first day.')])}
+
+{cta_band('See it with your own pharmacy in mind.', 'Talk to us about your branches and we will walk you through a day’s work.', primary=('Book a demo', 'contact.html?product=pharmacy'))}'''
+
 LANDING_PAGES = [
  ('ternah-core-banking.html', f'Ternah Core Banking | {COMPANY}',
   'Core banking for SACCOs and microfinance: members, savings, tellers and loans, with CRB checks, SMS alerts and USSD on any phone.',
   core_banking_body),
+ ('ternah-health.html', f'Ternah Health | {COMPANY}',
+  'Hospital management for Reception, Doctor, Lab, Nursing, Pharmacy, Home Care and Finance. Subscribe only to the modules you run.',
+  health_body),
+ ('ternah-pharmacy.html', f'Ternah Pharmacy | {COMPANY}',
+  'Pharmacy software for Uganda: dispensing, payments, batch stock with expiry alerts and books that keep themselves, for one branch or many.',
+  pharmacy_body),
 ]
 
 # ================= WRITE FILES =================

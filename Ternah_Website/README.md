@@ -50,7 +50,7 @@ Build command `python build_pages.py`, publish directory `./`.
 The site never links to the running apps (Ternah Health, Ternah Pharmacy, Core Banking). A product with
 `page=` in `PRODUCTS` gets its own landing page on this site, and every button for it goes there; only
 Pearl Educate links out, to its public site. Landing pages are listed in `LANDING_PAGES` in build_pages.py
-(for now `ternah-core-banking.html`, written from the Core Banking app's own screens).
+(`ternah-health.html` and `ternah-pharmacy.html` copy the apps' own landing pages without their log-in links; `ternah-core-banking.html` is written from the Core Banking app's screens).
 
 ## Case studies
 Ternah Health, Ternah for Factories, Ternah Pharmacy and Pearl Educate each have a case study
