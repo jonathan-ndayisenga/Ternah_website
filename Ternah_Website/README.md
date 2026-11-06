@@ -46,6 +46,12 @@ python -m http.server 8000
 ## Deploy (Render static site or any static host)
 Build command `python build_pages.py`, publish directory `./`.
 
+## Product landing pages
+The site never links to the running apps (Ternah Health, Ternah Pharmacy, Core Banking). A product with
+`page=` in `PRODUCTS` gets its own landing page on this site, and every button for it goes there; only
+Pearl Educate links out, to its public site. Landing pages are listed in `LANDING_PAGES` in build_pages.py
+(for now `ternah-core-banking.html`, written from the Core Banking app's own screens).
+
 ## Case studies
 Ternah Health, Ternah for Factories, Ternah Pharmacy and Pearl Educate each have a case study
 (`CASES` in `build_pages.py`), shown as coloured bands under the product grid on the Products page.

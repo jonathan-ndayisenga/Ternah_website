@@ -829,3 +829,13 @@ header:not(.scrolled),body[data-page=index] header:not(.scrolled){background:#16
 .contact-info .dir-link{display:inline-block;margin-top:6px;font-size:15px;font-weight:500;color:var(--blue,#2563EB)}
 .contact-info .dir-link:hover{text-decoration:underline}
 .office-map{display:block;width:100%;height:280px;margin-top:8px;border:1px solid var(--border);border-radius:16px;background:var(--surface)}
+
+/* Product landing pages (ternah-core-banking.html): the dark hero with the product's screen under it */
+.lp-hero .eyebrow{display:block;margin-bottom:16px;color:#60A5FA}
+.lp-hero .lp-shot{margin-top:56px;background:#1D1D1F;border-color:rgba(255,255,255,.1);box-shadow:0 0 0 1px rgba(255,255,255,.06),0 30px 90px -10px rgba(37,99,235,.45)}
+.lp-hero .lp-shot .shot{aspect-ratio:16/9}
+.lp-glance{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:8px}
+.lp-glance dt{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#BFDBFE}
+.lp-glance dd{color:#fff;font-size:17px;line-height:1.55;margin-top:6px}
+@media (max-width:900px){ .lp-glance{grid-template-columns:1fr 1fr} }
+@media (max-width:560px){ .lp-glance{grid-template-columns:1fr} .lp-hero .lp-shot{margin-top:36px} }

@@ -112,7 +112,7 @@ def footer_html():
     </div>
     <div>
       <h4>Products</h4>
-      {"".join(f'<a href="products.html#{p["key"]}">{p["name"]}</a>' for p in PRODUCTS[:4])}
+      {"".join(f'<a href="{p.get("page") or "products.html#" + p["key"]}">{p["name"]}</a>' for p in FOOTER_PRODUCTS)}
       <a href="products.html">All products</a>
     </div>
     <div>
@@ -231,17 +231,18 @@ FACTORY_DASH = dict(
   ])
 
 BANK_DASH = dict(
-  org='Ternah Demo SACCO', org_sub='Ternah Core Banking', user=('GN','Grace Nambi','Branch manager'),
-  nav=['Home','Members','Savings','Loans','Tellers','Reports'],
-  search='Search members, accounts or loan numbers',
-  greet='Good morning, Grace', sub='Ternah Demo SACCO · here is where the branch stands right now.',
+  org='Ternah Demo SACCO', org_sub='Main branch', user=('GN','Grace Nambi','Branch manager'),
+  nav=['Dashboard','Clients','Register individual','Register group','Register company','Joint accounts','Loans'],
+  search='Search clients, accounts or loans',
+  greet='Good morning, Grace', sub='Clients, loans and savings across the branch, right now.',
   tiles=[
-    ('Loans','4','applications to assess','2','CRB reports back',['Assess','Disburse','Repayments'],2,'raised'),
-    ('Tellers','UGX 3.1M','deposited today',None,None,[],2,''),
-    ('Members','12','joined this month',None,None,[],1,''),
-    ('SMS & USSD','86','SMS alerts sent today',None,None,[],1,''),
-    ('Repayments','3','due this week',None,None,[],1,'warn'),
-    ('Reports',None,'Nothing needs your attention',None,None,[],1,''),
+    ('Total members','1,240','members',None,None,[],1,''),
+    ('Male members','610','individual male',None,None,[],1,''),
+    ('Female members','630','individual female',None,None,[],1,''),
+    ('Status','1,182','active','58','inactive',[],1,''),
+    ('Savings portfolio','UGX 486M','total savings','UGX 2.1M','frozen',['Savings','Withdraws','Loans'],2,'raised'),
+    ('Loan engagement','312','active clients with a loan',None,None,[],1,''),
+    ('Mobile banking','41%','use SMS and USSD',None,None,[],1,''),
   ])
 
 def dash_html(d):
@@ -270,7 +271,8 @@ def dash_html(d):
 TILE_ICONS = {'Reception':'chat','Doctor':'health','Laboratory':'layers','Nursing':'support','Sonography':'chart',
               'Inventory':'cart','Finance':'bank','Hospital admin':'gov','Production':'factory',
               'Branch & stock':'truck','Cashier':'cart','Staff':'support',
-              'Loans':'bank','Tellers':'cart','Members':'support','SMS & USSD':'phone','Repayments':'chart','Reports':'layers'}
+              'Total members':'support','Male members':'support','Female members':'support','Status':'support',
+              'Savings portfolio':'bank','Loan engagement':'chart','Mobile banking':'phone'}
 
 DASHES = {'ternah-health': HEALTH_DASH, 'ternah-factories': FACTORY_DASH, 'sacco': BANK_DASH}
 
@@ -291,20 +293,19 @@ def screenshot(p, lazy=True):
 
 # ================= CONTENT =================
 # Product names must match the names used inside the products themselves.
-# 'link' = live site; without one the card shows "Book a demo".
-# Live product sites. Switch to the real domains once they exist (keep https).
-HEALTH_URL   = 'https://shark-app-7ssb2.ondigitalocean.app/welcome/'
-PHARMACY_URL = 'https://ternah-pharmacy.onrender.com/pharmacy/'
+# 'page' = the product's landing page on this site; 'link' = a public site of its own (only Pearl Educate).
+# The running apps (Ternah Health, Ternah Pharmacy, Core Banking) are never linked from this site.
+# Without either, the card shows "Book a demo".
 PEARL_URL    = 'https://pearl-educate.com/'
 MYKASHOP_URL = None  # https://mykashop.online/ was not responding on 28 Oct 2026; restore once it is back up
 
 PRODUCTS = [
- dict(key='ternah-health', name='Ternah Health', sector='Hospitals & clinics', link=HEALTH_URL,
+ dict(key='ternah-health', name='Ternah Health', sector='Hospitals & clinics',
       brief='A hospital management system that puts every department on one patient record. Reception registers the patient, doctors work from live queues and order tests, the lab sends results straight back, and pharmacy, nursing, home care and finance work from the same file.',
       features=['Live queues for reception, doctor, nurse, lab and scans',
                 'Lab results that reach the doctor the moment they are ready',
                 'Subscribe only to the modules you run, set up the same day']),
- dict(key='pharmacy', name='Ternah Pharmacy', sector='Pharmacies', link=PHARMACY_URL,
+ dict(key='pharmacy', name='Ternah Pharmacy', sector='Pharmacies',
       brief='Software that runs a pharmacy from prescription to receipt. It dispenses, takes cash, mobile money, card, insurance or credit, tracks every batch with low-stock and expiry alerts, and keeps the books for one branch or many, even when the internet drops.',
       features=['Prescription to receipt: cash, mobile money, card, insurance or credit',
                 'Batch stock with low-stock and expiry alerts',
@@ -325,7 +326,7 @@ PRODUCTS = [
       features=['Built on CMU learning science principles for memory formation',
                 'Recall practice with hints and no scores, spaced over 30 days',
                 'Lessons from teachers we have checked; parents pay by mobile money']),
- dict(key='sacco', name='Ternah Core Banking', sector='SACCOs and microfinance',
+ dict(key='sacco', name='Ternah Core Banking', sector='SACCOs and microfinance', page='ternah-core-banking.html',
       brief='Core banking for SACCOs and microfinance institutions. It runs member accounts, savings, fixed deposits, '
             'teller deposits and withdrawals, and every loan from application to repayment. CRB checks are built into '
             'loan assessment, so officers see a borrower’s credit history before they approve. Members get an SMS for '
@@ -347,6 +348,7 @@ PRODUCTS = [
 ]
 
 # The three products shown on the home page, in order
+FOOTER_PRODUCTS = [next(p for p in PRODUCTS if p['key'] == k) for k in ('ternah-health', 'sacco', 'ternah-factories', 'pearl-educate')]
 HOME_PRODUCTS = [next(p for p in PRODUCTS if p['key'] == k) for k in ('ternah-health', 'pearl-educate', 'ternah-factories')]
 
 # Brief case studies, one per product, shown on the Products page in this order. They describe the type of
@@ -440,12 +442,17 @@ def sec_head(eyebrow, h2, lead=None, center=False):
     lp = f'<p class="lead">{lead}</p>' if lead else ''
     return f'<div class="sec-head{" center" if center else ""}"><span class="eyebrow">{eyebrow}</span><h2 class="h2">{h2}</h2>{lp}</div>'
 
+def product_action(p, cls):
+    """The product's main button: its landing page here, else its own public site, else a demo booking."""
+    if p.get('page'):
+        return f'<a class="{cls}" href="{p["page"]}">See {escape(p["name"])} {ARROW}</a>'
+    if p.get('link'):
+        return f'<a class="{cls}" href="{p["link"]}" target="_blank" rel="noopener noreferrer">Visit {escape(p["name"])} {EXT}</a>'
+    return f'<a class="{cls}" href="contact.html?product={p["key"]}">Book a demo {ARROW}</a>'
+
 def product_card(i, p, full=False):
     feats = f'<ul>{"".join(f"<li>{escape(f)}</li>" for f in p["features"])}</ul>' if full else ''
-    if p.get('link'):
-        act = f'<a class="btn btn-ghost" href="{p["link"]}" target="_blank" rel="noopener noreferrer">Visit {escape(p["name"])} {EXT}</a>'
-    else:
-        act = f'<a class="btn btn-ghost" href="contact.html?product={p["key"]}">Book a demo {ARROW}</a>'
+    act = product_action(p, 'btn btn-ghost')
     return f'''    <article class="card prod reveal" id="{p["key"]}" data-d="{i%3+1}">
       <div class="frame">{screenshot(p)}</div>
       <div class="body">
@@ -460,10 +467,7 @@ def product_card(i, p, full=False):
     </article>'''
 
 def product_card_text(i, p):
-    if p.get('link'):
-        act = f'<a class="link-arrow" href="{p["link"]}" target="_blank" rel="noopener noreferrer">Visit {escape(p["name"])} {EXT}</a>'
-    else:
-        act = f'<a class="link-arrow" href="contact.html?product={p["key"]}">Book a demo {ARROW}</a>'
+    act = product_action(p, 'link-arrow')
     return f'''    <article class="card prod-text reveal" id="{p["key"]}" data-d="{i%3+1}">
       <img class="card-art" src="assets/img/art/{p["key"]}.svg" alt="" width="800" height="500" loading="lazy">
       <div class="kicker">{escape(p["sector"])}</div>
@@ -512,7 +516,7 @@ HERO_SLIDES = [
       brief='A member deposits at the teller and gets an SMS before leaving the counter. Loan officers see the '
             'borrower’s CRB report inside the assessment, and members check balances and statements by USSD on any '
             'phone, so the SACCO serves members who rarely come to the branch.',
-      more=('See the product', 'products.html#sacco')),
+      more=('Book a demo', 'contact.html?product=sacco')),
  dict(key='ternah-health', tab='Health',
       alt='Illustration: a doctor with a tablet and a nurse with a clipboard in a hospital',
       title='How Ternah Health works in a hospital',
@@ -537,9 +541,7 @@ def hero_stage():
         f'aria-selected="{"true" if i == 0 else "false"}" tabindex="{0 if i == 0 else -1}">{escape(sl["tab"])}</button>'
         for i, (sl, p) in enumerate(items))
     def primary(p):
-        if p.get('link'):
-            return f'<a class="btn btn-primary" href="{p["link"]}" target="_blank" rel="noopener noreferrer">Visit {escape(p["name"])} {EXT}</a>'
-        return f'<a class="btn btn-primary" href="contact.html?product={p["key"]}">Book a demo {ARROW}</a>'
+        return product_action(p, 'btn btn-primary')
     def scene_img(p):
         return art(f'assets/img/hero/{p["key"]}.webp', f'assets/img/art/hero-{p["key"]}.svg')
     panels = "".join(f'''
@@ -596,9 +598,8 @@ def enquiry_form(full=True):
 
 def facts_strip():
     """Plain, checkable facts (counted from the data above), in place of client logos we can't name yet."""
-    live = sum(1 for p in PRODUCTS if p.get('link'))
     facts = [(str(len(PRODUCTS)), 'products, each built for one kind of business'),
-             (str(live), 'you can open and try today'),
+             ('After launch', 'we stay to train and support your team'),
              (str(len(INDUSTRIES)), 'industries we build for'),
              ('Kampala', 'where we design, build and support')]
     return '<ul class="facts">' + "".join(f'<li><strong>{n}</strong><span>{t}</span></li>' for n,t in facts) + '</ul>'
@@ -662,10 +663,10 @@ def explore_tiles():
 
 def sector_row():
     """The industries we serve, one line under the hero headline, each linking to its product."""
-    row = [('factory','Factories','ternah-factories'), ('bank','SACCOs & microfinance','sacco'), ('health','Hospitals','ternah-health'),
+    row = [('factory','Factories','ternah-factories'), ('bank','SACCOs & microfinance','sacco', 'ternah-core-banking.html'), ('health','Hospitals','ternah-health'),
            ('edu','Schools','pearl-educate'), ('cart','Shops','mykashop'), ('pill','Pharmacies','pharmacy')]
     return '<ul class="sectors" aria-label="Industries we build for">' + "".join(
-        f'<li><a href="products.html#{k}">{ICONS[ic]}{t}</a></li>' for ic, t, k in row) + '</ul>'
+        f'<li><a href="{(rest or [f"products.html#{k}"])[0]}">{ICONS[ic]}{t}</a></li>' for ic, t, k, *rest in row) + '</ul>'
 
 # ================= PAGE BODIES =================
 home_body = f'''<section class="hero wrap">
@@ -1561,6 +1562,94 @@ def article_body(i):
 </section>
 {cta_band("Let's turn insight into action.", "Reading about it is one thing. Tell us what you want to fix and we'll build it with you.", primary=('Talk to us','contact.html'))}'''
 
+
+# ================= CORE BANKING LANDING PAGE =================
+# What the SACCO platform does, from its own screens: members, savings, loans, tellers, SMS and USSD.
+CB = next(p for p in PRODUCTS if p['key'] == 'sacco')
+CB_MODULES = [
+ ('support', 'Members and accounts',
+  'Register individuals, groups and companies, and open joint accounts. Each member has one record that holds their savings, loans and statements.',
+  ['Individual, group and company members', 'Joint accounts', 'Active and inactive members at a glance']),
+ ('bank', 'Savings',
+  'Every savings account in one portfolio. The system keeps what a member can withdraw apart from savings that are frozen or held.',
+  ['Total, available and frozen balances', 'Fixed deposits', 'Locked or held funds kept separate']),
+ ('cart', 'Deposits and withdrawals',
+  'Tellers record deposits and withdrawals at the counter, and the member gets an SMS before they leave.',
+  ['Teller deposits and withdrawals', 'An SMS for every transaction', 'Each teller’s totals for the day']),
+ ('chart', 'Loans',
+  'Every loan from application to the last repayment. The borrower’s CRB report sits inside the assessment, so officers see their credit history before they approve.',
+  ['CRB checks built into assessment', 'Approval, disbursement and repayment schedules', 'SMS reminders before a repayment is due']),
+ ('phone', 'SMS and USSD',
+  'Members check balances and statements by USSD from any phone, with no smartphone or data needed. The dashboard shows how many members use it.',
+  ['Balances and statements by USSD', 'SMS alerts for deposits, withdrawals and repayments', 'Mobile banking adoption rate']),
+ ('layers', 'Dashboard and reports',
+  'The manager opens one screen and sees members, loans and savings for the branch, with a report behind each number.',
+  ['Members by gender and status', 'Clients with active loans', 'Savings portfolio and mobile banking']),
+]
+CB_GLANCE = [
+ ('Members', 'Total members, split into male and female, and how many are active or inactive.'),
+ ('Loan engagement', 'Active clients with at least one disbursed loan, with the report one click away.'),
+ ('Savings portfolio', 'Total savings, what is available to withdraw, and what is frozen or held.'),
+ ('Mobile banking', 'How many members use SMS and USSD, so you can see adoption grow.'),
+]
+CB_STEPS = [
+ ('Join', 'Register as an individual, a group or a company, or open a joint account.'),
+ ('Save', 'Deposit at the teller and get an SMS before leaving the counter.'),
+ ('Borrow', 'Apply for a loan. The officer sees the CRB report and approves.'),
+ ('Repay', 'Get an SMS reminder before each repayment is due.'),
+ ('Check', 'Dial the USSD code for a balance or statement on any phone.'),
+]
+
+core_banking_body = f'''<section class="hero wrap lp-hero">
+  <div class="hero-top">
+    <div><span class="eyebrow">{escape(CB["name"])} · For SACCOs and microfinance</span>
+      <h1>Core banking for SACCOs.<span class="l2">Members served on any phone.</span></h1></div>
+    <div>
+      <p class="lead">Members, savings, tellers and loans in one system, with CRB checks in every loan assessment, an SMS for every transaction, and USSD for members who rarely come to the branch.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="contact.html?product=sacco">Book a demo</a>
+        <a class="btn btn-ghost btn-lg" href="#modules">See what it does</a>
+      </div>
+    </div>
+  </div>
+  <div class="frame lp-shot">{screenshot(CB, lazy=False)}</div>
+  <ul class="facts">
+    <li><strong>4 ways</strong><span>to join: individual, group, company or joint account</span></li>
+    <li><strong>CRB</strong><span>checks inside every loan assessment</span></li>
+    <li><strong>SMS</strong><span>for every deposit, withdrawal and repayment due</span></li>
+    <li><strong>USSD</strong><span>balances and statements on any phone</span></li>
+  </ul>
+</section>
+
+<section class="sec wrap" id="modules">
+  {sec_head('What it runs', 'Everything a SACCO does, in one system.', 'From the day a member joins to the last loan repayment.')}
+  <div class="grid g3">
+{chr(10).join(card(i, ic, t, d, items) for i, (ic, t, d, items) in enumerate(CB_MODULES))}
+  </div>
+</section>
+
+<section class="band-blue">
+  <div class="wrap">
+    {sec_head('The dashboard', 'What the manager sees each morning.', 'One screen for the whole branch, with a report behind each number.')}
+    <dl class="lp-glance">{"".join(f'<div><dt>{t}</dt><dd>{d}</dd></div>' for t, d in CB_GLANCE)}</dl>
+  </div>
+</section>
+
+<section class="sec wrap">
+  {sec_head('For members', 'How a member is served.', 'Most of it happens on their phone, without a trip to the branch.')}
+  <ol class="process">{"".join(f'''
+    <li class="step reveal" data-d="{i%4+1}"><span class="dot">{i+1}</span><h3>{t}</h3><p>{d}</p></li>''' for i, (t, d) in enumerate(CB_STEPS))}
+  </ol>
+</section>
+
+{cta_band('See Ternah Core Banking with your SACCO in mind.', 'We will walk you through it with your own products, loan rules and branches.', primary=('Book a demo', 'contact.html?product=sacco'))}'''
+
+LANDING_PAGES = [
+ ('ternah-core-banking.html', f'Ternah Core Banking | {COMPANY}',
+  'Core banking for SACCOs and microfinance: members, savings, tellers and loans, with CRB checks, SMS alerts and USSD on any phone.',
+  core_banking_body),
+]
+
 # ================= WRITE FILES =================
 PAGES = [
  ('index', f'{COMPANY} | Keep it simple.', 'Software built around the way your business already runs, for factories, SACCOs and microfinance, hospitals, schools and shops. Built in Kampala, Uganda.', home_body),
@@ -1577,6 +1666,10 @@ for slug,title,desc,body in PAGES:
     open(fn,'w',encoding='utf-8').write(page(slug,title,desc,body))
     print('wrote', fn)
 
+for path, title, desc, body in LANDING_PAGES:
+    open(os.path.join(OUT, path), 'w', encoding='utf-8').write(page('products', title, desc, body, path=path))
+    print('wrote', path)
+
 os.makedirs(os.path.join(OUT, 'insights'), exist_ok=True)
 for i, (slug, cat, t, d, meta) in enumerate(ARTICLE_LIST):
     path = f'insights/{slug}.html'
@@ -1585,8 +1678,9 @@ for i, (slug, cat, t, d, meta) in enumerate(ARTICLE_LIST):
 
 today = datetime.date.today().isoformat()
 urls = "".join(f'  <url><loc>{SITE_URL}/{"" if s=="index" else s+".html"}</loc><lastmod>{today}</lastmod></url>\n' for s,*_ in PAGES)
+urls += "".join(f'  <url><loc>{SITE_URL}/{path}</loc><lastmod>{today}</lastmod></url>\n' for path,*_ in LANDING_PAGES)
 urls += "".join(f'  <url><loc>{SITE_URL}/insights/{slug}.html</loc><lastmod>{today}</lastmod></url>\n' for slug,*_ in ARTICLE_LIST)
 open(os.path.join(OUT,'sitemap.xml'),'w',encoding='utf-8').write(
     f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
 open(os.path.join(OUT,'robots.txt'),'w',encoding='utf-8').write(f'User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n')
-print('done —', len(PAGES), 'pages,', len(ARTICLE_LIST), 'articles + sitemap.xml + robots.txt')
+print('done —', len(PAGES) + len(LANDING_PAGES), 'pages,', len(ARTICLE_LIST), 'articles + sitemap.xml + robots.txt')
